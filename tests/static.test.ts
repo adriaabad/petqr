@@ -12,7 +12,7 @@ test('static distribution includes project and dependency license notices', asyn
 });
 test('all configured standalone routes have HTML, metadata, assets and scoped JSON', async () => {
   for (const pet of config.pets) {
-    const path = resolve('dist', petPath(pet.id), 'index.html'),
+    const path = resolve('dist', petPath(pet), 'index.html'),
       html = await readFile(path, 'utf8');
     assert.match(html, /<h1>/);
     assert.ok(html.includes(pet.indexing ? 'index, follow' : 'noindex, nofollow'));
@@ -33,15 +33,25 @@ test('all configured standalone routes have HTML, metadata, assets and scoped JS
     );
     assert.doesNotMatch(html, /<script[^>]+src="https?:|<link[^>]+href="https?:[^>]+stylesheet/);
     assert.doesNotMatch(html, /editor.js/);
+    if (pet.shortId) {
+      assert.equal(await readFile(resolve('dist', petPath(pet.id), 'index.html'), 'utf8'), html);
+      assert.deepEqual(
+        JSON.parse(await readFile(resolve('dist', petPath(pet.id), 'profile.json'), 'utf8')),
+        data,
+      );
+    }
   }
   const directories = await readdir('dist/p').catch(() => []);
-  assert.deepEqual(directories.sort(), config.pets.map((p) => p.id).sort());
+  assert.deepEqual(
+    directories.sort(),
+    [...new Set(config.pets.flatMap((p) => [p.id, ...(p.shortId ? [p.shortId] : [])]))].sort(),
+  );
 });
 test('public build has editor and includes only explicitly indexed pet URLs in sitemap', async () => {
   assert.ok((await readFile('dist/editor/index.html', 'utf8')).includes('assets/editor.js'));
   const sitemap = await readFile('dist/sitemap.xml', 'utf8');
   for (const pet of config.pets) {
-    const listed = sitemap.includes('/p/' + pet.id + '/');
+    const listed = sitemap.includes(petPath(pet));
     assert.equal(listed, pet.indexing && Boolean(config.site.publicUrl));
   }
 });

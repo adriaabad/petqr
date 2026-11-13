@@ -32,7 +32,8 @@ An ordered array. Each pet has:
 
 | Property | Meaning |
 | --- | --- |
-| id | Stable unique 3–64 character lowercase alphanumeric/hyphen identifier. Never change after printing. The editor generates random UUID-based IDs. |
+| id | Stable unique 3–64 character lowercase alphanumeric/hyphen identifier. Never change after printing. New pets use eight random hexadecimal characters, checked against existing IDs and short routes. |
+| shortId | Optional stable short address, 3–12 lowercase alphanumeric/hyphen characters. The canonical path and QR use `p/shortId/`; `p/id/` also remains functional. All IDs and short routes must be unique across pets. Never change/remove a published shortId after printing tags. |
 | name | Required public name, 1–100 characters |
 | species, breed, introduction | Plain or translated text; species may be empty for a newly created draft |
 | status | Legacy compatibility: `safe`, `missing`, `found`, `custom`; no longer displayed or editable |

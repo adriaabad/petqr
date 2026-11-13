@@ -5,6 +5,8 @@ import {
   parseConfig,
   setValidationLanguage,
   petSchema,
+  newPet,
+  preserveProfileAddresses,
   fieldSchema,
   publicConfig,
   assertPublishable,
@@ -25,6 +27,46 @@ const site = JSON.parse(await readFile('tests/fixtures/data/site.json', 'utf8'))
   contacts = JSON.parse(await readFile('tests/fixtures/data/contacts.json', 'utf8')),
   pets = JSON.parse(await readFile('tests/fixtures/data/pets.json', 'utf8'));
 const fixture = () => parseConfig({ version: 1, site, contacts, pets });
+
+test('new pet identifiers are short and skip existing identifiers and short routes', (context) => {
+  const candidates = ['00000000', '11111111', '22222222'];
+  context.mock.method(
+    crypto,
+    'randomUUID',
+    () => `${candidates.shift()}-0000-4000-8000-000000000000`,
+  );
+  const pet = newPet([{ id: '00000000' }, { id: 'legacy-pet', shortId: '11111111' }]);
+  assert.equal(pet.id, '22222222');
+  assert.match(pet.id, /^[a-f0-9]{8}$/);
+  assert.equal(pet.shortId, undefined);
+});
+
+test('short profile addresses preserve the logical identifier and reject route collisions', () => {
+  const c = fixture();
+  c.pets[0].shortId = 'c0ffee12';
+  assert.equal(petPath(c.pets[0]), 'p/c0ffee12/');
+  assert.equal(
+    publicPetURL('https://owner.example/animals', c.pets[0]),
+    'https://owner.example/animals/p/c0ffee12/',
+  );
+  assert.equal(c.pets[0].id, 'cooper-7f2a');
+  assert.match(renderIndex(c, 'en'), /href="p\/c0ffee12\/"/);
+  assert.equal(publicConfig(c).pets[0].shortId, 'c0ffee12');
+  const oldDraft = fixture();
+  oldDraft.pets[0].name = 'Edited in an older draft';
+  const restored = preserveProfileAddresses(oldDraft, c);
+  assert.equal(restored.pets[0].shortId, 'c0ffee12');
+  assert.equal(restored.pets[0].name, 'Edited in an older draft');
+  assert.equal(oldDraft.pets[0].shortId, undefined);
+  c.pets[1].shortId = 'c0ffee12';
+  assert.throws(() => parseConfig(c), /Duplicate profile path/);
+  c.pets[1].shortId = c.pets[0].id;
+  assert.throws(() => parseConfig(c), /Duplicate profile path/);
+  for (const unsafe of ['../private', 'a/b', '<script>', 'TOOUPPER']) {
+    c.pets[0].shortId = unsafe;
+    assert.throws(() => parseConfig(c));
+  }
+});
 test('validation diagnostics support Spanish and Catalan', () => {
   try {
     for (const language of ['es', 'ca'] as const) {

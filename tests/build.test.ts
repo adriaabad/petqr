@@ -20,7 +20,15 @@ test('personalized and empty repositories build without demo identities, and tes
         ownerIndex: false,
       },
       contacts: [],
-      pets: [{ id: 'independent-bird', name: 'Pip', species: 'Bird', indexing: true }],
+      pets: [
+        {
+          id: 'independent-bird',
+          shortId: 'a1b2c3d4',
+          name: 'Pip',
+          species: 'Bird',
+          indexing: true,
+        },
+      ],
     });
     for (const name of ['version', 'site', 'contacts', 'pets'] as const)
       await writeFile(join(root, 'data', name + '.json'), JSON.stringify(config[name]));
@@ -30,7 +38,16 @@ test('personalized and empty repositories build without demo identities, and tes
     assert.match(html, />Pip<\/h1>/);
     assert.match(html, /index, follow/);
     assert.doesNotMatch(html, /Cooper|Luna|Mochi/);
-    assert.match(await readFile('.test-site/sitemap.xml', 'utf8'), /independent-bird/);
+    const shortHTML = await readFile('.test-site/p/a1b2c3d4/index.html', 'utf8');
+    assert.equal(shortHTML, html);
+    assert.match(shortHTML, /rel="canonical" href="https:\/\/family.example\/pets\/p\/a1b2c3d4\/"/);
+    for (const path of ['independent-bird', 'a1b2c3d4']) {
+      const profile = JSON.parse(await readFile(`.test-site/p/${path}/profile.json`, 'utf8'));
+      assert.equal(profile.pets[0].id, 'independent-bird');
+      assert.equal(profile.pets[0].shortId, 'a1b2c3d4');
+    }
+    assert.match(await readFile('.test-site/sitemap.xml', 'utf8'), /a1b2c3d4/);
+    assert.doesNotMatch(await readFile('.test-site/sitemap.xml', 'utf8'), /independent-bird/);
     assert.doesNotMatch(await readFile('.test-site/index.html', 'utf8'), /Pip|independent-bird/);
     await writeFile(join(root, 'data/pets.json'), '[]');
     await buildSite({ dataRoot: root, output: '.test-site', environment: {} });
@@ -42,6 +59,7 @@ test('personalized and empty repositories build without demo identities, and tes
       false,
     );
     assert.match(await readFile('.test-site/editor/index.html', 'utf8'), /editor.js/);
+    await assert.rejects(readFile('.test-site/p/a1b2c3d4/index.html'));
     assert.equal(await readFile('dist/data/config.json', 'utf8'), production);
   } finally {
     // Verify the generated absolute temporary directory before recursive cleanup on Windows.

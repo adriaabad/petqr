@@ -92,7 +92,7 @@ export async function buildSite(
       contacts: config.contacts.filter((c) => pet.contacts.some((ref) => ref.id === c.id)),
     };
     const canonical = config.site.publicUrl
-      ? `${config.site.publicUrl}/${petPath(pet.id)}`
+      ? `${config.site.publicUrl}/${petPath(pet)}`
       : undefined;
     const page = htmlDocument(renderProfile(selected, pet, config.site.defaultLanguage), {
       title: `${pet.name} · PetQR`,
@@ -106,11 +106,14 @@ export async function buildSite(
           ? `${config.site.publicUrl}/${pet.photos[0].path}`
           : undefined,
     });
-    await write(
-      `${petPath(pet.id)}index.html`,
-      page.replace('</head>', `<meta name="petqr-id" content="${pet.id}"></head>`),
-    );
-    await write(`${petPath(pet.id)}profile.json`, JSON.stringify(selected));
+    // Serve complete static HTML at both addresses: old printed tags also work without JavaScript.
+    for (const route of new Set([petPath(pet), petPath(pet.id)])) {
+      await write(
+        `${route}index.html`,
+        page.replace('</head>', `<meta name="petqr-id" content="${pet.id}"></head>`),
+      );
+      await write(`${route}profile.json`, JSON.stringify(selected));
+    }
     for (const image of pet.photos) {
       const dest = resolve(outDir, image.path);
       await mkdir(dirname(dest), { recursive: true });

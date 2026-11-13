@@ -4,6 +4,7 @@ import {
   publicConfig,
   explainError,
   newPet,
+  preserveProfileAddresses,
   petSchema,
   contactSchema,
   telegramSchema,
@@ -195,7 +196,7 @@ function dashboard() {
   return `<div class="page-heading"><div><h1>${tr('A little tag. A way home.')}</h1><p>${tr('Your pets, their people, always connected.')}</p></div>${button(
     'Add pet',
     () => {
-      const pet = newPet();
+      const pet = newPet(config.pets);
       pet.name = lang === 'en' ? 'New pet' : lang === 'es' ? 'Nuevo animal' : 'Animal nou';
       config.pets.push(pet);
       selected = pet.id;
@@ -207,7 +208,7 @@ function dashboard() {
   )}</div>${config.site.fictional ? `<p class="demo-note">${tr('Fictional examples. Replace all demo data before publishing.')}</p>` : ''}<div class="pet-grid">${config.pets
     .map(
       (pet, index) =>
-        `<article class="pet-card"><a class="card-photo" href="${new URL(petPath(pet.id), base).href}">${replaceImages(photo(pet, lang, base.href, index > 2))}</a><div class="card-body"><div class="name-row"><h2>${esc(pet.name)}</h2></div><p class="species">${esc(local(pet.species) || '—')}</p><div class="card-actions"><a class="button primary" href="${new URL(petPath(pet.id), base).href}">${tr('View profile')} ↗</a>${button('QR code', () => openQR(config, pet, lang))}${button(
+        `<article class="pet-card"><a class="card-photo" href="${new URL(petPath(pet), base).href}">${replaceImages(photo(pet, lang, base.href, index > 2))}</a><div class="card-body"><div class="name-row"><h2>${esc(pet.name)}</h2></div><p class="species">${esc(local(pet.species) || '—')}</p><div class="card-actions"><a class="button primary" href="${new URL(petPath(pet), base).href}">${tr('View profile')} ↗</a>${button('QR code', () => openQR(config, pet, lang))}${button(
           'Edit',
           () => {
             selected = pet.id;
@@ -218,7 +219,8 @@ function dashboard() {
           'Duplicate',
           () => {
             const duplicate = structuredClone(pet);
-            duplicate.id = `pet-${crypto.randomUUID()}`;
+            duplicate.id = newPet(config.pets).id;
+            delete duplicate.shortId;
             duplicate.name += ' (2)';
             config.pets.splice(index + 1, 0, duplicate);
             dirty = true;
@@ -543,7 +545,7 @@ function settings() {
       toast(tr('No local draft is available.'));
       return;
     }
-    config = parseConfig(stored.config);
+    config = preserveProfileAddresses(stored.config, original);
     images = stored.images;
     clearImageURLs();
     dirty = true;
@@ -692,7 +694,7 @@ function importFiles() {
       } else {
         next = parseConfig(JSON.parse(await file.text()));
       }
-      config = next;
+      config = preserveProfileAddresses(next, original);
       images = nextImages;
       clearImageURLs();
       dirty = true;

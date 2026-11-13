@@ -98,6 +98,7 @@ export const contactOverrideSchema = z
 export const petSchema = z
   .object({
     id,
+    shortId: id.max(12).optional(),
     name: z.string().min(1).max(100),
     species: localized,
     breed: localized.optional(),
@@ -165,7 +166,17 @@ export const configSchema = z
         used.add(item.id);
       });
     }
+    const routes = new Map<string, number>();
     config.pets.forEach((pet, i) => {
+      for (const route of new Set([pet.id, ...(pet.shortId ? [pet.shortId] : [])])) {
+        if (routes.has(route) && routes.get(route) !== i)
+          ctx.addIssue({
+            code: 'custom',
+            path: ['pets', i, route === pet.id ? 'id' : 'shortId'],
+            message: `Duplicate profile path: ${route}`,
+          });
+        routes.set(route, i);
+      }
       const refs = new Set<string>();
       pet.contacts.forEach((ref, j) => {
         if (!config.contacts.some((c) => c.id === ref.id))
@@ -255,13 +266,27 @@ export function assertPublishable(config: Config): void {
       'Configuration contains unpublished or unconfirmed sensitive data. Export public files from the editor before committing. Do not upload private drafts.',
     );
 }
-export function newPet(): Pet {
+export function newPet(existing: readonly Pick<Pet, 'id' | 'shortId'>[] = []): Pet {
+  const used = new Set(existing.flatMap((pet) => [pet.id, ...(pet.shortId ? [pet.shortId] : [])]));
+  let shortId: string;
+  do shortId = crypto.randomUUID().slice(0, 8);
+  while (used.has(shortId));
   return petSchema.parse({
-    id: `pet-${crypto.randomUUID()}`,
+    id: shortId,
     name: 'New pet',
     species: '',
     photos: [],
     contacts: [],
     sections: [],
   });
+}
+// Older local drafts/ZIPs must not remove the published short address of the same animal.
+export function preserveProfileAddresses(draft: Config, deployed: Config): Config {
+  const next = parseConfig(draft);
+  const addresses = new Map(deployed.pets.map((pet) => [pet.id, pet.shortId]));
+  for (const pet of next.pets) {
+    const shortId = addresses.get(pet.id);
+    if (shortId) pet.shortId = shortId;
+  }
+  return parseConfig(next);
 }

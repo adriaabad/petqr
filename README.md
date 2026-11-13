@@ -44,7 +44,9 @@ Disabling the owner index removes the overview links, but the public editor conf
 
 ## Everyday tasks
 
-**Add several pets:** Add pet creates a new random, stable ID. Duplicate copies information but creates a different ID/QR. The dashboard order is saved in `data/pets.json`.
+**Add several pets:** Add pet creates a random, stable eight-character ID, keeping URLs and QR payloads short. The editor checks existing IDs and short addresses to avoid collisions. Duplicate copies information but creates its own new short ID/QR. The dashboard order is saved in `data/pets.json`.
+
+**Short URLs for existing pets:** An optional stable `shortId` in the pet configuration gives an older long-ID profile a shorter address, such as `p/a1b2c3d4/`. The original logical ID stays unchanged. Both URLs serve complete static profiles, including without JavaScript; QR downloads, profile links and canonical metadata use the short one. No third-party URL shortener is involved. Keep both `id` and any published `shortId` unchanged after printing tags. Restoring older local drafts or importing backups preserves the deployed short address of the same animal.
 
 **Identification numbers:** Edit → Identity → Microchip number / Registration number. These optional text inputs preserve leading zeros. Select the corresponding Publish checkbox and confirm before including either number on the public profile. Unpublished numbers stay in the browser and are excluded from exports.
 

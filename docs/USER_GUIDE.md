@@ -20,6 +20,8 @@ Telegram is optional, under **More contact methods (optional)**. It is not invol
 
 ## Identification and existing warnings
 
+New pets and duplicates receive eight-character IDs for short URLs. An existing long-ID animal can have a stable `shortId` configured without changing its original ID. The QR dialog, public index and profile buttons use the short address; the old address also keeps working without JavaScript. Restoring an older local draft or importing an older backup retains the deployed short address for that same ID. Both addresses depend only on your own Pages copy. Do not change or remove a published ID/shortId after printing tags.
+
 Microchip and registration numbers are text, so leading zeros and registry prefixes are preserved. Published and confirmed numbers appear directly on the public profile. Existing handling/medical warning fields remain available; PetQR does not diagnose or generate veterinary advice. The lost/found/custom status selector, badges, loss banner and legacy loss instructions are no longer displayed. Legacy data is preserved for compatibility.
 
 Changing names, numbers, photos or instructions never changes the ID/URL. Always export/upload/deploy to update the page behind the printed QR. There is no direct GitHub connection or access-key field. The local preview intentionally shows only publishable data, so a draft identification or medical field will not appear until you select Publish and confirm.

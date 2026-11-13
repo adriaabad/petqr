@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.2 — 2026-11-13
+
+- Generate short eight-character pet IDs, checking collisions with existing IDs and short addresses. Duplicates receive their own address.
+- Add optional stable `shortId` addresses for existing pets without changing their logical IDs. Both old and short routes serve the complete profile without a redirect, JavaScript requirement or external shortening service.
+- Use the short address consistently in the dashboard, public index, QR exports and canonical metadata; keep old printed tags working.
+- Preserve deployed short addresses when restoring an older local draft or importing an older backup of the same animal.
+
 ## 1.1.1 — 2026-11-13
 
 - Revert optional direct GitHub publishing. Restore the local editor and manual ZIP upload workflow, without access keys.

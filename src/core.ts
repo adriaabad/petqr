@@ -27,10 +27,11 @@ export function safeURL(value: string): boolean {
     return false;
   }
 }
-export function petPath(id: string): string {
-  return `p/${id}/`;
+type ProfileAddress = string | Pick<Pet, 'id' | 'shortId'>;
+export function petPath(pet: ProfileAddress): string {
+  return `p/${typeof pet === 'string' ? pet : pet.shortId || pet.id}/`;
 }
-export function publicPetURL(siteUrl: string, id: string): string {
+export function publicPetURL(siteUrl: string, pet: ProfileAddress): string {
   if (!siteUrl || !safeURL(siteUrl))
     throw new Error('Configure the final public site URL before generating QR codes.');
   const url = new URL(siteUrl);
@@ -39,7 +40,7 @@ export function publicPetURL(siteUrl: string, id: string): string {
     url.hostname.endsWith('.localhost')
   )
     throw new Error('QR codes require your deployed public URL, not localhost.');
-  return new URL(petPath(id), siteUrl.replace(/\/+$/, '') + '/').href;
+  return new URL(petPath(pet), siteUrl.replace(/\/+$/, '') + '/').href;
 }
 export function resolvedContacts(config: Config, pet: Pet): Contact[] {
   return pet.contacts.flatMap((ref) => {

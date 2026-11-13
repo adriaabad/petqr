@@ -15,6 +15,12 @@ test.beforeEach(async ({ page }) => {
   });
 });
 test('desktop dashboard loads cleanly and manages multiple pets', async ({ page }) => {
+  await page.route('**/data/config.json', async (route) => {
+    const response = await route.fetch();
+    const config = await response.json();
+    config.pets[0].shortId = 'c0ffee12';
+    await route.fulfill({ json: config });
+  });
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
   await page.setViewportSize({ width: 1440, height: 1000 });
@@ -24,6 +30,9 @@ test('desktop dashboard loads cleanly and manages multiple pets', async ({ page 
   await page.getByRole('button', { name: 'Duplicate', exact: true }).first().click();
   await expect(page.locator('.pet-card')).toHaveCount(4);
   await expect(page.locator('.pet-card').nth(1)).toContainText('Cooper (2)');
+  await expect(
+    page.locator('.pet-card').nth(1).getByRole('link', { name: 'View profile' }),
+  ).toHaveAttribute('href', /\/p\/[a-f0-9]{8}\/$/);
   page.once('dialog', (d) => d.dismiss());
   await page.getByRole('button', { name: 'Delete', exact: true }).first().click();
   await expect(page.locator('.pet-card')).toHaveCount(4);
@@ -126,6 +135,12 @@ test('simple pet form exports chip and registration only with explicit consent a
   expect(result.config.pets[0].id).toBe('cooper-7f2a');
 });
 test('QR settings require a public URL and produce SVG and PNG files', async ({ page }) => {
+  await page.route('**/data/config.json', async (route) => {
+    const response = await route.fetch();
+    const config = await response.json();
+    config.pets[0].shortId = 'c0ffee12';
+    await route.fulfill({ json: config });
+  });
   await page.goto('editor/');
   await page.getByRole('button', { name: 'Site settings', exact: true }).click();
   await page.getByLabel('Public site URL', { exact: true }).fill('');
@@ -138,7 +153,7 @@ test('QR settings require a public URL and produce SVG and PNG files', async ({ 
   await page.getByRole('button', { name: 'My pets', exact: true }).click();
   await page.getByRole('button', { name: 'QR code', exact: true }).first().click();
   await expect(page.locator('.url-display')).toContainText(
-    'https://owner.example/animals/p/cooper-7f2a/',
+    'https://owner.example/animals/p/c0ffee12/',
   );
   await expect(page.locator('[data-qr] svg')).toBeVisible();
   await page.getByLabel('Resolution', { exact: true }).selectOption('512');
@@ -165,7 +180,7 @@ test('QR settings require a public URL and produce SVG and PNG files', async ({ 
         };
       }, bytes.toString('base64'));
       expect(jsQR(new Uint8ClampedArray(decoded.pixels), decoded.width, decoded.height)?.data).toBe(
-        'https://owner.example/animals/p/cooper-7f2a/',
+        'https://owner.example/animals/p/c0ffee12/',
       );
     }
   }
@@ -350,12 +365,21 @@ test('local drafts are explicit, restorable and forgettable', async ({ page }) =
   await page.getByRole('button', { name: 'Site settings', exact: true }).click();
   await page.getByRole('button', { name: 'Save draft on this device', exact: true }).click();
   await expect(page.locator('#toast')).toContainText('Draft saved locally.');
+  await page.route('**/data/config.json', async (route) => {
+    const response = await route.fetch();
+    const config = await response.json();
+    config.pets[0].shortId = 'c0ffee12';
+    await route.fulfill({ json: config });
+  });
   await page.reload();
   await expect(page.locator('.pet-card').first()).toContainText('Cooper');
   await page.getByRole('button', { name: 'Site settings', exact: true }).click();
   await page.getByRole('button', { name: 'Restore local draft', exact: true }).click();
   await page.getByRole('button', { name: 'My pets', exact: true }).click();
   await expect(page.locator('.pet-card').first()).toContainText('Local draft companion');
+  await expect(
+    page.locator('.pet-card').first().getByRole('link', { name: 'View profile' }),
+  ).toHaveAttribute('href', /\/p\/c0ffee12\/$/);
   await page.getByRole('button', { name: 'Site settings', exact: true }).click();
   await page.getByRole('button', { name: 'Forget local draft', exact: true }).click();
   await expect(page.locator('#toast')).toContainText('Local draft deleted.');

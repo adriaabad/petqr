@@ -79,7 +79,7 @@ test('authenticated Save publishes one atomic update, tracks deployment and neve
   await page.getByLabel('Name', { exact: true }).fill('Saved directly');
   await connect(page);
   await expect(page.locator('#github-publishing')).toContainText('Connected as test-owner');
-  expect(await page.locator('input[type=password]').count()).toBe(0);
+  await expect(page.locator('input[type=password]')).toHaveCount(0);
   await page.getByRole('button', { name: 'Save and publish', exact: true }).click();
   await expect(page.getByRole('dialog')).toContainText('petqr-tests/pets');
   await page.getByRole('button', { name: 'Publish changes', exact: true }).click();

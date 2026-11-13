@@ -371,7 +371,7 @@ function editor() {
       contentLang = v as Language;
       render();
     },
-  )}</div><div class="spacer"></div><div class="editor-layout"><div class="editor-form">${section(tr('Identity'), identity, 'identity', true)}${section(tr('Contacts'), contactContent, 'contacts')}${section(tr('Emergency message'), emergency, 'emergency')}${section(tr('Photos'), photoContent, 'photos')}${section(tr('Appearance'), appearance, 'appearance')}${dataSections(pet)}${advanced ? button('Add section', () => addSection(pet)) : ''}</div><aside class="preview-panel"><div class="row spread preview-heading"><span>${tr('Preview profile')}</span>${button('Preview profile', () => openPreview(pet), 'subtle')}</div><iframe title="${tr('Preview profile')}" id="profile-preview" sandbox="allow-popups allow-popups-to-escape-sandbox"></iframe></aside></div>`;
+  )}</div><div class="spacer"></div><div class="editor-layout"><div class="editor-form">${section(tr('Identity'), identity, 'identity', true)}${section(tr('Contacts'), contactContent, 'contacts')}${section(tr('Emergency message'), emergency, 'emergency')}${section(tr('Photos'), photoContent, 'photos')}${section(tr('Appearance'), appearance, 'appearance')}${dataSections(pet)}${advanced ? button('Add section', () => addSection(pet)) : ''}</div><aside class="preview-panel"><div class="row spread preview-heading"><span>${tr('Preview profile')}</span>${button('Preview profile', () => openPreview(pet), 'subtle')}</div><iframe title="${tr('Preview profile')}" id="profile-preview" sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe></aside></div>`;
 }
 function dataSections(pet: Pet) {
   const known = (Object.keys(categoryNames) as (keyof typeof categoryNames)[]).map((id) => ({
@@ -664,7 +664,7 @@ function openPreview(pet: Pet) {
     const dialog = document.createElement('dialog');
     dialog.style.width = 'min(1000px,95vw)';
     dialog.setAttribute('aria-label', tr('Preview profile'));
-    dialog.innerHTML = `<div class="modal-heading"><h2>${tr('Preview profile')}</h2><button class="button">${tr('Close')}</button></div><iframe title="${tr('Preview profile')}" sandbox="allow-popups allow-popups-to-escape-sandbox" style="width:100%;height:72vh;border:0"></iframe>`;
+    dialog.innerHTML = `<div class="modal-heading"><h2>${tr('Preview profile')}</h2><button class="button">${tr('Close')}</button></div><iframe title="${tr('Preview profile')}" sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox" style="width:100%;height:72vh;border:0"></iframe>`;
     dialog.querySelector('iframe')!.srcdoc = previewDocument(pet);
     dialog.querySelector('button')!.onclick = () => dialog.close();
     dialog.onclose = () => dialog.remove();

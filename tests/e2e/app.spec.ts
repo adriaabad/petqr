@@ -174,6 +174,9 @@ test('an invalid optional Telegram does not block a photo over 15 MB, and the ex
   test.setTimeout(60000);
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
+  page.on('console', (message) => {
+    if (message.type() === 'error') errors.push(message.text());
+  });
   await page.goto('editor/');
   await page.getByRole('button', { name: 'Contacts', exact: true }).click();
   const contact = page.locator('.contact-editor').first();
@@ -223,6 +226,17 @@ test('an invalid optional Telegram does not block a photo over 15 MB, and the ex
   await expect(page.locator('.photo-item')).toHaveCount(2);
   await expect(page.locator('#toast')).toContainText('Photo optimized');
   await expect(page.locator('#errors')).toBeEmpty();
+  const sandbox = await page.locator('#profile-preview').getAttribute('sandbox');
+  expect(sandbox?.split(' ')).toContain('allow-same-origin');
+  expect(sandbox?.split(' ')).not.toContain('allow-scripts');
+  const preview = page.frameLocator('#profile-preview');
+  await preview.locator('.full-details summary').click();
+  await expect(preview.locator('.gallery img')).toBeVisible();
+  await expect
+    .poll(() =>
+      preview.locator('.gallery img').evaluate((image) => (image as HTMLImageElement).naturalWidth),
+    )
+    .toBeGreaterThan(0);
   await page.getByRole('button', { name: 'Export files', exact: true }).click();
   await expect(page.locator('#errors')).toContainText('Contacts → Alex (fictional) → telegram');
   await expect(page.locator('#errors')).not.toContainText('/^');

@@ -53,4 +53,6 @@ Prefer custom sections/fields; no schema change is needed. To suggest a field in
 
 Keep the lockfile and dependency licenses. Dependencies are build-time or locally bundled, not runtime CDN URLs. No `eval`, remote script, raw owner HTML or repository-write token is used. Image filenames disallow path traversal and active SVG. Imported archives only accept expected configuration files and safe image paths, with extraction limits. Preview iframes are sandboxed without scripts. Any new import feature must keep these boundaries.
 
+Preview frames allow same-origin image access so newly processed local Blob photos render; `allow-scripts` stays absent, owner text is escaped and no scripts are inserted into preview documents. Never enable both same-origin and scripts for these frames.
+
 Future ideas, not implemented: authorized GitHub writes, cross-device draft synchronization, additional languages and a physical tag scanning lab. They are deliberately unnecessary for the current static workflow.

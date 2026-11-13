@@ -47,19 +47,21 @@ test('editor preview and exported public files reflect edits while keeping the I
   expect(result.config.pets[0].name).toBe('Cooper updated');
   expect(result.images.size).toBe(3);
 });
-test('missing profile works on mobile under subdirectory hosting with language switching', async ({
+test('profile works on mobile without lost status under subdirectory hosting with language switching', async ({
   page,
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('p/luna-92bd/');
   await expect(page.getByRole('heading', { name: 'Luna', exact: true })).toBeVisible();
-  await expect(page.locator('.missing-banner')).toBeVisible();
+  await expect(page.locator('.missing-banner, .status')).toHaveCount(0);
   await expect(page.locator('a[href="tel:+12025550188"]').first()).toBeVisible();
   await page.getByLabel('Language', { exact: true }).selectOption('ca');
   await expect(page.locator('html')).toHaveAttribute('lang', 'ca');
-  await expect(page.getByText('Aquest animal està perdut.', { exact: false })).toBeVisible();
+  await expect(page.getByText('Aquest animal està perdut.', { exact: false })).toHaveCount(0);
   await page.getByText('Tots els detalls', { exact: true }).click();
-  await expect(page.getByText('Collar verd blavós', { exact: true })).toBeVisible();
+  await expect(page.locator('.full-details')).toHaveAttribute('open', '');
+  await expect(page.locator('.full-details')).toContainText('Gat');
+  await expect(page.getByText('Collar verd blavós', { exact: true })).toHaveCount(0);
   expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
   await page.locator('img').evaluateAll(async (images) => {
     await Promise.all(images.map((i) => (i as HTMLImageElement).decode().catch(() => {})));
@@ -83,27 +85,45 @@ test('emergency contact and warnings remain available without JavaScript', async
   ).toBeVisible();
   await context.close();
 });
-test('sensitive medical field requires confirmation and remains unpublished when declined', async ({
+test('simple pet form exports chip and registration only with explicit consent and has no GitHub connection or status controls', async ({
   page,
 }) => {
   await page.goto('editor/');
   await page.getByRole('button', { name: 'Edit', exact: true }).first().click();
-  await page.getByRole('button', { name: 'Advanced', exact: true }).click();
-  const section = page.locator('details[data-section="data-medical"]');
-  await section.locator('summary').click();
-  await section.getByLabel('Optional fields').selectOption('medications');
-  await section.getByRole('button', { name: 'Add field', exact: true }).click();
-  const field = section.locator('.field-row').last();
-  await field
-    .getByLabel('Current medications', { exact: true })
-    .fill('PRIVATE_MEDICATION_SENTINEL');
+  await expect(page.getByRole('button', { name: 'Advanced', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Connect GitHub', exact: true })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: 'Save and publish', exact: true })).toHaveCount(0);
+  await expect(page.getByLabel('Status', { exact: true })).toHaveCount(0);
+  await expect(page.locator('details[data-section="emergency"]')).toHaveCount(0);
+  await page.getByLabel('Microchip number', { exact: true }).fill('000123456789012');
+  await page.getByLabel('Registration number', { exact: true }).fill('REG-00042');
   page.once('dialog', (d) => d.dismiss());
-  await field.getByLabel('Publish', { exact: true }).click();
-  await expect(field.getByLabel('Publish', { exact: true })).not.toBeChecked();
+  await page.getByLabel('Publish microchip number', { exact: true }).click();
+  await expect(page.getByLabel('Publish microchip number', { exact: true })).not.toBeChecked();
   await expect(page.locator('#profile-preview')).not.toHaveAttribute(
     'srcdoc',
-    /PRIVATE_MEDICATION_SENTINEL/,
+    /000123456789012|REG-00042/,
   );
+  for (const label of ['Publish microchip number', 'Publish registration number']) {
+    page.once('dialog', (dialog) => dialog.accept());
+    await page.getByLabel(label, { exact: true }).check();
+  }
+  await expect(
+    page.frameLocator('#profile-preview').getByText('000123456789012', { exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.frameLocator('#profile-preview').getByText('REG-00042', { exact: true }),
+  ).toBeVisible();
+  await page.getByRole('button', { name: 'Export files', exact: true }).click();
+  const downloaded = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Confirm publication · ZIP' }).click();
+  const file = await downloaded;
+  const result = importArchive(new Uint8Array(await readFile((await file.path())!)));
+  expect(result.config.pets[0].sections.filter((s) => s.id === 'identification')).toHaveLength(1);
+  const fields = result.config.pets[0].sections.find((s) => s.id === 'identification')!.fields;
+  expect(fields.find((f) => f.key === 'microchip')?.value).toBe('000123456789012');
+  expect(fields.find((f) => f.key === 'registration')?.value).toBe('REG-00042');
+  expect(result.config.pets[0].id).toBe('cooper-7f2a');
 });
 test('QR settings require a public URL and produce SVG and PNG files', async ({ page }) => {
   await page.goto('editor/');

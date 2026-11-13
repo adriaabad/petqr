@@ -35,20 +35,20 @@ An ordered array. Each pet has:
 | id | Stable unique 3–64 character lowercase alphanumeric/hyphen identifier. Never change after printing. The editor generates random UUID-based IDs. |
 | name | Required public name, 1–100 characters |
 | species, breed, introduction | Plain or translated text; species may be empty for a newly created draft |
-| status | `safe`, `missing`, `found`, `custom`; defaults safe |
-| statusLabel | Optional custom status text |
-| emergency | Always-visible owner-written urgent instructions |
+| status | Legacy compatibility: `safe`, `missing`, `found`, `custom`; no longer displayed or editable |
+| statusLabel | Legacy compatibility only; no longer displayed |
+| emergency | Legacy loss instructions; retained in data but no longer displayed |
 | photos | Up to 30 `{path, alt}` objects. First is featured. Path must be a flat filename under `assets/pets/`, ending in .webp/.png/.jpg/.jpeg. No external image URLs, SVG or traversal. |
 | contacts | Ordered `{id, overrides?}` assignments. Order determines priority. Overrides can replace a name, relationship, method, phone, WhatsApp, email, Telegram, language, availability or publication flags. Unset values inherit; empty strings clear an optional method. |
 | sections | Custom or built-in `{id, title, fields}` sections |
 | theme | `{accent: "#27634b", background: "sage", icon: "paw"}`; background sage/sand/sky, icon paw/heart/none |
 | indexing | false by default; enables index/follow metadata and sitemap inclusion only when canonical URL is known |
 
-Basic identity, introduction, photos, status and urgent message are inherently public. Advanced fields have explicit Publish controls. All contacts need confirmation before use. Override publication is evaluated against the confirmed shared contact; private override values are removed from exports rather than hidden in the UI.
+Basic identity, introduction and photos are inherently public. Microchip and registration numbers are stored as fields in the `identification` section, with keys `microchip` and `registration`; legacy `registry` is also supported. These are text values, not numeric values. Both require Publish and consent before export/display. All contacts need confirmation before use. Override publication is evaluated against the confirmed shared contact; private override values are removed from exports rather than hidden in the UI.
 
 ## Extensible sections and fields
 
-Built-in category IDs: identity, identification, medical, behavior, care, location, emergency. `src/fields.ts` lists their field suggestions with three-language labels. Custom sections and fields use the same schema and rendering path:
+Existing category IDs: identity, identification, medical, behavior, care, location, emergency. Legacy `emergency` sections are preserved but no longer displayed. `src/fields.ts` retains compatible category labels and keys. The simplified editor edits existing fields without an Advanced builder. Custom sections and fields can still be configured in source using the same schema and rendering path:
 
 ```json
 {

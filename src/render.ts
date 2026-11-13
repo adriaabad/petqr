@@ -1,6 +1,6 @@
 import { contactLink, resolvedContacts, textOf, petPath } from './core';
 import type { Config, Pet, Language, Localized } from './model';
-import { t, statusKey } from './i18n';
+import { t } from './i18n';
 export function esc(value: unknown): string {
   return String(value ?? '').replace(
     /[&<>"']/g,
@@ -20,9 +20,6 @@ export function brand(href: string): string {
 }
 export function footer(config: Config, lang: Language): string {
   return `<footer><p>${t('Public information. Share only what you are comfortable publishing.', lang)}</p>${config.site.attribution ? `<p>PetQR · ${config.site.sourceUrl ? `<a href="${esc(config.site.sourceUrl)}" rel="noopener noreferrer">${t('Open-source project', lang)}</a>` : 'MIT · Open source'}</p>` : ''}</footer>`;
-}
-export function status(pet: Pet, lang: Language): string {
-  return `<span class="status ${pet.status}"><span aria-hidden="true">${pet.status === 'missing' ? '!' : '✓'}</span> ${esc(pet.status === 'custom' ? textOf(pet.statusLabel, lang) || t('Custom', lang) : t(statusKey[pet.status], lang))}</span>`;
 }
 export function photo(pet: Pet, lang: Language, prefix: string, lazy = false): string {
   const p = pet.photos[0];
@@ -54,19 +51,35 @@ export function renderProfile(
         )
         .join('')}</nav>`
     : '';
-  const warnings = pet.sections
+  const sections = pet.sections.filter((section) => section.id !== 'emergency');
+  const isIdentifier = (section: string, key: string) =>
+    section === 'identification' && ['microchip', 'registration', 'registry'].includes(key);
+  const identifiers = sections
+    .filter((section) => section.id === 'identification')
+    .flatMap((section) => section.fields)
+    .filter(
+      (field) =>
+        ['microchip', 'registration', 'registry'].includes(field.key) &&
+        field.publish &&
+        field.consent &&
+        local(field.value).trim(),
+    );
+  const identification = identifiers.length
+    ? `<dl class="pet-identifiers">${identifiers.map((field) => `<div><dt>${tr(field.key === 'microchip' ? 'Microchip number' : 'Registration number')}</dt><dd>${esc(local(field.value))}</dd></div>`).join('')}</dl>`
+    : '';
+  const warnings = sections
     .flatMap((s) =>
       s.fields
-        .filter((f) => f.kind === 'warning')
+        .filter((f) => f.kind === 'warning' && !isIdentifier(s.id, f.key))
         .map(
           (f) =>
             `<div class="notice warning"><strong>${esc(local(f.label))}</strong><p>${esc(local(f.value))}</p></div>`,
         ),
     )
     .join('');
-  const details = pet.sections
+  const details = sections
     .map((s) => {
-      const values = s.fields.filter((f) => f.kind !== 'warning');
+      const values = s.fields.filter((f) => f.kind !== 'warning' && !isIdentifier(s.id, f.key));
       return values.length
         ? `<section class="detail-section"><h3>${esc(local(s.title))}</h3><dl>${values.map((f) => `<div><dt>${esc(local(f.label))}</dt><dd>${f.kind === 'link' ? `<a href="${esc(local(f.value))}" rel="noopener noreferrer">${esc(local(f.value))}</a>` : esc(local(f.value))}</dd></div>`).join('')}</dl></section>`
         : '';
@@ -74,9 +87,8 @@ export function renderProfile(
     .join('');
   return `<header class="public-header">${brand(config.site.ownerIndex ? prefix : '#main')}${controls(lang)}</header><main id="main" class="profile theme-${pet.theme.background}" style="--pet-accent:${pet.theme.accent}">
   ${config.site.fictional ? `<p class="demo-note">${tr('Fictional examples. Replace all demo data before publishing.')}</p>` : ''}
-  ${pet.status === 'missing' ? `<div class="missing-banner" role="status">${tr('This pet is missing. Please contact their people.')}</div>` : ''}
-  <div class="profile-top"><div class="profile-photo">${photo(pet, lang, prefix)}${pet.theme.icon !== 'none' ? `<span class="pet-decoration" aria-hidden="true">${pet.theme.icon === 'heart' ? '♡' : paw}</span>` : ''}</div><div class="profile-intro"><div class="name-row"><h1>${esc(pet.name)}</h1>${status(pet, lang)}</div><p class="species">${esc(local(pet.species))}${pet.breed ? ` · ${esc(local(pet.breed))}` : ''}</p><p class="introduction">${esc(local(pet.introduction) || tr('Please contact my people so I can get home safely.'))}</p>
-  ${pet.emergency ? `<div class="notice warning"><strong>${tr('Important information')}</strong><p>${esc(local(pet.emergency))}</p></div>` : ''}
+  <div class="profile-top"><div class="profile-photo">${photo(pet, lang, prefix)}${pet.theme.icon !== 'none' ? `<span class="pet-decoration" aria-hidden="true">${pet.theme.icon === 'heart' ? '♡' : paw}</span>` : ''}</div><div class="profile-intro"><div class="name-row"><h1>${esc(pet.name)}</h1></div><p class="species">${esc(local(pet.species))}${pet.breed ? ` · ${esc(local(pet.breed))}` : ''}</p><p class="introduction">${esc(local(pet.introduction) || tr('Please contact my people so I can get home safely.'))}</p>
+  ${identification}
   <section class="contacts-public" aria-label="${tr('Contact my people')}"><h2>${tr('Contact my people')}</h2>${
     contacts.length
       ? contacts
@@ -114,7 +126,7 @@ export function renderProfile(
   ${config.site.ownerIndex ? `<a class="back-link" href="${esc(prefix)}">← ${tr('All pets')}</a>` : ''}</main>${!preview ? quick : ''}${footer(config, lang)}<div class="toast" role="status" aria-live="polite" id="toast"></div>`;
 }
 export function renderIndex(config: Config, lang: Language): string {
-  return `<header class="public-header">${brand('./')}${controls(lang)}</header><main id="main" class="owner-index"><div class="page-heading"><div><h1>${esc(config.site.title)}</h1><p>${t('Your pets, their people, always connected.', lang)}</p></div><a class="button" href="editor/">${t('Local editor', lang)}</a></div>${config.site.fictional ? `<p class="demo-note">${t('Fictional examples. Replace all demo data before publishing.', lang)}</p>` : ''}${config.site.ownerIndex ? `<div class="pet-grid">${config.pets.map((p) => `<article class="pet-card"><a class="card-photo" href="${petPath(p.id)}">${photo(p, lang, '', true)}</a><div class="card-body"><div class="name-row"><h2><a href="${petPath(p.id)}">${esc(p.name)}</a></h2>${status(p, lang)}</div><p class="species">${esc(textOf(p.species, lang))}</p><a class="button primary" href="${petPath(p.id)}">${t('View profile', lang)} <span aria-hidden="true">↗</span></a></div></article>`).join('')}</div>` : `<p>${t('Profiles are public, including when the index is disabled.', lang)}</p>`}</main>${footer(config, lang)}<div class="toast" role="status" id="toast"></div>`;
+  return `<header class="public-header">${brand('./')}${controls(lang)}</header><main id="main" class="owner-index"><div class="page-heading"><div><h1>${esc(config.site.title)}</h1><p>${t('Your pets, their people, always connected.', lang)}</p></div><a class="button" href="editor/">${t('Local editor', lang)}</a></div>${config.site.fictional ? `<p class="demo-note">${t('Fictional examples. Replace all demo data before publishing.', lang)}</p>` : ''}${config.site.ownerIndex ? `<div class="pet-grid">${config.pets.map((p) => `<article class="pet-card"><a class="card-photo" href="${petPath(p.id)}">${photo(p, lang, '', true)}</a><div class="card-body"><div class="name-row"><h2><a href="${petPath(p.id)}">${esc(p.name)}</a></h2></div><p class="species">${esc(textOf(p.species, lang))}</p><a class="button primary" href="${petPath(p.id)}">${t('View profile', lang)} <span aria-hidden="true">↗</span></a></div></article>`).join('')}</div>` : `<p>${t('Profiles are public, including when the index is disabled.', lang)}</p>`}</main>${footer(config, lang)}<div class="toast" role="status" id="toast"></div>`;
 }
 export function htmlDocument(
   body: string,
@@ -130,9 +142,5 @@ export function htmlDocument(
   },
 ): string {
   const { title, lang, prefix, indexing, canonical, photo: ogPhoto, script, description } = options;
-  const policy =
-    script === 'editor.js'
-      ? `<meta name="referrer" content="no-referrer"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' blob: data:; connect-src 'self' https://api.github.com; frame-src 'self' about:; object-src 'none'; base-uri 'none'; form-action 'none'">`
-      : '';
-  return `<!doctype html>\n<html lang="${lang}"><head><meta charset="UTF-8">${policy}<meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light dark"><title>${esc(title)}</title><meta name="description" content="${esc(description || 'Pet identification & emergency contacts · PetQR')}"><meta name="robots" content="${indexing ? 'index, follow' : 'noindex, nofollow'}"><meta property="og:title" content="${esc(title)}"><meta property="og:description" content="Pet identification · PetQR"><meta property="og:type" content="website">${canonical ? `<link rel="canonical" href="${esc(canonical)}"><meta property="og:url" content="${esc(canonical)}">` : ''}${ogPhoto ? `<meta property="og:image" content="${esc(ogPhoto)}">` : ''}<link rel="icon" href="${prefix}favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="${prefix}assets/style.css"><script type="module" src="${prefix}assets/${script}"></script></head><body>${skipLink(lang)}${body}</body></html>`;
+  return `<!doctype html>\n<html lang="${lang}"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="color-scheme" content="light dark"><title>${esc(title)}</title><meta name="description" content="${esc(description || 'Pet identification & emergency contacts · PetQR')}"><meta name="robots" content="${indexing ? 'index, follow' : 'noindex, nofollow'}"><meta property="og:title" content="${esc(title)}"><meta property="og:description" content="Pet identification · PetQR"><meta property="og:type" content="website">${canonical ? `<link rel="canonical" href="${esc(canonical)}"><meta property="og:url" content="${esc(canonical)}">` : ''}${ogPhoto ? `<meta property="og:image" content="${esc(ogPhoto)}">` : ''}<link rel="icon" href="${prefix}favicon.svg" type="image/svg+xml"><link rel="stylesheet" href="${prefix}assets/style.css"><script type="module" src="${prefix}assets/${script}"></script></head><body>${skipLink(lang)}${body}</body></html>`;
 }

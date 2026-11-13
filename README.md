@@ -2,28 +2,13 @@
 
 A little tag. A way home.
 
-PetQR gives every pet a permanent identification page and a printable QR code. Manage dogs, cats, rabbits, birds or any other companions in one independent repository. Your copy includes the entire application: no PetQR account, server, database, mandatory API key, subscription or central domain. Optional direct saving uses your own short-lived, repository-scoped GitHub access key.
+PetQR gives every pet a permanent identification page and a printable QR code. Manage dogs, cats, rabbits, birds or any other companions in one independent repository. Your copy includes the entire application: no PetQR account, server, database, API key, subscription or central domain.
 
 **English · [Español](docs/QUICKSTART.es.md) · [Català](docs/QUICKSTART.ca.md)**
 
 ![PetQR local dashboard with three fictional pets](docs/screenshots/dashboard.png)
 
 [See a mobile emergency profile in Catalan](docs/screenshots/mobile.png).
-
-## Edit → Save and publish, entirely on GitHub Pages
-
-The editor can now update your repository directly, including photos, without downloading a ZIP or running a backend.
-
-1. Open `/editor/` and click **Connect GitHub**. The repository is detected from that copy's own GitHub Actions build.
-2. Click **Create a limited access key in GitHub**. GitHub pre-fills the owner, a seven-day expiration and **Contents: Read and write**. In **Repository access**, select **Only select repositories** and choose **only your PetQR repository**. Do not grant Workflows, Administration or all-repository access.
-3. Generate the fine-grained key, paste it into the editor's password field and confirm the repository restriction. Do not paste it into a pet field, source file or chat. Classic/broad keys are rejected by the editor.
-4. Edit your pets, click **Save and publish**, review the public-data notice and press **Publish changes**. Data and referenced photos are saved together in one commit. The editor reports **Saved in GitHub**, then **Published** once Pages serves the new version.
-
-The key stays only in this tab's memory. The connection expires after 30 minutes and is forgotten on disconnect, navigation or reload. Reconnecting may reuse the same unexpired key; GitHub's key expiration and the editor's shorter connection lifetime are separate. Closing the tab does not revoke the key in GitHub; use **Manage or revoke keys** for that. PetQR does not store it in local drafts, browser storage, exported ZIPs or repository files.
-
-GitHub enforces repository permissions. The Contents permission grants write access to that repository's content, not a GitHub-enforced folder restriction; protect the key and use only a trusted copy of the editor. The editor itself allows writes only to the four public `data/*.json` files and referenced `assets/pets/` images. It checks source-file hashes, preserves unrelated code, never force-pushes, and stops if newer remote data or a concurrent update is detected. Save/export your draft before reloading after a conflict.
-
-No OAuth login server, paid service or maintainer-controlled domain is involved. This is a **fine-grained access-key connection**, not an automatic GitHub sign-in. The public profiles and ZIP workflow remain fully functional without it. See [direct saving and security](docs/GITHUB_SAVE.md).
 
 ## Start on GitHub — no coding needed
 
@@ -32,8 +17,8 @@ No OAuth login server, paid service or maintainer-controlled domain is involved.
 3. Open **Actions → Validate, test & deploy PetQR → Run workflow** on your default branch. The first run publishes clearly labeled fictional examples. Wait for the green deployment, then follow its Pages URL. No personal access token or extra secret is needed.
 4. Visit `<your Pages URL>/editor/`. In **Site settings**, verify the public site URL, including the repository path. The workflow fills it from your repository's Pages metadata; an explicit custom URL overrides it.
 5. Replace the example pets using **Edit**, or delete them and **Add pet**. Add your contacts in **Contacts**, confirm publication, and assign them to each pet. Set the preferred order for emergency contacts. Turn off **Demo data notice** after replacing all fictional data.
-6. **Preview profile**, then connect GitHub and use **Save and publish** as described above. Alternatively, choose **Export files → Confirm publication · ZIP**. Extract the download, replace the repository's **entire `data/` folder**, and upload/merge the exported photos into `assets/pets/`. Keep the existing application source and workflow. GitHub's **Add file → Upload files** supports uploading a folder's contents. Confirm the exact paths below without an extra ZIP folder prefix, then commit to your default branch.
-7. Wait for Actions to finish. Open each pet's **View profile** and confirm the contacts, photo and warnings on your phone. Local editor changes update the website only after publishing and deployment.
+6. **Preview profile**, then **Export files → Confirm publication · ZIP**. Extract the download. Replace the repository's **entire `data/` folder** with the exported `data/`, and upload/merge the exported photos into `assets/pets/`. Keep the existing application source and workflow. GitHub's **Add file → Upload files** supports uploading a folder's contents. Confirm that the exported files have the exact paths below, rather than an extra ZIP folder prefix. Commit the changes to your default branch.
+7. Wait for Actions to finish. Open each pet's **View profile** and confirm the contacts, photo and warnings on your phone. Local editor changes do not update your website until this upload/deployment step.
 8. In the editor, open **QR code** for each pet. Download SVG for printing/engraving or PNG for other tools. **Test destination** opens the final deployed URL; also scan the exported/printed QR with more than one phone. Keep the URL and stable pet ID unchanged after printing.
 
 The project works with `https://USERNAME.github.io/REPOSITORY/`, `https://USERNAME.github.io/` and custom domains. Those are URL patterns, not dependencies on a particular account. A copy continues to work if its original repository disappears.
@@ -41,9 +26,8 @@ The project works with `https://USERNAME.github.io/REPOSITORY/`, `https://USERNA
 ## What is included
 
 - Any number of profiles, each built to a real `p/PET_ID/index.html`, with emergency contacts available even without JavaScript.
-- A local visual dashboard: add, edit, duplicate, reorder and delete; safe/missing/found/custom status; shared contacts and pet-specific overrides.
-- Optional **Save and publish** to your own GitHub repository with atomic data/photo commits, conflict checks and deployment status; credentials stay in tab memory only.
-- Basic/advanced forms, over 100 optional animal fields, custom sections/links/warnings, multilingual free text, explicit sensitive-field publication and filtered ZIP export/import.
+- A local visual dashboard: add, edit, duplicate, reorder and delete; shared contacts and pet-specific overrides.
+- One simple pet form with microchip and registration numbers, multilingual free text, explicit sensitive-field publication and filtered ZIP export/import. Existing extra details remain editable without an Advanced mode.
 - Local photo crop, rotation, pan, compression to at most 300 KB, WebP/JPEG conversion, alt text, featured photo and ordering. No remote image service.
 - Bundled QR generator: SVG/PNG, resolution, colors with enforced contrast, error correction, quiet zone, labels, destination check, millimeter tag designer and print layout.
 - English, Spanish and Catalan; browser preference, manual selection, fallback language; system/light/dark modes, keyboard focus, reduced motion and responsive layouts.
@@ -62,9 +46,9 @@ Disabling the owner index removes the overview links, but the public editor conf
 
 **Add several pets:** Add pet creates a new random, stable ID. Duplicate copies information but creates a different ID/QR. The dashboard order is saved in `data/pets.json`.
 
-**Mark missing or found:** Edit → Emergency message → Status. Add urgent instructions, then Save and publish (or export/upload/deploy). The public URL and QR stay unchanged.
+**Identification numbers:** Edit → Identity → Microchip number / Registration number. These optional text inputs preserve leading zeros. Select the corresponding Publish checkbox and confirm before including either number on the public profile. Unpublished numbers stay in the browser and are excluded from exports.
 
-**More details:** Switch to Advanced. Open a category, select an optional field and Add field, or add a custom section. Check Publish for each intended public field. Choose Warning to keep urgent text visible in emergency view. Medical/identification publication asks for consent. Use Edit translation to enter translated values without changing the interface language.
+**Existing details:** Previously configured additional fields remain editable in their existing sections. Medical/identification publication asks for consent. Use Edit translation to enter translated free text without changing the interface language. The Advanced mode, new custom-field builders and lost/found status are no longer shown. Legacy configuration stays compatible without deleting existing data.
 
 **Photos:** Edit → Photos → Add photo. Crop, pan/zoom and rotate before Use photo. Add alt text; choose Make featured or reorder. Upload the exported image files along with the configuration. Photo removal updates the public page; manually remove unused photos from the repository if desired, remembering history can retain them.
 
@@ -129,7 +113,7 @@ To migrate, `npm ci && npm run build`, then upload **all contents of `dist/`** t
 
 ## Limits and release checks
 
-This release is browser-only: GitHub writes require your explicit access-key connection and publication action; there are no PetQR accounts, background sync, tracking, analytics or veterinary diagnosis. Direct saving needs connectivity, GitHub permission and a valid source snapshot; repository rules can require a different review workflow. Unpublished fields remain local and are never synchronized by public saving. Keep repository uploads under GitHub's current limits. A ZIP import is limited to 60 MB compressed / 120 MB extracted, and photographs to 30 per pet. New photos are reduced to at most 300 KB. Source decoding depends on browser codecs and device memory. Local drafts depend on browser quotas.
+This release is browser-only: no automatic GitHub writes, accounts, sync, tracking, analytics or veterinary diagnosis. Keep direct repository uploads under GitHub's current limits. A ZIP import is limited to 60 MB compressed / 120 MB extracted, and photographs to 30 per pet. New photos are reduced to at most 300 KB. Source decoding depends on browser codecs and device memory; the app has no arbitrary 15 MB upload limit. Local drafts depend on browser quotas. No technical fixed maximum number of pets is imposed, but very large collections depend on device memory and hosting limits.
 
 Tag SVGs use ordinary text so vector editors can edit them; convert text to paths in your engraving application if needed. Printers, materials and scanners vary: always physically test before engraving. Automated accessibility checks are included, but human assistive-technology testing remains necessary. Deployment is provided as a workflow; a live GitHub run requires your own repository and Pages settings. There is deliberately no hardcoded upstream repository URL: set the optional source URL in your own installation.
 

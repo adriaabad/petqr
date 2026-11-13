@@ -1,9 +1,13 @@
 import { languages } from './core';
 import type { Language } from './model';
 const phrases: Record<string, [string, string]> = {
-  'Changes stay on this device until you publish or export.': [
-    'Los cambios se quedan en este dispositivo hasta que publiques o exportes.',
-    'Els canvis es queden en aquest dispositiu fins que publiquis o exportis.',
+  'Microchip number': ['Número de microchip', 'Número de microxip'],
+  'Registration number': ['Número de registro', 'Número de registre'],
+  'Publish microchip number': ['Publicar número de microchip', 'Publicar número de microxip'],
+  'Publish registration number': ['Publicar número de registro', 'Publicar número de registre'],
+  'Optional. Published identification numbers can be read by anyone.': [
+    'Opcional. Cualquier persona puede leer los números de identificación publicados.',
+    'Opcional. Qualsevol persona pot llegir els números d’identificació publicats.',
   ],
   'Enter a Telegram username, @username or https://t.me/username. Leave blank if you do not use Telegram.':
     [

@@ -19,9 +19,9 @@ import {
   type Field,
 } from './model';
 import { preferredLanguage, t } from './i18n';
-import { brand, controls, status, photo, esc, renderProfile } from './render';
+import { brand, controls, photo, esc, renderProfile } from './render';
 import { bindPreferences, toast } from './preferences';
-import { fields, categoryNames, tri } from './fields';
+import { categoryNames, tri } from './fields';
 import { openQR } from './qr';
 import { processImage } from './images';
 import { profilePreview } from './preview';
@@ -29,7 +29,6 @@ import { exportArchive, importArchive, type ImageFiles } from './archive';
 import { download } from './download';
 import { draftStore } from './draft';
 import { icon } from './icons';
-import { PublishingUI } from './publishing-ui';
 
 const base = new URL(/* @vite-ignore */ '../', import.meta.url);
 let config: Config,
@@ -38,11 +37,9 @@ let config: Config,
   contentLang: Language = 'en';
 let screen: 'pets' | 'contacts' | 'settings' | 'help' | 'edit' = 'pets',
   selected = '',
-  advanced = false,
   dirty = false,
   previewCSS = '';
 let images: ImageFiles = new Map();
-let publishing: PublishingUI | null = null;
 const imageURLs = new Map<string, string>();
 const binding = new Map<string, (value: string | boolean) => void>(),
   actions = new Map<string, () => void | Promise<void>>();
@@ -189,10 +186,10 @@ function shell(content: string) {
     )
     .join(
       '',
-    )}</nav><p class="sidebar-note">${tr('Local only. Nothing is uploaded automatically.')}</p></aside><main class="app-main" id="main"><div class="topbar"><span class="context">PetQR / ${tr('Local editor')}</span><div class="editor-top-actions">${controls(lang)}<div id="github-publishing"></div></div></div><div id="errors" class="error-box" role="alert"></div>${content}</main></div><div class="toast" role="status" aria-live="polite" id="toast"></div>`;
+    )}</nav><p class="sidebar-note">${tr('Local only. Nothing is uploaded automatically.')}</p></aside><main class="app-main" id="main"><div class="topbar"><span class="context">PetQR / ${tr('Local editor')}</span>${controls(lang)}</div><div id="errors" class="error-box" role="alert"></div>${content}</main></div><div class="toast" role="status" aria-live="polite" id="toast"></div>`;
 }
 function exportStrip() {
-  return `<div class="export-strip"><div><strong>${tr('Changes stay on this device until you publish or export.')}</strong><p>${tr('Only selected public fields are exported. Unpublished fields remain in this browser session.')}</p></div>${button('Export files', openExport)}</div>`;
+  return `<div class="export-strip"><div><strong>${tr('Changes stay on this device. Export when you’re ready.')}</strong><p>${tr('Only selected public fields are exported. Unpublished fields remain in this browser session.')}</p></div>${button('Export files', openExport)}</div>`;
 }
 function dashboard() {
   return `<div class="page-heading"><div><h1>${tr('A little tag. A way home.')}</h1><p>${tr('Your pets, their people, always connected.')}</p></div>${button(
@@ -210,7 +207,7 @@ function dashboard() {
   )}</div>${config.site.fictional ? `<p class="demo-note">${tr('Fictional examples. Replace all demo data before publishing.')}</p>` : ''}<div class="pet-grid">${config.pets
     .map(
       (pet, index) =>
-        `<article class="pet-card"><a class="card-photo" href="${new URL(petPath(pet.id), base).href}">${replaceImages(photo(pet, lang, base.href, index > 2))}</a><div class="card-body"><div class="name-row"><h2>${esc(pet.name)}</h2>${status(pet, lang)}</div><p class="species">${esc(local(pet.species) || '—')}</p><div class="card-actions"><a class="button primary" href="${new URL(petPath(pet.id), base).href}">${tr('View profile')} ↗</a>${button('QR code', () => openQR(config, pet, lang))}${button(
+        `<article class="pet-card"><a class="card-photo" href="${new URL(petPath(pet.id), base).href}">${replaceImages(photo(pet, lang, base.href, index > 2))}</a><div class="card-body"><div class="name-row"><h2>${esc(pet.name)}</h2></div><p class="species">${esc(local(pet.species) || '—')}</p><div class="card-actions"><a class="button primary" href="${new URL(petPath(pet.id), base).href}">${tr('View profile')} ↗</a>${button('QR code', () => openQR(config, pet, lang))}${button(
           'Edit',
           () => {
             selected = pet.id;
@@ -253,25 +250,63 @@ function dashboard() {
 function section(title: string, content: string, id: string, open = false) {
   return `<details data-section="${esc(id)}" ${open ? 'open' : ''}><summary>${esc(title)}</summary><div class="section-content">${content}</div></details>`;
 }
+function identificationInput(pet: Pet, key: 'microchip' | 'registration', label: string) {
+  let data = pet.sections.find((s) => s.id === 'identification');
+  const field =
+    data?.fields.find((f) => f.key === key) ||
+    (key === 'registration' ? data?.fields.find((f) => f.key === 'registry') : undefined) ||
+    fieldSchema.parse({
+      key,
+      label: { en: label, es: t(label, 'es'), ca: t(label, 'ca') },
+      value: '',
+      sensitive: true,
+    });
+  const attach = () => {
+    data ||= pet.sections.find((section) => section.id === 'identification');
+    if (!data) {
+      data = { id: 'identification', title: tri(categoryNames.identification), fields: [] };
+      pet.sections.push(data);
+    }
+    if (!data.fields.includes(field)) data.fields.push(field);
+  };
+  return `<div class="identification-input">${input(
+    label,
+    textOf(field.value, config.site.defaultLanguage),
+    (value) => {
+      attach();
+      field.value = value;
+    },
+    { max: 100 },
+  )}${check(
+    key === 'microchip' ? 'Publish microchip number' : 'Publish registration number',
+    field.publish && field.consent,
+    (value) => {
+      if (
+        value &&
+        !field.consent &&
+        !confirm(
+          tr(
+            'Publish this sensitive information publicly? It may be copied and remain in Git history after removal.',
+          ),
+        )
+      ) {
+        render();
+        return;
+      }
+      attach();
+      field.publish = value;
+      if (value) field.consent = true;
+      render();
+    },
+  )}<p class="hint">${tr('Optional. Published identification numbers can be read by anyone.')}</p></div>`;
+}
 function editor() {
   const pet = currentPet();
   if (!pet) {
     screen = 'pets';
     return dashboard();
   }
-  const identity = `<div class="form-grid">${input('Name', pet.name, (v) => (pet.name = v), { required: true, max: 100 })}${textInput('Species', pet.species, (v) => (pet.species = v))}${textInput('Breed', pet.breed, (v) => (pet.breed = v))}<div class="wide">${textInput('Introduction', pet.introduction, (v) => (pet.introduction = v), true)}</div><div class="wide"><label>${tr('Stable ID')}<code>${esc(pet.id)}</code><span class="hint">${tr('Keep this ID unchanged once a tag is printed.')}</span></label></div></div>`;
-  const emergency = `${select(
-    'Status',
-    pet.status,
-    ['safe', 'missing', 'found', 'custom'].map((v) => ({
-      value: v,
-      label: v[0].toUpperCase() + v.slice(1),
-    })),
-    (v) => {
-      pet.status = v as Pet['status'];
-      render();
-    },
-  )}${textInput('Custom status', pet.statusLabel, (v) => (pet.statusLabel = v))}${textInput('Emergency message', pet.emergency, (v) => (pet.emergency = v), true)}<p class="hint">${tr('Emergency instructions stay visible in compact view.')}</p>`;
+  const identity = `<div class="form-grid">${input('Name', pet.name, (v) => (pet.name = v), { required: true, max: 100 })}${textInput('Species', pet.species, (v) => (pet.species = v))}${textInput('Breed', pet.breed, (v) => (pet.breed = v))}<div class="wide form-grid">${identificationInput(pet, 'microchip', 'Microchip number')}${identificationInput(pet, 'registration', 'Registration number')}</div><div class="wide">${textInput('Introduction', pet.introduction, (v) => (pet.introduction = v), true)}</div><div class="wide"><label>${tr('Stable ID')}<code>${esc(pet.id)}</code><span class="hint">${tr('Keep this ID unchanged once a tag is printed.')}</span></label></div></div>`;
   const orderedContacts = [
     ...pet.contacts.map((ref) => config.contacts.find((c) => c.id === ref.id)!).filter(Boolean),
     ...config.contacts.filter((c) => !pet.contacts.some((ref) => ref.id === c.id)),
@@ -347,21 +382,7 @@ function editor() {
       render();
     },
     'subtle',
-  )}<h1 style="font-size:1.7rem">${tr('Edit pet')} · ${esc(pet.name)}</h1></div></div>${button('Export files', openExport, 'primary')}</div><div class="row spread editor-toolbar"><div class="mode-switch">${button(
-    'Basic',
-    () => {
-      advanced = false;
-      render();
-    },
-    advanced ? '' : 'active',
-  )}${button(
-    'Advanced',
-    () => {
-      advanced = true;
-      render();
-    },
-    advanced ? 'active' : '',
-  )}</div>${select(
+  )}<h1 style="font-size:1.7rem">${tr('Edit pet')} · ${esc(pet.name)}</h1></div></div>${button('Export files', openExport, 'primary')}</div><div class="row spread editor-toolbar">${select(
     'Edit translation',
     contentLang,
     [
@@ -373,7 +394,7 @@ function editor() {
       contentLang = v as Language;
       render();
     },
-  )}</div><div class="spacer"></div><div class="editor-layout"><div class="editor-form">${section(tr('Identity'), identity, 'identity', true)}${section(tr('Contacts'), contactContent, 'contacts')}${section(tr('Emergency message'), emergency, 'emergency')}${section(tr('Photos'), photoContent, 'photos')}${section(tr('Appearance'), appearance, 'appearance')}${dataSections(pet)}${advanced ? button('Add section', () => addSection(pet)) : ''}</div><aside class="preview-panel"><div class="row spread preview-heading"><span>${tr('Preview profile')}</span>${button('Preview profile', () => openPreview(pet), 'subtle')}</div><iframe title="${tr('Preview profile')}" id="profile-preview" sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe></aside></div>`;
+  )}</div><div class="spacer"></div><div class="editor-layout"><div class="editor-form">${section(tr('Identity'), identity, 'identity', true)}${section(tr('Contacts'), contactContent, 'contacts')}${section(tr('Photos'), photoContent, 'photos')}${section(tr('Appearance'), appearance, 'appearance')}${dataSections(pet)}</div><aside class="preview-panel"><div class="row spread preview-heading"><span>${tr('Preview profile')}</span>${button('Preview profile', () => openPreview(pet), 'subtle')}</div><iframe title="${tr('Preview profile')}" id="profile-preview" sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe></aside></div>`;
 }
 function dataSections(pet: Pet) {
   const known = (Object.keys(categoryNames) as (keyof typeof categoryNames)[]).map((id) => ({
@@ -384,21 +405,27 @@ function dataSections(pet: Pet) {
   return list
     .map((s) => {
       const data = pet.sections.find((item) => item.id === s.id);
-      if (!advanced && !data?.fields.length) return '';
+      const visibleFields =
+        data?.fields.filter(
+          (field) =>
+            s.id !== 'identification' ||
+            !['microchip', 'registration', 'registry'].includes(field.key),
+        ) || [];
+      if (s.id === 'emergency' || !visibleFields.length) return '';
       const sensitive = s.id === 'medical' || s.id === 'identification';
       return section(
         local(s.title),
         `${sensitive ? `<p class="sensitive-note">${tr('Sensitive details can identify an animal or expose health information. Publish only with informed consent.')}</p>` : ''}${
-          data?.fields
+          visibleFields
             .map((f) =>
               fieldEditor(s.id, f, () => {
-                data.fields.splice(data.fields.indexOf(f), 1);
+                data!.fields.splice(data!.fields.indexOf(f), 1);
                 dirty = true;
                 render();
               }),
             )
             .join('') || ''
-        }${advanced ? addFieldControl(pet, s) : ''}`,
+        }`,
         `data-${s.id}`,
       );
     })
@@ -425,74 +452,7 @@ function fieldEditor(sectionId: string, field: Field, remove: () => void) {
       field.publish = v;
       render();
     },
-  )}${
-    advanced
-      ? `${select(
-          'Type',
-          field.kind,
-          ['text', 'warning', 'link'].map((v) => ({
-            value: v,
-            label: v[0].toUpperCase() + v.slice(1),
-          })),
-          (v) => (field.kind = v as Field['kind']),
-        )}${check('Sensitive information', field.sensitive, (v) => {
-          field.sensitive = v;
-          if (v) {
-            field.publish = false;
-            field.consent = false;
-          }
-          render();
-        })}`
-      : ''
-  }${button('Remove', remove, 'subtle danger')}</div>${advanced ? textInput('Field label', field.label, (v) => (field.label = v)) : ''}</div>`;
-}
-function addFieldControl(pet: Pet, section: { id: string; title: Localized }) {
-  const options = fields[section.id as keyof typeof fields] || [];
-  let chosen = options[0]?.[0] || 'custom';
-  return `<div class="row">${select('Optional fields', chosen, [...options.map((f) => ({ value: f[0], label: local(tri(f.slice(1))) })), { value: 'custom', label: 'Custom' }], (v) => (chosen = v))}${button(
-    'Add field',
-    () => {
-      let data = pet.sections.find((s) => s.id === section.id);
-      if (!data) {
-        data = { ...section, fields: [] };
-        pet.sections.push(data);
-      }
-      const known = options.find((f) => f[0] === chosen);
-      data.fields.push(
-        fieldSchema.parse({
-          key: known?.[0] || `custom-${crypto.randomUUID()}`,
-          label: known ? tri(known.slice(1)) : tr('Field label'),
-          value: '',
-          sensitive: section.id === 'medical',
-          kind: chosen === 'video' || chosen === 'map' ? 'link' : 'text',
-        }),
-      );
-      dirty = true;
-      render();
-    },
-  )}</div>`;
-}
-function addSection(pet: Pet) {
-  const dialog = document.createElement('dialog');
-  dialog.setAttribute('aria-label', tr('Add section'));
-  dialog.innerHTML = `<form><h2>${tr('Custom section')}</h2><div class="spacer"></div><label>${tr('Section title')}<input name="title" required maxlength="100"></label><div class="qr-output-actions"><button class="button primary" type="submit">${tr('Add section')}</button><button class="button" type="button" data-cancel>${tr('Cancel')}</button></div></form>`;
-  dialog.querySelector('form')!.onsubmit = (e) => {
-    e.preventDefault();
-    const title = dialog.querySelector<HTMLInputElement>('[name=title]')!.value.trim();
-    if (!title) return;
-    pet.sections.push({
-      id: `custom-${crypto.randomUUID()}`,
-      title: { [contentLang]: title },
-      fields: [],
-    });
-    dirty = true;
-    dialog.close();
-    render();
-  };
-  dialog.querySelector<HTMLElement>('[data-cancel]')!.onclick = () => dialog.close();
-  dialog.onclose = () => dialog.remove();
-  document.body.append(dialog);
-  dialog.showModal();
+  )}${button('Remove', remove, 'subtle danger')}</div></div>`;
 }
 function contactMethods() {
   return [
@@ -775,8 +735,6 @@ function render() {
     contentLang = next;
     render();
   });
-  const publishingRoot = document.getElementById('github-publishing');
-  if (publishingRoot) publishing?.mount(publishingRoot);
   document.body.onclick = (event) => {
     const target = (event.target as Element).closest<HTMLElement>('[data-action]');
     if (!target) return;
@@ -807,12 +765,9 @@ window.addEventListener('beforeunload', (event) => {
   }
 });
 async function start() {
-  const [response, css, metadata] = await Promise.all([
+  const [response, css] = await Promise.all([
     fetch(new URL('data/config.json', base)),
     fetch(new URL('assets/style.css', base)),
-    fetch(new URL('data/deployment.json', base), { cache: 'no-store' })
-      .then((response) => (response.ok ? response.json() : null))
-      .catch(() => null),
   ]);
   if (!response.ok) throw new Error('Could not load public configuration');
   config = parseConfig(await response.json());
@@ -820,17 +775,6 @@ async function start() {
   previewCSS = await css.text();
   lang = preferredLanguage(config.site.defaultLanguage);
   contentLang = lang;
-  publishing = new PublishingUI({
-    base,
-    deployment: metadata,
-    language: () => lang,
-    draft: () => config,
-    images: () => images,
-    onError: showError,
-    onSaved: () => {
-      dirty = JSON.stringify(parseConfig(config)) !== JSON.stringify(publicConfig(config));
-    },
-  });
   render();
 }
 void start().catch((error) => {

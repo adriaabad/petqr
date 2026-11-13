@@ -1,12 +1,11 @@
 # Changelog
 
-## 1.1.0 — 2026-11-13
+## 1.1.1 — 2026-11-13
 
-- Add optional Save and publish directly from the browser using a temporary, single-repository fine-grained GitHub access key; no authentication backend or central domain.
-- Save privacy-filtered configuration and photos atomically, preserve unrelated source changes, reject stale data and racing edits, and never force an overwrite.
-- Keep credentials only in tab memory, forget them on disconnect/navigation/expiry, restrict authenticated destinations and add an editor CSP.
-- Detect each template copy's repository from its own Actions deployment, and show saved versus published status.
-- Retain the local draft and ZIP workflows; document initial key creation, permission limits and revocation.
+- Revert optional direct GitHub publishing. Restore the local editor and manual ZIP upload workflow, without access keys.
+- Remove the Advanced mode, optional-field builders and missing/found/custom status controls and badges.
+- Add microchip and registration number inputs to the main identity form, preserving leading zeros and requiring explicit consent before publication.
+- Show confirmed identification numbers directly on public profiles. Preserve existing owner data, photos and compatible legacy fields; old loss-status settings are no longer displayed.
 
 ## 1.0.1 — 2026-11-13
 

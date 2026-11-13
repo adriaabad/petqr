@@ -32,7 +32,9 @@ test('validation diagnostics support Spanish and Catalan', () => {
       assert.throws(
         () => parseConfig({}),
         (error) =>
-          explainError(error, language).includes(language === 'es' ? 'se esperaba' : 'Tipus invàlid'),
+          explainError(error, language).includes(
+            language === 'es' ? 'se esperaba' : 'Tipus invàlid',
+          ),
       );
     }
   } finally {
@@ -90,13 +92,35 @@ test('unknown and localhost QR destinations are blocked', () => {
   ])
     assert.throws(() => publicPetURL(root, 'pet-123'));
 });
-test('missing status renders an immediate emergency banner', () => {
+test('legacy lost-pet settings no longer render badges, banners or loss instructions', () => {
   const c = fixture();
   const html = renderProfile(c, c.pets[1], 'en');
-  assert.match(html, /This pet is missing/);
-  assert.match(html, /missing-banner/);
+  assert.doesNotMatch(html, /This pet is missing|missing-banner|class="status/);
   assert.match(html, /tel:\+12025550188/);
-  assert.match(html, /Please do not chase/);
+  assert.doesNotMatch(html, /Please do not chase/);
+  assert.doesNotMatch(renderIndex(c, 'en'), /class="status/);
+});
+
+test('microchip and registration are visible only after publication consent, with leading zeros preserved', () => {
+  const c = fixture();
+  c.pets[0].sections.push({
+    id: 'identification',
+    title: 'ID',
+    fields: [
+      fieldSchema.parse({ key: 'microchip', label: 'Chip', value: '000123456789012' }),
+      fieldSchema.parse({ key: 'registration', label: 'Registry', value: 'REG-00042' }),
+    ],
+  });
+  const fields = c.pets[0].sections.at(-1)!.fields;
+  assert.doesNotMatch(renderProfile(c, c.pets[0], 'ca'), /000123456789012|REG-00042/);
+  for (const f of fields) f.publish = true;
+  assert.doesNotMatch(renderProfile(c, c.pets[0], 'ca'), /000123456789012|REG-00042/);
+  for (const f of fields) f.consent = true;
+  const html = renderProfile(publicConfig(c), c.pets[0], 'ca');
+  assert.match(html, /Número de microxip/);
+  assert.match(html, /Número de registre/);
+  assert.equal((html.match(/000123456789012/g) || []).length, 1);
+  assert.equal((html.match(/REG-00042/g) || []).length, 1);
 });
 test('minimal optional profile renders without a photo or contact', () => {
   const c = fixture(),
@@ -287,7 +311,7 @@ test('ZIP public export/import round trip keeps photo bytes and excludes local-o
   const images = new Map<string, Uint8Array>();
   for (const p of c.pets)
     for (const image of p.photos)
-      images.set(image.path, new Uint8Array(await readFile('tests/fixtures/'+image.path)));
+      images.set(image.path, new Uint8Array(await readFile('tests/fixtures/' + image.path)));
   const zip = await exportArchive(c, images, new URL('https://example.com'));
   assert.doesNotMatch(new TextDecoder().decode(zip), /ZIP_SECRET/);
   const imported = importArchive(zip);

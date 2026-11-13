@@ -2,8 +2,6 @@ import { build } from 'vite';
 import { mkdir, writeFile, copyFile, readFile } from 'node:fs/promises';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { createHash } from 'node:crypto';
-import { DATA_PATHS, type Deployment } from '../src/deployment';
 import { loadConfig } from './config';
 import { dependencyLicenses } from './licenses';
 import { htmlDocument, renderProfile, renderIndex, esc, paw } from '../src/render';
@@ -29,9 +27,7 @@ export async function buildSite(
   if (outDir !== resolve('dist') && outDir !== resolve('.test-site'))
     throw new Error('Unsafe build output directory.');
   const config = await loadConfig(dataRoot);
-  const environment = options.environment || process.env;
-  const configuredPublicUrl = config.site.publicUrl;
-  config.site.publicUrl = deployedURL(config, environment);
+  config.site.publicUrl = deployedURL(config, options.environment);
   await build({
     configFile: false,
     publicDir: false,
@@ -64,35 +60,6 @@ export async function buildSite(
   await write('LICENSE.txt', await readFile('LICENSE', 'utf8'));
   await write('THIRD_PARTY_LICENSES.txt', await dependencyLicenses());
   await write('data/config.json', JSON.stringify(config));
-  const dataShas: Record<string, string> = {};
-  for (const path of DATA_PATHS) {
-    const bytes = await readFile(resolve(dataRoot, path));
-    dataShas[path] = createHash('sha1')
-      .update(`blob ${bytes.length}\0`)
-      .update(bytes)
-      .digest('hex');
-  }
-  const photoShas: Record<string, string> = {};
-  for (const path of new Set(config.pets.flatMap((pet) => pet.photos.map((photo) => photo.path)))) {
-    const bytes = await readFile(resolve(dataRoot, path));
-    photoShas[path] = createHash('sha1')
-      .update(`blob ${bytes.length}\0`)
-      .update(bytes)
-      .digest('hex');
-  }
-  const deployment: Deployment = {
-    repository: environment.GITHUB_REPOSITORY || null,
-    repositoryId: environment.GITHUB_REPOSITORY_ID
-      ? Number(environment.GITHUB_REPOSITORY_ID)
-      : null,
-    branch: environment.GITHUB_REF_NAME || null,
-    commit: environment.GITHUB_SHA || null,
-    dataShas,
-    photoShas,
-    configuredPublicUrl,
-    resolvedPublicUrl: config.site.publicUrl,
-  };
-  await write('data/deployment.json', JSON.stringify(deployment));
   // Disabled index must not embed or list pet identities. The editor still reads explicitly public data.
   const indexConfig = { ...config, pets: config.site.ownerIndex ? config.pets : [], contacts: [] };
   await write('data/index.json', JSON.stringify(indexConfig));

@@ -2,9 +2,9 @@
 
 ## Manage pets
 
-Open `/editor/` on your deployed website. **My pets** lists all profiles in the current local session. Add pet generates a new ID. Edit opens basic information, contacts, emergency status, photos and appearance. Duplicate creates a new ID and copies the public/draft information; review the copy before publishing. Move up/down changes the dashboard/index order. Delete requires confirmation because its physical QR tags stop working after the next deployment.
+Open `/editor/` on your deployed website. **My pets** lists all profiles in the current local session. Add pet generates a new ID. Edit opens identity, identification numbers, contacts, photos and appearance. Duplicate creates a new ID and copies the public/draft information; review the copy before publishing. Move up/down changes the dashboard/index order. Delete requires confirmation because its physical QR tags stop working after the next deployment.
 
-Basic identity, introduction, photos, emergency message and appearance are public information. Advanced fields are opt-in. The **Basic** editor keeps existing details accessible; **Advanced** adds suggested optional fields and custom sections. Collapse categories you do not need. Every animal uses the same extensible fields, so bird/reptile/environmental instructions do not require a special account or code change.
+Basic identity, introduction, photos and appearance are public information. There is one editor mode. Microchip and registration numbers are available directly in Identity; each has an explicit publication checkbox and consent confirmation. Leave them unpublished to keep them in the local draft. Existing additional fields remain editable in their sections, but there are no Advanced/custom-field builders.
 
 ## Languages
 
@@ -18,11 +18,11 @@ Contact buttons open the relevant application. WhatsApp/email are not sent autom
 
 Telegram is optional, under **More contact methods (optional)**. It is not involved in photo handling, storage or application authentication. Enter `username`, `@username` or a public `https://t.me/username` link, or leave blank. The export normalizes the username. Invalid values get an inline explanation; the preview omits the invalid method and shows a warning without blocking photo editing. Export still requires valid public data.
 
-## Warnings and missing pets
+## Identification and existing warnings
 
-Set safe/missing/found/custom under Emergency message. A missing pet receives a prominent emergency banner. The always-visible message should be concise and actionable. In Advanced, select a field's **Warning** type to show urgent handling/medical information outside Full details. PetQR shows owner-written information; it does not diagnose or generate veterinary advice.
+Microchip and registration numbers are text, so leading zeros and registry prefixes are preserved. Published and confirmed numbers appear directly on the public profile. Existing handling/medical warning fields remain available; PetQR does not diagnose or generate veterinary advice. The lost/found/custom status selector, badges, loss banner and legacy loss instructions are no longer displayed. Legacy data is preserved for compatibility.
 
-Changing status, name, age, photos or instructions never changes the ID/URL. Always export/upload/deploy to update the page behind the printed QR. The local preview intentionally shows only publishable data, so a draft medical field will not appear until you select Publish and confirm.
+Changing names, numbers, photos or instructions never changes the ID/URL. Always export/upload/deploy to update the page behind the printed QR. There is no direct GitHub connection or access-key field. The local preview intentionally shows only publishable data, so a draft identification or medical field will not appear until you select Publish and confirm.
 
 ## Photos
 
@@ -41,8 +41,6 @@ The tag designer provides circle, rectangle, rounded rectangle and square shapes
 Use a flat, durable, high-contrast surface. Preserve at least four clear modules around the QR. Larger/longer URLs may need larger tags. Avoid holes, decorations, scratches or curved edges inside the quiet zone. Test the actual printed or engraved result with multiple phones under ordinary lighting. Opening Test destination checks a URL but does not prove a physical engraving can be scanned.
 
 ## Import, export and local drafts
-
-For direct publication, use **Connect GitHub** at the top of the editor. Create a fine-grained key for only this repository with **Contents: Read and write**, paste it into the masked field and connect. The key stays only in tab memory for a 30-minute connection. Edit, then **Save and publish → Publish changes**. The app saves data/photos together and shows the deployment status. Visitors without a key granting write access cannot publish. Closing/reloading the editor forgets the connection. See [setup and security](GITHUB_SAVE.md).
 
 Export files shows a public-data warning, then downloads a ZIP. It contains four JSON files under data/ and referenced images under assets/pets/. Replace the repository's data/ and upload/merge the photos, commit to the default branch and wait for deployment. Files do not upload themselves.
 

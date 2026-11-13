@@ -201,31 +201,6 @@
   }
 }
 @layer components {
-  .editor-top-actions {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 12px;
-    min-width: 0;
-  }
-  .publishing-buttons {
-    display: flex;
-    gap: 6px;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-  }
-  .publishing-status {
-    max-width: 500px;
-    text-align: right;
-    margin-top: 6px;
-    font-size: 0.75rem;
-  }
-  .publishing-status:empty {
-    display: none;
-  }
-  .topbar {
-    align-items: flex-start;
-  }
   .field-error {
     color: var(--danger);
     font-size: 0.8rem;
@@ -295,9 +270,6 @@
   }
   .profile .full-details {
     background: color-mix(in srgb, var(--surface) 90%, var(--theme-tint));
-  }
-  .pet-card:has(.status.missing) .card-body {
-    background: var(--warning-bg);
   }
   .sr-only {
     position: absolute;
@@ -440,31 +412,6 @@
   .name-row h2 a {
     color: inherit;
     text-decoration: none;
-  }
-  .status {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    flex-shrink: 0;
-    padding: 3px 10px;
-    border-radius: 99px;
-    font-size: 0.75rem;
-    font-weight: 750;
-    background: #dff0db;
-    color: #214e2b;
-    white-space: nowrap;
-  }
-  .status.missing {
-    background: #ffded2;
-    color: #8c271b;
-  }
-  .status.found {
-    background: #dceef3;
-    color: #20526a;
-  }
-  .status.custom {
-    background: var(--soft);
-    color: var(--text);
   }
   .notice {
     padding: 16px 18px;
@@ -766,14 +713,6 @@
     gap: 16px;
     margin-top: 24px;
   }
-  .missing-banner {
-    background: #8f2c21;
-    color: #fff;
-    padding: 14px 20px;
-    border-radius: 8px;
-    font-weight: 650;
-    margin-bottom: 20px;
-  }
   .full-details {
     border: 1px solid var(--border);
     border-radius: 9px;
@@ -787,6 +726,18 @@
   }
   .full-details > summary span {
     display: none;
+  }
+  .identification-input {
+    display: grid;
+    align-content: start;
+    gap: 8px;
+  }
+  .pet-identifiers {
+    margin: 18px 0;
+    padding: 8px 14px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
   }
   .detail-section {
     padding: 20px 0;
@@ -916,22 +867,6 @@
     border: 1px solid var(--border);
     border-radius: 8px;
     background: var(--bg);
-  }
-  .mode-switch {
-    display: inline-flex;
-    border: 1px solid var(--border);
-    border-radius: 7px;
-    padding: 3px;
-    background: var(--surface);
-  }
-  .mode-switch .button {
-    min-height: 36px;
-    border: 0;
-    padding: 0.45rem 0.8rem;
-    background: transparent;
-  }
-  .mode-switch .active {
-    background: var(--soft);
   }
   .field-row {
     display: grid;
@@ -1124,25 +1059,6 @@
   }
 }
 @layer responsive {
-  @media (max-width: 620px) {
-    .topbar {
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-    .editor-top-actions {
-      width: 100%;
-      align-items: flex-start;
-    }
-    .publishing-buttons {
-      justify-content: flex-start;
-    }
-    .publishing-status {
-      text-align: left;
-    }
-    .publishing-buttons .button {
-      font-size: 0.8rem;
-    }
-  }
   @media (max-width: 620px) {
     .quick-contact {
       display: flex;

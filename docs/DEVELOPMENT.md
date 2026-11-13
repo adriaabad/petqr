@@ -23,6 +23,7 @@ Public HTML contains usable contact links and warnings before scripts load. Java
 - `src/public.ts` / `src/preferences.ts`: small progressive enhancements.
 - `src/editor.ts`: dashboard/forms, draft state, contact assignments, previews and user actions.
 - `src/images.ts`: canvas crop/pan/rotate/re-encode workflow; no original metadata copied.
+- `src/preview.ts`: scoped public previews that warn about incomplete optional contact methods without mutating the draft or relaxing export validation.
 - `src/archive.ts`: whitelist-based ZIP import and filtered export; bounded extraction sizes.
 - `src/draft.ts`: opt-in IndexedDB draft persistence, including processed images.
 - `src/qr.ts`: bundled QR encoder, contrast validation, SVG composition and tag layout.

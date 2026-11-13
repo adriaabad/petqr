@@ -2,7 +2,7 @@ import { z } from 'zod';
 import en from 'zod/v4/locales/en.js';
 import es from 'zod/v4/locales/es.js';
 import ca from 'zod/v4/locales/ca.js';
-import { safeURL } from './core';
+import { safeURL, normalizeTelegram } from './core';
 import { t } from './i18n';
 export { safeURL, textOf, petPath, publicPetURL, resolvedContacts, contactLink } from './core';
 
@@ -59,16 +59,20 @@ const phone = z
     (v) => !v || /^\+?[0-9 ()-]{3,30}$/.test(v),
     'Use a telephone number, with optional +, spaces, parentheses and hyphens.',
   );
+export const telegramSchema = z
+  .string()
+  .transform(normalizeTelegram)
+  .refine(
+    (value) => !value || /^[a-zA-Z][a-zA-Z0-9_]{4,31}$/.test(value),
+    'Enter a Telegram username, @username or https://t.me/username. Leave blank if you do not use Telegram.',
+  );
 const contactFields = {
   name: z.string().min(1).max(100),
   relationship: localized.optional(),
   phone: phone.optional(),
   whatsapp: phone.optional(),
   email: z.union([z.literal(''), z.email()]).optional(),
-  telegram: z
-    .string()
-    .regex(/^$|^[a-zA-Z][a-zA-Z0-9_]{4,31}$/)
-    .optional(),
+  telegram: telegramSchema.optional(),
   preferred: z.enum(['phone', 'whatsapp', 'email', 'telegram']).default('phone'),
   language: z.enum(languages).default('en'),
   availability: localized.optional(),
@@ -83,10 +87,7 @@ export const contactOverrideSchema = z
     phone: phone.optional(),
     whatsapp: phone.optional(),
     email: z.union([z.literal(''), z.email()]).optional(),
-    telegram: z
-      .string()
-      .regex(/^$|^[a-zA-Z][a-zA-Z0-9_]{4,31}$/)
-      .optional(),
+    telegram: telegramSchema.optional(),
     preferred: z.enum(['phone', 'whatsapp', 'email', 'telegram']).optional(),
     language: z.enum(languages).optional(),
     availability: localized.optional(),

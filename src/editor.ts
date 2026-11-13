@@ -6,6 +6,7 @@ import {
   newPet,
   petSchema,
   contactSchema,
+  telegramSchema,
   fieldSchema,
   needsConsent,
   textOf,
@@ -23,6 +24,7 @@ import { bindPreferences, toast } from './preferences';
 import { fields, categoryNames, tri } from './fields';
 import { openQR } from './qr';
 import { processImage } from './images';
+import { profilePreview } from './preview';
 import { exportArchive, importArchive, type ImageFiles } from './archive';
 import { download } from './download';
 import { draftStore } from './draft';
@@ -63,10 +65,28 @@ function input(
   label: string,
   value: string,
   fn: (value: string) => void,
-  options: { type?: string; hint?: string; required?: boolean; max?: number } = {},
+  options: {
+    type?: string;
+    hint?: string;
+    required?: boolean;
+    max?: number;
+    validate?: (value: string) => string;
+  } = {},
 ) {
   const id = `input-${counter++}`;
-  return `<div class="form-control"><label for="${id}">${esc(tr(label))}</label><input id="${id}" type="${options.type || 'text'}" value="${esc(value)}" ${bind((v) => fn(String(v)))} ${options.required ? 'required' : ''} maxlength="${options.max || 1000}" ${options.hint ? `aria-describedby="${id}-hint"` : ''}>${options.hint ? `<span id="${id}-hint" class="hint">${esc(tr(options.hint))}</span>` : ''}</div>`;
+  const error = options.validate?.(value) || '';
+  const setter = (v: string | boolean) => {
+    const next = String(v);
+    fn(next);
+    if (options.validate) {
+      const message = options.validate(next);
+      const input = document.getElementById(id);
+      input?.setAttribute('aria-invalid', String(Boolean(message)));
+      const errorNode = document.getElementById(`${id}-error`);
+      if (errorNode) errorNode.textContent = message;
+    }
+  };
+  return `<div class="form-control"><label for="${id}">${esc(tr(label))}</label><input id="${id}" type="${options.type || 'text'}" value="${esc(value)}" ${bind(setter)} ${options.required ? 'required' : ''} maxlength="${options.max || 1000}" ${options.validate ? `aria-invalid="${Boolean(error)}"` : ''} aria-describedby="${options.hint ? `${id}-hint ` : ''}${options.validate ? `${id}-error` : ''}">${options.hint ? `<span id="${id}-hint" class="hint">${esc(tr(options.hint))}</span>` : ''}${options.validate ? `<span id="${id}-error" class="field-error" role="status">${esc(error)}</span>` : ''}</div>`;
 }
 function check(label: string, value: boolean, fn: (value: boolean) => void) {
   return `<label class="check"><input type="checkbox" ${value ? 'checked' : ''} ${bind((v) => fn(Boolean(v)))}>${esc(tr(label))}</label>`;
@@ -114,7 +134,12 @@ function mark() {
 function showError(error: unknown) {
   const box = document.getElementById('errors');
   if (box) {
-    box.textContent = `${tr('Validation errors')}\n${explainError(error, lang)}`;
+    const detail = explainError(error, lang).replace(
+      /^contacts\.(\d+)\./gm,
+      (_, index) =>
+        `${tr('Contacts')} → ${config.contacts[Number(index)]?.name || Number(index) + 1} → `,
+    );
+    box.textContent = `${tr('Validation errors')}\n${detail}`;
     box.scrollIntoView({ block: 'nearest' });
   } else toast(explainError(error, lang));
 }
@@ -275,7 +300,7 @@ function editor() {
           .join('')
       : `<p>${tr('No contacts yet. Add one in Contacts.')}</p>`
   }`;
-  const photoContent = `<p class="hint">${tr('Photos are processed on this device. Maximum 15 MB per file; exported at up to 1200 px.')}</p>${button('Add photo', () => choosePhoto(pet))}<div class="photos-list">${pet.photos
+  const photoContent = `<p class="hint">${tr('Photos are converted and compressed on this device to WebP or JPEG, up to 1200 px and 300 KB. Animated images use the first frame.')}</p>${button('Add photo', () => choosePhoto(pet))}<div class="photos-list">${pet.photos
     .map(
       (p, i) =>
         `<div class="photo-item"><img src="${esc(imageURL(p.path))}" alt="${esc(local(p.alt))}">${textInput('Alternative text', p.alt, (v) => (p.alt = v))}<div class="row">${
@@ -476,7 +501,8 @@ function contactMethods() {
   ];
 }
 function contactForm(c: Contact) {
-  return `<div class="form-grid">${input('Contact name', c.name, (v) => (c.name = v), { required: true, max: 100 })}${textInput('Relationship', c.relationship, (v) => (c.relationship = v))}${input('Telephone', c.phone || '', (v) => (c.phone = v), { type: 'tel' })}${input('WhatsApp', c.whatsapp || '', (v) => (c.whatsapp = v), { type: 'tel' })}${input('Email', c.email || '', (v) => (c.email = v), { type: 'email' })}${input('Telegram', c.telegram || '', (v) => (c.telegram = v))}${select('Preferred method', c.preferred, contactMethods(), (v) => (c.preferred = v as Contact['preferred']))}${select(
+  const optionalTelegram = `<details class="optional-contact-method" ${c.telegram ? 'open' : ''}><summary>${tr('More contact methods (optional)')}</summary><div class="section-content">${input('Telegram', c.telegram || '', (v) => (c.telegram = v), { hint: 'Optional. Enter username, @username or https://t.me/username. Leave blank if you do not use Telegram.', validate: (value) => (telegramSchema.safeParse(value).success ? '' : tr('Enter a Telegram username, @username or https://t.me/username. Leave blank if you do not use Telegram.')) })}</div></details>`;
+  return `<div class="form-grid">${input('Contact name', c.name, (v) => (c.name = v), { required: true, max: 100 })}${textInput('Relationship', c.relationship, (v) => (c.relationship = v))}${input('Telephone', c.phone || '', (v) => (c.phone = v), { type: 'tel' })}${input('WhatsApp', c.whatsapp || '', (v) => (c.whatsapp = v), { type: 'tel' })}${input('Email', c.email || '', (v) => (c.email = v), { type: 'email' })}${select('Preferred method', c.preferred, contactMethods(), (v) => (c.preferred = v as Contact['preferred']))}${select(
     'Preferred language',
     c.language,
     [
@@ -485,7 +511,7 @@ function contactForm(c: Contact) {
       { value: 'ca', label: 'Català' },
     ],
     (v) => (c.language = v as Language),
-  )}<div class="wide">${textInput('Availability', c.availability, (v) => (c.availability = v))}</div></div><div class="spacer"></div>${check(
+  )}<div class="wide">${textInput('Availability', c.availability, (v) => (c.availability = v))}</div></div>${optionalTelegram}<div class="spacer"></div>${check(
     'Publish contact',
     c.publish && c.consent,
     (v) => {
@@ -578,7 +604,7 @@ function settings() {
   )}</div>${exportStrip()}</div>`;
 }
 function help() {
-  return `<div class="help-content"><h1>${tr('Help')}</h1><h2>${tr('Export & publish')}</h2><p>${tr('Download the ZIP, extract it, then replace the data/ folder and merge assets/pets/ into your repository. Commit the changes and wait for Pages to deploy.')}</p><h2>${tr('Publishing & privacy')}</h2><p>${tr('Everything uploaded to GitHub Pages is public. Unlisted URLs and noindex do not provide privacy. Never upload confidential records or precise home addresses.')}</p><h2>${tr('Photos')}</h2><p>${tr('Photos are processed on this device. Maximum 15 MB per file; exported at up to 1200 px.')}</p><h2>${tr('QR code')}</h2><p>${tr('Keep at least four clear modules around the code. Print at least 25 mm, larger for long URLs. Test with multiple phones before engraving.')}</p><h2>${tr('Stable ID')}</h2><p>${tr('Keep this ID unchanged once a tag is printed.')}</p><div class="settings-actions">${button('Import files', importFiles)}${button('Export files', openExport, 'primary')}</div></div>`;
+  return `<div class="help-content"><h1>${tr('Help')}</h1><h2>${tr('Export & publish')}</h2><p>${tr('Download the ZIP, extract it, then replace the data/ folder and merge assets/pets/ into your repository. Commit the changes and wait for Pages to deploy.')}</p><h2>${tr('Publishing & privacy')}</h2><p>${tr('Everything uploaded to GitHub Pages is public. Unlisted URLs and noindex do not provide privacy. Never upload confidential records or precise home addresses.')}</p><h2>${tr('Photos')}</h2><p>${tr('Photos are converted and compressed on this device to WebP or JPEG, up to 1200 px and 300 KB. Animated images use the first frame.')}</p><h2>${tr('QR code')}</h2><p>${tr('Keep at least four clear modules around the code. Print at least 25 mm, larger for long URLs. Test with multiple phones before engraving.')}</p><h2>${tr('Stable ID')}</h2><p>${tr('Keep this ID unchanged once a tag is printed.')}</p><div class="settings-actions">${button('Import files', importFiles)}${button('Export files', openExport, 'primary')}</div></div>`;
 }
 function clearImageURLs() {
   for (const url of imageURLs.values()) URL.revokeObjectURL(url);
@@ -587,7 +613,7 @@ function clearImageURLs() {
 async function choosePhoto(pet: Pet) {
   const input = document.createElement('input');
   input.type = 'file';
-  input.accept = 'image/jpeg,image/png,image/webp';
+  input.accept = 'image/*,.heic,.heif';
   input.onchange = async () => {
     try {
       const file = input.files?.[0];
@@ -600,6 +626,9 @@ async function choosePhoto(pet: Pet) {
       pet.photos.push({ path, alt: { [contentLang]: pet.name } });
       dirty = true;
       render();
+      toast(
+        `${tr('Photo optimized')}: ${formatPhotoSize(file.size)} → ${formatPhotoSize(processed.bytes.length)} (${processed.extension.toUpperCase()})`,
+      );
     } catch (error) {
       showError(error);
     }
@@ -607,9 +636,17 @@ async function choosePhoto(pet: Pet) {
   input.click();
 }
 function previewDocument(pet: Pet) {
-  const safe = publicConfig(config);
+  const preview = profilePreview(config, pet.id),
+    safe = preview.config;
   const published = safe.pets.find((p) => p.id === pet.id)!;
-  return `<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>${previewCSS}</style></head><body>${replaceImages(renderProfile(safe, published, lang, base.href, true))}</body></html>`;
+  const warning = preview.incompleteContacts.length
+    ? `<p class="notice warning" role="status">${tr('Some contact methods are incomplete and are omitted from this preview. Correct them in Contacts before exporting.')} ${esc(preview.incompleteContacts.join(', '))}</p>`
+    : '';
+  const profile = renderProfile(safe, published, lang, base.href, true);
+  return `<!doctype html><html lang="${lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>${previewCSS}</style></head><body>${warning}${replaceImages(profile)}</body></html>`;
+}
+function formatPhotoSize(bytes: number) {
+  return `${new Intl.NumberFormat(lang, { maximumFractionDigits: 1 }).format(bytes / (bytes >= 1024 * 1024 ? 1024 * 1024 : 1024))} ${bytes >= 1024 * 1024 ? 'MB' : 'KB'}`;
 }
 function updatePreview() {
   if (screen !== 'edit') return;

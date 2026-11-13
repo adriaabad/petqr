@@ -28,7 +28,7 @@ The project works with `https://USERNAME.github.io/REPOSITORY/`, `https://USERNA
 - Any number of profiles, each built to a real `p/PET_ID/index.html`, with emergency contacts available even without JavaScript.
 - A local visual dashboard: add, edit, duplicate, reorder and delete; safe/missing/found/custom status; shared contacts and pet-specific overrides.
 - Basic/advanced forms, over 100 optional animal fields, custom sections/links/warnings, multilingual free text, explicit sensitive-field publication and filtered ZIP export/import.
-- Local photo crop, rotation, pan, compression, WebP conversion, alt text, featured photo and ordering. No remote image service.
+- Local photo crop, rotation, pan, compression to at most 300 KB, WebP/JPEG conversion, alt text, featured photo and ordering. No remote image service.
 - Bundled QR generator: SVG/PNG, resolution, colors with enforced contrast, error correction, quiet zone, labels, destination check, millimeter tag designer and print layout.
 - English, Spanish and Catalan; browser preference, manual selection, fallback language; system/light/dark modes, keyboard focus, reduced motion and responsive layouts.
 - Optional finder location sharing: explicit permission, a WhatsApp draft, and a separate manual send. No PetQR server receives location.
@@ -51,6 +51,10 @@ Disabling the owner index removes the overview links, but the public editor conf
 **More details:** Switch to Advanced. Open a category, select an optional field and Add field, or add a custom section. Check Publish for each intended public field. Choose Warning to keep urgent text visible in emergency view. Medical/identification publication asks for consent. Use Edit translation to enter translated values without changing the interface language.
 
 **Photos:** Edit → Photos → Add photo. Crop, pan/zoom and rotate before Use photo. Add alt text; choose Make featured or reorder. Upload the exported image files along with the configuration. Photo removal updates the public page; manually remove unused photos from the repository if desired, remembering history can retain them.
+
+Photos are automatically converted to WebP (JPEG fallback), at most 1200 px / 300 KB. There is no fixed source-file size limit: input decoding depends on the browser/device. Common JPEG, PNG, WebP, GIF, AVIF and BMP files are supported by current browsers; HEIC/HEIF requires native browser support. Animated images become a still photo. Unsupported formats require conversion or another browser. The original photo never leaves the device.
+
+**Telegram is optional:** under More contact methods, enter `username`, `@username` or a public `https://t.me/username` link, or leave blank. PetQR does not require a Telegram account, bot or API. Incomplete contact methods show a preview warning without blocking photo editing; correct them before exporting.
 
 **Design:** Edit → Appearance. Accent colors are decorative so they cannot reduce contact/warning contrast. Choose a background and icon. Site settings controls the public index and attribution. Each profile's indexing starts disabled.
 
@@ -109,7 +113,7 @@ To migrate, `npm ci && npm run build`, then upload **all contents of `dist/`** t
 
 ## Limits and release checks
 
-This release is browser-only: no automatic GitHub writes, accounts, sync, tracking, analytics or veterinary diagnosis. Keep direct file uploads under GitHub's current limits. A ZIP import is limited to 60 MB compressed / 120 MB extracted; photographs are limited to 30 per pet and 15 MB per upload. Local drafts depend on browser quotas. No technical fixed maximum number of pets is imposed, but very large collections depend on device memory and hosting limits.
+This release is browser-only: no automatic GitHub writes, accounts, sync, tracking, analytics or veterinary diagnosis. Keep direct repository uploads under GitHub's current limits. A ZIP import is limited to 60 MB compressed / 120 MB extracted, and photographs to 30 per pet. New photos are reduced to at most 300 KB. Source decoding depends on browser codecs and device memory; the app has no arbitrary 15 MB upload limit. Local drafts depend on browser quotas. No technical fixed maximum number of pets is imposed, but very large collections depend on device memory and hosting limits.
 
 Tag SVGs use ordinary text so vector editors can edit them; convert text to paths in your engraving application if needed. Printers, materials and scanners vary: always physically test before engraving. Automated accessibility checks are included, but human assistive-technology testing remains necessary. Deployment is provided as a workflow; a live GitHub run requires your own repository and Pages settings. There is deliberately no hardcoded upstream repository URL: set the optional source URL in your own installation.
 

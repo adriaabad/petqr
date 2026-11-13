@@ -1,6 +1,45 @@
 import { languages } from './core';
 import type { Language } from './model';
 const phrases: Record<string, [string, string]> = {
+  'Enter a Telegram username, @username or https://t.me/username. Leave blank if you do not use Telegram.':
+    [
+      'Introduce un usuario de Telegram, @usuario o https://t.me/usuario. Déjalo vacío si no usas Telegram.',
+      'Introdueix un usuari de Telegram, @usuari o https://t.me/usuari. Deixa-ho buit si no utilitzes Telegram.',
+    ],
+  'Optional. Enter username, @username or https://t.me/username. Leave blank if you do not use Telegram.':
+    [
+      'Opcional. Acepta usuario, @usuario o https://t.me/usuario. Déjalo vacío si no usas Telegram.',
+      'Opcional. Accepta usuari, @usuari o https://t.me/usuari. Deixa-ho buit si no utilitzes Telegram.',
+    ],
+  'More contact methods (optional)': [
+    'Más métodos de contacto (opcional)',
+    'Més mètodes de contacte (opcional)',
+  ],
+  'Some contact methods are incomplete and are omitted from this preview. Correct them in Contacts before exporting.':
+    [
+      'Hay métodos de contacto incompletos que no se muestran en esta vista previa. Corrígelos en Contactos antes de exportar.',
+      'Hi ha mètodes de contacte incomplets que no es mostren en aquesta vista prèvia. Corregeix-los a Contactes abans d’exportar.',
+    ],
+  'Photos are converted and compressed on this device to WebP or JPEG, up to 1200 px and 300 KB. Animated images use the first frame.':
+    [
+      'Las fotos se convierten y comprimen aquí a WebP o JPEG, con un máximo de 1200 px y 300 KB. Las imágenes animadas usan el primer fotograma.',
+      'Les fotos es converteixen i comprimeixen aquí a WebP o JPEG, amb un màxim de 1200 px i 300 KB. Les imatges animades utilitzen el primer fotograma.',
+    ],
+  'Choose a photo, such as JPEG, PNG, WebP, AVIF, GIF or BMP. SVG and documents are not supported.':
+    [
+      'Selecciona una foto, como JPEG, PNG, WebP, AVIF, GIF o BMP. No se admiten SVG ni documentos.',
+      'Selecciona una foto, com JPEG, PNG, WebP, AVIF, GIF o BMP. No s’admeten SVG ni documents.',
+    ],
+  'This browser could not open the photo. Try another browser, or convert it to JPEG or PNG. Very large images may exceed your device memory.':
+    [
+      'Este navegador no ha podido abrir la foto. Prueba otro navegador o conviértela a JPEG o PNG. Las imágenes muy grandes pueden superar la memoria del dispositivo.',
+      'Aquest navegador no ha pogut obrir la foto. Prova un altre navegador o converteix-la a JPEG o PNG. Les imatges molt grans poden superar la memòria del dispositiu.',
+    ],
+  'Photo optimized': ['Foto optimizada', 'Foto optimitzada'],
+  'Image compression failed.': [
+    'No se ha podido comprimir la foto. Prueba con otra imagen.',
+    'No s’ha pogut comprimir la foto. Prova amb una altra imatge.',
+  ],
   'Language unavailable offline': [
     'Idioma no disponible sin conexión.',
     'Idioma no disponible sense connexió.',

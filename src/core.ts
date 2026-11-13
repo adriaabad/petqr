@@ -1,6 +1,15 @@
 // Shared, dependency-free public-profile helpers. Runtime schemas stay in the editor/build.
 import type { Config, Pet, Contact, Language, Localized } from './model';
 export const languages = ['en', 'es', 'ca'] as const;
+export function normalizeTelegram(value: string): string {
+  const input = value.trim();
+  if (!input) return '';
+  if (input.startsWith('@')) return input.slice(1);
+  const link = /^(?:https?:\/\/)?(?:www\.)?(?:t\.me|telegram\.me)\/([a-zA-Z0-9_]+)\/?$/i.exec(
+    input,
+  );
+  return link ? link[1] : input;
+}
 export function textOf(
   value: Localized | undefined,
   lang: Language,
@@ -48,6 +57,6 @@ export function contactLink(
   if (kind === 'phone') return `tel:${value.replace(/[^+0-9]/g, '')}`;
   if (kind === 'whatsapp')
     return `https://wa.me/${value.replace(/\D/g, '')}${message ? `?text=${encodeURIComponent(message)}` : ''}`;
-  if (kind === 'telegram') return `https://t.me/${encodeURIComponent(value)}`;
+  if (kind === 'telegram') return `https://t.me/${encodeURIComponent(normalizeTelegram(value))}`;
   return `mailto:${encodeURIComponent(value).replace(/%40/g, '@')}`;
 }

@@ -24,7 +24,7 @@ An explicit publicUrl wins over `PAGES_BASE_URL`, which the workflow obtains fro
 
 An ordered array of reusable contacts. Required: `id`, `name`. Optional: `relationship`, `phone`, `whatsapp`, `email`, `telegram`, `availability`. Other properties: `preferred` (`phone`, `whatsapp`, `email`, `telegram`; default phone), `language` (default en), `publish` and `consent` (both default false). Public data requires both true. Each `id` is unique; phone links normalize punctuation and messages/email are URI encoded.
 
-Contact language is useful availability information; PetQR does not automatically translate messages. Telegram usernames use Telegram's conventional character/length rules. Telephone numbers may contain an initial plus, digits, spaces, parentheses and hyphens. Owners should include country codes, particularly for WhatsApp.
+Contact language is useful availability information; PetQR does not automatically translate messages. Telegram is optional: a username, @username or public t.me/telegram.me profile link is accepted and normalized. Phone numbers, group invites and unrelated URLs are not Telegram usernames. Invalid values get a clear translated message. Telephone numbers may contain an initial plus, digits, spaces, parentheses and hyphens. Owners should include country codes, particularly for WhatsApp.
 
 ### pets.json
 

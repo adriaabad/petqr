@@ -6,7 +6,13 @@ import { readFile } from 'node:fs/promises';
 import { importArchive } from '../../src/archive';
 import jsQR from 'jsqr';
 test.beforeEach(async ({ page }) => {
-  await page.addInitScript(() => localStorage.setItem('petqr-language', 'en'));
+  await page.addInitScript(() => {
+    try {
+      localStorage.setItem('petqr-language', 'en');
+    } catch {
+      /* Sandboxed profile previews intentionally cannot access storage. */
+    }
+  });
 });
 test('desktop dashboard loads cleanly and manages multiple pets', async ({ page }) => {
   const errors: string[] = [];
@@ -160,6 +166,84 @@ test('image crop, rotate and publication ZIP include the processed photo', async
   await expect(page.locator('.photo-item')).toHaveCount(2);
   await page.getByRole('button', { name: 'Make featured', exact: true }).click();
   await expect(page.locator('.photo-item').first()).toContainText('Featured');
+});
+
+test('an invalid optional Telegram does not block a photo over 15 MB, and the export contains a compressed image', async ({
+  page,
+}) => {
+  test.setTimeout(60000);
+  const errors: string[] = [];
+  page.on('pageerror', (error) => errors.push(error.message));
+  await page.goto('editor/');
+  await page.getByRole('button', { name: 'Contacts', exact: true }).click();
+  const contact = page.locator('.contact-editor').first();
+  await contact.locator('.optional-contact-method summary').click();
+  await contact.getByLabel('Telegram', { exact: true }).fill('+34 600 123 456');
+  await expect(contact.getByLabel('Telegram', { exact: true })).toHaveAttribute(
+    'aria-invalid',
+    'true',
+  );
+  await expect(contact.locator('.field-error')).toContainText('Leave blank');
+  await page.getByRole('button', { name: 'My pets', exact: true }).click();
+  await page.getByRole('button', { name: 'Edit', exact: true }).first().click();
+  await expect(page.locator('#profile-preview')).toHaveAttribute(
+    'srcdoc',
+    /Some contact methods are incomplete/,
+  );
+  await expect(page.locator('#errors')).toBeEmpty();
+  await page.locator('details[data-section=photos] summary').click();
+  const width = 2400,
+    height = 2400,
+    stride = width * 3,
+    pixels = stride * height;
+  const bmp = Buffer.alloc(54 + pixels);
+  let noise = 42;
+  for (let index = 54; index < bmp.length; index++) {
+    noise = (Math.imul(1664525, noise) + 1013904223) >>> 0;
+    bmp[index] = noise >>> 24;
+  }
+  bmp.write('BM');
+  bmp.writeUInt32LE(bmp.length, 2);
+  bmp.writeUInt32LE(54, 10);
+  bmp.writeUInt32LE(40, 14);
+  bmp.writeInt32LE(width, 18);
+  bmp.writeInt32LE(height, 22);
+  bmp.writeUInt16LE(1, 26);
+  bmp.writeUInt16LE(24, 28);
+  bmp.writeUInt32LE(0, 30);
+  bmp.writeUInt32LE(pixels, 34);
+  expect(bmp.length).toBeGreaterThan(15 * 1024 * 1024);
+  const chooser = page.waitForEvent('filechooser');
+  await page.getByRole('button', { name: 'Add photo', exact: true }).click();
+  await (
+    await chooser
+  ).setFiles({ name: 'large-camera-photo.bmp', mimeType: 'image/bmp', buffer: bmp });
+  await expect(page.locator('.crop-canvas')).toBeVisible();
+  await page.getByRole('button', { name: 'Use photo', exact: true }).click();
+  await expect(page.locator('.photo-item')).toHaveCount(2);
+  await expect(page.locator('#toast')).toContainText('Photo optimized');
+  await expect(page.locator('#errors')).toBeEmpty();
+  await page.getByRole('button', { name: 'Export files', exact: true }).click();
+  await expect(page.locator('#errors')).toContainText('Contacts → Alex (fictional) → telegram');
+  await expect(page.locator('#errors')).not.toContainText('/^');
+  await page.getByRole('button', { name: 'Contacts', exact: true }).click();
+  await page
+    .locator('.contact-editor')
+    .first()
+    .getByLabel('Telegram', { exact: true })
+    .fill('https://t.me/person_123');
+  await expect(
+    page.locator('.contact-editor').first().getByLabel('Telegram', { exact: true }),
+  ).toHaveAttribute('aria-invalid', 'false');
+  await page.getByRole('button', { name: 'Export files', exact: true }).click();
+  const downloaded = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Confirm publication · ZIP' }).click();
+  const archive = importArchive(new Uint8Array(await readFile((await (await downloaded).path())!)));
+  expect(archive.config.contacts[0].telegram).toBe('person_123');
+  const added = archive.config.pets[0].photos[1];
+  expect(added.path).toMatch(/\.(webp|jpg)$/);
+  expect(archive.images.get(added.path)!.byteLength).toBeLessThanOrEqual(300 * 1024);
+  expect(errors).toEqual([]);
 });
 test('dashboard and public profile pass automated WCAG AA checks', async ({ page }) => {
   for (const route of ['editor/', 'p/cooper-7f2a/']) {

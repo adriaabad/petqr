@@ -16,6 +16,8 @@ Add a contact in Contacts. Enter only methods you want public, choose a preferen
 
 Contact buttons open the relevant application. WhatsApp/email are not sent automatically. Copy contact copies only public details. Local clipboard/geolocation availability depends on the browser and secure origin; a location-permission failure does not remove call/email options.
 
+Telegram is optional, under **More contact methods (optional)**. It is not involved in photo handling, storage or application authentication. Enter `username`, `@username` or a public `https://t.me/username` link, or leave blank. The export normalizes the username. Invalid values get an inline explanation; the preview omits the invalid method and shows a warning without blocking photo editing. Export still requires valid public data.
+
 ## Warnings and missing pets
 
 Set safe/missing/found/custom under Emergency message. A missing pet receives a prominent emergency banner. The always-visible message should be concise and actionable. In Advanced, select a field's **Warning** type to show urgent handling/medical information outside Full details. PetQR shows owner-written information; it does not diagnose or generate veterinary advice.
@@ -24,7 +26,11 @@ Changing status, name, age, photos or instructions never changes the ID/URL. Alw
 
 ## Photos
 
-Add photo opens a local crop canvas. Use zoom and horizontal/vertical position sliders, Rotate, then Use photo. Processing stays on the device and strips the original metadata during re-encoding. Add descriptive alt text. The first image is featured; Make featured, Move up/down and Remove manage the gallery. Accepts JPEG, PNG and WebP, up to 15 MB per source and 50 megapixels, exported to a 1200×900 canvas. There are at most 30 images per pet. Small photos may be enlarged; choose a clear source.
+Add photo opens a local crop canvas. Use zoom and horizontal/vertical position sliders, Rotate, then Use photo. Processing stays on the device and strips original metadata during re-encoding. The picker accepts browser-decodable photos: common JPEG, PNG, WebP, GIF, AVIF and BMP, plus HEIC/HEIF when natively supported. MIME-less camera exports can also be selected. SVG and documents are rejected. Animated images use the first frame.
+
+There is no fixed input MB or megapixel limit in the app. The browser must still decode the original; very large images may exceed device memory, and compression cannot supply an unavailable decoder. Errors suggest another browser or JPEG/PNG conversion. Large decoded photos are downscaled for smooth editing. The crop starts at 1200×900, then quality and, if needed, dimensions are reduced until the WebP (JPEG fallback) output is at most 300 KB. A notification shows original and resulting sizes.
+
+Add descriptive alt text. The first image is featured; Make featured, Move up/down and Remove manage the gallery. There are at most 30 images per pet. Small photos may be enlarged; choose a clear source.
 
 ## QR and tags
 

@@ -2,7 +2,11 @@
   {
     "id": "demo-alex",
     "name": "Alex (fictional)",
-    "relationship": { "en": "My person", "es": "Mi persona", "ca": "La meva persona" },
+    "relationship": {
+      "en": "My person",
+      "es": "Mi persona",
+      "ca": "La meva persona"
+    },
     "phone": "+1 202 555 0142",
     "whatsapp": "+1 202 555 0142",
     "email": "alex@example.com",

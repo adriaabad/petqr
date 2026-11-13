@@ -2,7 +2,11 @@
   {
     "id": "cooper-7f2a",
     "name": "Cooper",
-    "species": { "en": "Dog", "es": "Perro", "ca": "Gos" },
+    "species": {
+      "en": "Dog",
+      "es": "Perro",
+      "ca": "Gos"
+    },
     "breed": "Golden retriever",
     "introduction": {
       "en": "Hi, I’m Cooper. If you found me, thank you! Please contact my people so I can get home safely.",
@@ -20,17 +24,39 @@
         }
       }
     ],
-    "contacts": [{ "id": "demo-alex" }, { "id": "demo-sam" }],
+    "contacts": [
+      {
+        "id": "demo-alex"
+      },
+      {
+        "id": "demo-sam"
+      }
+    ],
     "sections": [
       {
         "id": "identity",
-        "title": { "en": "About Cooper", "es": "Sobre Cooper", "ca": "Sobre en Cooper" },
+        "title": {
+          "en": "About Cooper",
+          "es": "Sobre Cooper",
+          "ca": "Sobre en Cooper"
+        },
         "fields": [
           {
             "key": "age",
-            "label": { "en": "Age", "es": "Edad", "ca": "Edat" },
-            "value": { "en": "4 years", "es": "4 años", "ca": "4 anys" },
-            "publish": true
+            "label": {
+              "en": "Age",
+              "es": "Edad",
+              "ca": "Edat"
+            },
+            "value": {
+              "en": "4 years",
+              "es": "4 años",
+              "ca": "4 anys"
+            },
+            "publish": true,
+            "sensitive": false,
+            "consent": false,
+            "kind": "text"
           },
           {
             "key": "markings",
@@ -44,7 +70,10 @@
               "es": "Pelaje dorado, pequeña mancha blanca en el pecho",
               "ca": "Pelatge daurat, petita taca blanca al pit"
             },
-            "publish": true
+            "publish": true,
+            "sensitive": false,
+            "consent": false,
+            "kind": "text"
           }
         ]
       },
@@ -68,14 +97,20 @@
               "es": "Soy sociable, pero puedo correr hacia otros perros. Acércate con calma y contacta con mi gente.",
               "ca": "Soc sociable, però puc córrer cap a altres gossos. Apropa’t amb calma i contacta amb la meva gent."
             },
-            "kind": "warning",
-            "publish": true
+            "publish": true,
+            "sensitive": false,
+            "consent": false,
+            "kind": "warning"
           }
         ]
       },
       {
         "id": "medical",
-        "title": { "en": "Health", "es": "Salud", "ca": "Salut" },
+        "title": {
+          "en": "Health",
+          "es": "Salud",
+          "ca": "Salut"
+        },
         "fields": [
           {
             "key": "foodAllergies",
@@ -89,21 +124,29 @@
               "es": "Alergia al pollo. No me ofrezcas premios.",
               "ca": "Al·lèrgia al pollastre. No m’ofereixis premis."
             },
-            "kind": "warning",
             "publish": true,
             "sensitive": true,
-            "consent": true
+            "consent": true,
+            "kind": "warning"
           }
         ]
       }
     ],
-    "theme": { "accent": "#27634b", "background": "sage", "icon": "paw" },
+    "theme": {
+      "accent": "#27634b",
+      "background": "sage",
+      "icon": "paw"
+    },
     "indexing": false
   },
   {
     "id": "luna-92bd",
     "name": "Luna",
-    "species": { "en": "Cat", "es": "Gato", "ca": "Gat" },
+    "species": {
+      "en": "Cat",
+      "es": "Gato",
+      "ca": "Gat"
+    },
     "breed": {
       "en": "European shorthair",
       "es": "Europeo de pelo corto",
@@ -131,62 +174,109 @@
       }
     ],
     "contacts": [
-      { "id": "demo-sam" },
-      { "id": "demo-alex", "overrides": { "preferred": "email" } }
+      {
+        "id": "demo-sam"
+      },
+      {
+        "id": "demo-alex",
+        "overrides": {
+          "preferred": "email"
+        }
+      }
     ],
     "sections": [
       {
         "id": "emergency",
-        "title": { "en": "Last seen", "es": "Última vez vista", "ca": "Darrera vegada vista" },
+        "title": {
+          "en": "Last seen",
+          "es": "Última vez vista",
+          "ca": "Darrera vegada vista"
+        },
         "fields": [
           {
             "key": "lastLocation",
-            "label": { "en": "Location", "es": "Ubicación", "ca": "Ubicació" },
+            "label": {
+              "en": "Location",
+              "es": "Ubicación",
+              "ca": "Ubicació"
+            },
             "value": {
               "en": "Near the community garden (fictional)",
               "es": "Cerca del huerto comunitario (ficticio)",
               "ca": "A prop de l’hort comunitari (fictici)"
             },
-            "publish": true
+            "publish": true,
+            "sensitive": false,
+            "consent": false,
+            "kind": "text"
           },
           {
             "key": "wearing",
-            "label": { "en": "Wearing", "es": "Llevaba", "ca": "Portava" },
+            "label": {
+              "en": "Wearing",
+              "es": "Llevaba",
+              "ca": "Portava"
+            },
             "value": {
               "en": "Teal collar",
               "es": "Collar verde azulado",
               "ca": "Collar verd blavós"
             },
-            "publish": true
+            "publish": true,
+            "sensitive": false,
+            "consent": false,
+            "kind": "text"
           }
         ]
       },
       {
         "id": "behavior",
-        "title": { "en": "Safe approach", "es": "Cómo acercarse", "ca": "Com apropar-se" },
+        "title": {
+          "en": "Safe approach",
+          "es": "Cómo acercarse",
+          "ca": "Com apropar-se"
+        },
         "fields": [
           {
             "key": "approach",
-            "label": { "en": "A little shy", "es": "Algo tímida", "ca": "Una mica tímida" },
+            "label": {
+              "en": "A little shy",
+              "es": "Algo tímida",
+              "ca": "Una mica tímida"
+            },
             "value": {
               "en": "Keep your distance and speak softly. Avoid sudden movements.",
               "es": "Mantén la distancia y habla suavemente. Evita movimientos bruscos.",
               "ca": "Mantén la distància i parla suaument. Evita moviments bruscos."
             },
-            "kind": "warning",
-            "publish": true
+            "publish": true,
+            "sensitive": false,
+            "consent": false,
+            "kind": "warning"
           }
         ]
       }
     ],
-    "theme": { "accent": "#906038", "background": "sand", "icon": "heart" },
+    "theme": {
+      "accent": "#906038",
+      "background": "sand",
+      "icon": "heart"
+    },
     "indexing": false
   },
   {
     "id": "mochi-3c81",
     "name": "Mochi",
-    "species": { "en": "Rabbit", "es": "Conejo", "ca": "Conill" },
-    "breed": { "en": "Holland lop", "es": "Belier holandés", "ca": "Bèller holandès" },
+    "species": {
+      "en": "Rabbit",
+      "es": "Conejo",
+      "ca": "Conill"
+    },
+    "breed": {
+      "en": "Holland lop",
+      "es": "Belier holandés",
+      "ca": "Bèller holandès"
+    },
     "introduction": {
       "en": "Small paws, big personality. Thank you for helping me find my way home.",
       "es": "Patas pequeñas, gran personalidad. Gracias por ayudarme a volver a casa.",
@@ -203,11 +293,19 @@
         }
       }
     ],
-    "contacts": [{ "id": "demo-alex" }],
+    "contacts": [
+      {
+        "id": "demo-alex"
+      }
+    ],
     "sections": [
       {
         "id": "care",
-        "title": { "en": "Everyday care", "es": "Cuidados diarios", "ca": "Cures diàries" },
+        "title": {
+          "en": "Everyday care",
+          "es": "Cuidados diarios",
+          "ca": "Cures diàries"
+        },
         "fields": [
           {
             "key": "environment",
@@ -221,12 +319,60 @@
               "es": "Mi responsable pide que me dejes en un espacio tranquilo y seguro, lejos de perros. Pídele instrucciones.",
               "ca": "El meu responsable demana que em deixis en un espai tranquil i segur, lluny de gossos. Demana-li instruccions."
             },
-            "publish": true
+            "publish": true,
+            "sensitive": false,
+            "consent": false,
+            "kind": "text"
           }
         ]
       }
     ],
-    "theme": { "accent": "#38677c", "background": "sky", "icon": "paw" },
+    "theme": {
+      "accent": "#38677c",
+      "background": "sky",
+      "icon": "paw"
+    },
+    "indexing": false
+  },
+  {
+    "id": "pet-e951fb41-995f-47d2-a863-d1d394c9860b",
+    "name": "tORTOISE",
+    "species": {
+      "en": "",
+      "ca": "TORTUFA "
+    },
+    "breed": {
+      "ca": "RAÇA"
+    },
+    "introduction": {
+      "ca": "JKDSFKJSKJBALABAL"
+    },
+    "status": "safe",
+    "statusLabel": {
+      "ca": "SOC "
+    },
+    "emergency": {
+      "ca": "DOEWO03 E0340"
+    },
+    "photos": [
+      {
+        "path": "assets/pets/4c88a4ec-428c-44b1-b48d-abf5d92ec985.webp",
+        "alt": {
+          "ca": "tORTOISE"
+        }
+      }
+    ],
+    "contacts": [
+      {
+        "id": "demo-alex"
+      }
+    ],
+    "sections": [],
+    "theme": {
+      "accent": "#2f654f",
+      "background": "sage",
+      "icon": "none"
+    },
     "indexing": false
   }
 ]

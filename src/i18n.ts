@@ -1,6 +1,14 @@
 import { languages } from './core';
 import type { Language } from './model';
 const phrases: Record<string, [string, string]> = {
+  Allergies: ['Alergias', 'Al·lèrgies'],
+  'Health conditions': ['Condiciones de salud', 'Condicions de salut'],
+  'Behavior and handling notes': [
+    'Comportamiento e indicaciones de manejo',
+    'Comportament i indicacions de maneig',
+  ],
+  'Reset draft': ['Restablecer borrador', 'Restablir esborrany'],
+  'Photo credits': ['Créditos de las fotos', 'Crèdits de les fotos'],
   'Microchip number': ['Número de microchip', 'Número de microxip'],
   'Registration number': ['Número de registro', 'Número de registre'],
   'Publish microchip number': ['Publicar número de microchip', 'Publicar número de microxip'],
@@ -125,10 +133,6 @@ const phrases: Record<string, [string, string]> = {
     'Solo local. Nada se sube automáticamente.',
     'Només local. No es puja res automàticament.',
   ],
-  'Fictional examples. Replace all demo data before publishing.': [
-    'Ejemplos ficticios. Sustituye los datos antes de publicar.',
-    'Exemples ficticis. Substitueix les dades abans de publicar.',
-  ],
   Call: ['Llamar', 'Trucar'],
   WhatsApp: ['WhatsApp', 'WhatsApp'],
   Email: ['Correo', 'Correu'],
@@ -230,7 +234,6 @@ const phrases: Record<string, [string, string]> = {
     'URL del codi font (opcional)',
   ],
   'Site title': ['Título del sitio', 'Títol del lloc'],
-  'Demo data notice': ['Aviso de datos ficticios', 'Avís de dades fictícies'],
   'Add contact': ['Añadir contacto', 'Afegir contacte'],
   'Contact name': ['Nombre del contacto', 'Nom del contacte'],
   Relationship: ['Relación', 'Relació'],
@@ -296,7 +299,6 @@ const phrases: Record<string, [string, string]> = {
     'Borrador guardado localmente. Quien use este navegador podría acceder a él.',
     'Esborrany desat localment. Qui utilitzi aquest navegador podria accedir-hi.',
   ],
-  'Reset examples': ['Restablecer ejemplos', 'Restablir exemples'],
   'Replace the current draft with the deployed configuration?': [
     '¿Sustituir el borrador actual por la configuración publicada?',
     'Vols substituir l’esborrany actual per la configuració publicada?',

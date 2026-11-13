@@ -59,6 +59,7 @@ export async function buildSite(
   await write('.nojekyll', '');
   await write('LICENSE.txt', await readFile('LICENSE', 'utf8'));
   await write('THIRD_PARTY_LICENSES.txt', await dependencyLicenses());
+  await write('PHOTO_CREDITS.txt', await readFile('docs/PHOTO_CREDITS.md', 'utf8'));
   await write('data/config.json', JSON.stringify(config));
   // Disabled index must not embed or list pet identities. The editor still reads explicitly public data.
   const indexConfig = { ...config, pets: config.site.ownerIndex ? config.pets : [], contacts: [] };

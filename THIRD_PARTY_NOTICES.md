@@ -11,4 +11,4 @@ Runtime libraries bundled into the editor:
 
 Build/test-only tools include TypeScript (Apache-2.0), Vite (MIT), tsx (MIT), Playwright (Apache-2.0), axe-core (MPL-2.0) and jsQR (Apache-2.0). They are not remotely loaded by a deployed profile. These source URLs are documentation, not runtime dependencies.
 
-The three fictional demo photographs were generated for this project. They do not represent verified animal identities. Replace them with photographs you have permission to publish.
+The current application photos are real stock photographs from Wikimedia Commons, published under CC0 or public-domain dedications, plus one photo provided by the repository owner. They are locally resized and re-encoded as WebP. Full authors, source links and individual license information appear in [photo credits](docs/PHOTO_CREDITS.md), which is also distributed as `PHOTO_CREDITS.txt` with the website. No claim is made that stock photographs identify the profile owners' actual animals. Isolated test fixtures retain older assets only for automated regression testing and are not deployed.

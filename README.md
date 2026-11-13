@@ -6,7 +6,7 @@ PetQR gives every pet a permanent identification page and a printable QR code. M
 
 **English · [Español](docs/QUICKSTART.es.md) · [Català](docs/QUICKSTART.ca.md)**
 
-![PetQR local dashboard with three fictional pets](docs/screenshots/dashboard.png)
+![PetQR local dashboard](docs/screenshots/dashboard.png)
 
 [See a mobile emergency profile in Catalan](docs/screenshots/mobile.png).
 
@@ -14,9 +14,9 @@ PetQR gives every pet a permanent identification page and a printable QR code. M
 
 1. The maintainer first enables **Settings → General → Template repository** for this repository. As a user, click **Use this template → Create a new repository**. Choose **your own account**, any repository name, and **Public** for free GitHub Pages hosting. If the source is not yet marked as a template, download it and upload these files, including `.github/workflows/pages.yml`, to a new repository.
 2. In **your new repository**, open **Settings → Pages → Build and deployment → Source**, and select **GitHub Actions**. Enable Actions if your organization restricts them.
-3. Open **Actions → Validate, test & deploy PetQR → Run workflow** on your default branch. The first run publishes clearly labeled fictional examples. Wait for the green deployment, then follow its Pages URL. No personal access token or extra secret is needed.
+3. Open **Actions → Validate, test & deploy PetQR → Run workflow** on your default branch. The initial profiles use stock photos and reserved, nonworking contact numbers; replace contacts before real-world use. Wait for the green deployment, then follow its Pages URL. No personal access token or extra secret is needed.
 4. Visit `<your Pages URL>/editor/`. In **Site settings**, verify the public site URL, including the repository path. The workflow fills it from your repository's Pages metadata; an explicit custom URL overrides it.
-5. Replace the example pets using **Edit**, or delete them and **Add pet**. Add your contacts in **Contacts**, confirm publication, and assign them to each pet. Set the preferred order for emergency contacts. Turn off **Demo data notice** after replacing all fictional data.
+5. Replace the example pets using **Edit**, or delete them and **Add pet**. Add your contacts in **Contacts**, confirm publication, and assign them to each pet. Set the preferred order for emergency contacts.
 6. **Preview profile**, then **Export files → Confirm publication · ZIP**. Extract the download. Replace the repository's **entire `data/` folder** with the exported `data/`, and upload/merge the exported photos into `assets/pets/`. Keep the existing application source and workflow. GitHub's **Add file → Upload files** supports uploading a folder's contents. Confirm that the exported files have the exact paths below, rather than an extra ZIP folder prefix. Commit the changes to your default branch.
 7. Wait for Actions to finish. Open each pet's **View profile** and confirm the contacts, photo and warnings on your phone. Local editor changes do not update your website until this upload/deployment step.
 8. In the editor, open **QR code** for each pet. Download SVG for printing/engraving or PNG for other tools. **Test destination** opens the final deployed URL; also scan the exported/printed QR with more than one phone. Keep the URL and stable pet ID unchanged after printing.
@@ -58,7 +58,7 @@ Photos are automatically converted to WebP (JPEG fallback), at most 1200 px / 30
 
 **Telegram is optional:** under More contact methods, enter `username`, `@username` or a public `https://t.me/username` link, or leave blank. PetQR does not require a Telegram account, bot or API. Incomplete contact methods show a preview warning without blocking photo editing; correct them before exporting.
 
-**Design:** Edit → Appearance. Accent colors are decorative so they cannot reduce contact/warning contrast. Choose a background and icon. Site settings controls the public index and attribution. Each profile's indexing starts disabled.
+**Health and handling:** Every pet has Allergies, Health conditions and Behavior and handling notes text areas. Publish only the information you intend to share; medical details require confirmation. All pets use one standard design, without an Appearance section. Site settings controls the public index and attribution.
 
 **Keep a draft:** Site settings → Save draft on this device. It is never automatically uploaded. Restore or forget it explicitly. Clearing browser data may erase it. Public ZIPs are portable backups of **published** information only.
 
@@ -119,4 +119,4 @@ This release is browser-only: no automatic GitHub writes, accounts, sync, tracki
 
 Tag SVGs use ordinary text so vector editors can edit them; convert text to paths in your engraving application if needed. Printers, materials and scanners vary: always physically test before engraving. Automated accessibility checks are included, but human assistive-technology testing remains necessary. Deployment is provided as a workflow; a live GitHub run requires your own repository and Pages settings. There is deliberately no hardcoded upstream repository URL: set the optional source URL in your own installation.
 
-Fictional examples use reserved example emails and fictional North American 555-01xx numbers; **do not contact them**. Demo photographs were AI generated and are included for replacement. The code and documentation are licensed under MIT; see [third-party notices](THIRD_PARTY_NOTICES.md) for bundled dependencies.
+Bundled contact names are invented and telephone numbers use the [NANPA-reserved, nonworking 555-0100–0199 range](https://www.nanpa.com/numbering/555-line-numbers); they are not real business contacts. Configure real contacts before using tags. Each current pet has two real photographs: reusable stock images from Wikimedia Commons, plus the existing owner-provided turtle photo. Sources and licenses are recorded in [photo credits](docs/PHOTO_CREDITS.md). The code and documentation are licensed under MIT; see [third-party notices](THIRD_PARTY_NOTICES.md) for bundled dependencies.

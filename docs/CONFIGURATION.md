@@ -16,7 +16,7 @@ The browser editor manages JSON for you. Files in `data/` contain **publishable 
 | ownerIndex | true | Whether the public overview lists pets; does not make profiles/config confidential |
 | attribution | true | Show the project attribution footer |
 | sourceUrl | empty | Optional source repository link, controlled by each owner |
-| fictional | false | Show the fictional example warning |
+| fictional | false | Legacy compatibility only; demonstration notices and their editor control have been removed |
 
 An explicit publicUrl wins over `PAGES_BASE_URL`, which the workflow obtains from `actions/configure-pages`. All assets use relative paths regardless of this URL. The final URL is required for QR codes; local/unknown destinations are rejected.
 
@@ -42,7 +42,7 @@ An ordered array. Each pet has:
 | photos | Up to 30 `{path, alt}` objects. First is featured. Path must be a flat filename under `assets/pets/`, ending in .webp/.png/.jpg/.jpeg. No external image URLs, SVG or traversal. |
 | contacts | Ordered `{id, overrides?}` assignments. Order determines priority. Overrides can replace a name, relationship, method, phone, WhatsApp, email, Telegram, language, availability or publication flags. Unset values inherit; empty strings clear an optional method. |
 | sections | Custom or built-in `{id, title, fields}` sections |
-| theme | `{accent: "#27634b", background: "sage", icon: "paw"}`; background sage/sand/sky, icon paw/heart/none |
+| theme | Legacy compatibility only. The renderer uses a fixed standard appearance and the editor no longer offers per-pet colors, backgrounds or decorations. |
 | indexing | false by default; enables index/follow metadata and sitemap inclusion only when canonical URL is known |
 
 Basic identity, introduction and photos are inherently public. Microchip and registration numbers are stored as fields in the `identification` section, with keys `microchip` and `registration`; legacy `registry` is also supported. These are text values, not numeric values. Both require Publish and consent before export/display. All contacts need confirmation before use. Override publication is evaluated against the confirmed shared contact; private override values are removed from exports rather than hidden in the UI.

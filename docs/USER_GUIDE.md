@@ -2,9 +2,9 @@
 
 ## Manage pets
 
-Open `/editor/` on your deployed website. **My pets** lists all profiles in the current local session. Add pet generates a new ID. Edit opens identity, identification numbers, contacts, photos and appearance. Duplicate creates a new ID and copies the public/draft information; review the copy before publishing. Move up/down changes the dashboard/index order. Delete requires confirmation because its physical QR tags stop working after the next deployment.
+Open `/editor/` on your deployed website. **My pets** lists all profiles in the current local session. Add pet generates a new ID. Edit opens identity, identification numbers, contacts, photos, health and handling notes. Every pet uses the same standard appearance. Duplicate creates a new ID and copies the public/draft information; review the copy before publishing. Move up/down changes the dashboard/index order. Delete requires confirmation because its physical QR tags stop working after the next deployment.
 
-Basic identity, introduction, photos and appearance are public information. There is one editor mode. Microchip and registration numbers are available directly in Identity; each has an explicit publication checkbox and consent confirmation. Leave them unpublished to keep them in the local draft. Existing additional fields remain editable in their sections, but there are no Advanced/custom-field builders.
+Basic identity, introduction and photos are public information. There is one editor mode. Microchip and registration numbers are available directly in Identity; each has an explicit publication checkbox and consent confirmation. Leave them unpublished to keep them in the local draft. Health & emergency always offers Allergies and Health conditions text areas; Behavior & handling always offers a free-text notes box. There are no preset handling instructions. Medical fields require publication consent. Existing additional fields remain editable in their sections, but there are no Advanced/custom-field builders.
 
 ## Languages
 
@@ -32,7 +32,7 @@ Add photo opens a local crop canvas. Use zoom and horizontal/vertical position s
 
 There is no fixed input MB or megapixel limit in the app. The browser must still decode the original; very large images may exceed device memory, and compression cannot supply an unavailable decoder. Errors suggest another browser or JPEG/PNG conversion. Large decoded photos are downscaled for smooth editing. The crop starts at 1200×900, then quality and, if needed, dimensions are reduced until the WebP (JPEG fallback) output is at most 300 KB. A notification shows original and resulting sizes.
 
-Add descriptive alt text. The first image is featured; Make featured, Move up/down and Remove manage the gallery. There are at most 30 images per pet. Small photos may be enlarged; choose a clear source.
+Add descriptive alt text. The first image is featured; Make featured, Move up/down and Remove manage the gallery. Additional images appear directly on the public page, outside collapsed details, and can be opened at their full saved size. There are at most 30 images per pet. Small photos may be enlarged; choose a clear source. Current stock-image sources and licenses are linked in Photo credits.
 
 ## QR and tags
 
@@ -48,4 +48,4 @@ Export files shows a public-data warning, then downloads a ZIP. It contains four
 
 Import files accepts the complete public ZIP or one complete configuration JSON. It replaces your draft after confirmation. Individual site/contacts/pets JSON fragments must be combined into the complete version/site/contacts/pets shape, or loaded together as a ZIP. No source JSON editing is necessary for routine use.
 
-Save draft on this device explicitly saves the full draft/images in this browser. Restore it when returning; Forget deletes it. This is local storage, not authentication or cross-device synchronization. Reset examples restores the currently **deployed configuration**, which contains fictional examples only until you replace them. Leaving an unsaved session warns before discarding edits. A public ZIP intentionally cannot recover unpublished fields.
+Save draft on this device explicitly saves the full draft/images in this browser. Restore it when returning; Forget deletes it. This is local storage, not authentication or cross-device synchronization. Reset draft restores the currently **deployed configuration**. Leaving an unsaved session warns before discarding edits. A public ZIP intentionally cannot recover unpublished fields.

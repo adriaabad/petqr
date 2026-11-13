@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.3 — 2026-11-13
+
+- Replace generated profile photos with locally hosted real public-domain/CC0 stock photos; give every current pet two photos and preserve the owner's uploaded turtle image.
+- Publish source/author/license credits and show additional photos directly on the profile.
+- Remove pet Appearance controls, custom colors/backgrounds/decorations and demonstration notices; use one standard appearance.
+- Provide Allergies, Health conditions and Behavior and handling notes text areas for every pet, including new animals. Keep publication and medical consent checks, preserve legacy fields and export all new text together.
+- Clear invented health/handling details and use invented contact names with NANPA-reserved nonworking 555-01xx numbers, at the owner's request.
+
 ## 1.1.2 — 2026-11-13
 
 - Generate short eight-character pet IDs, checking collisions with existing IDs and short addresses. Duplicates receive their own address.

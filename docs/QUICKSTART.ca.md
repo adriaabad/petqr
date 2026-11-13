@@ -5,7 +5,7 @@ Una petita placa. Un camí a casa. Crea perfils públics i QR permanents per a d
 1. A GitHub, fes servir **Use this template → Create a new repository** al teu compte. El mantenidor ha de marcar primer el repositori com a plantilla. Tria un repositori públic per tenir GitHub Pages gratuït.
 2. Obre **Settings → Pages → Source → GitHub Actions**. Executa **Actions → Validate, test & deploy PetQR → Run workflow** a la branca predeterminada.
 3. Obre l’URL de Pages i afegeix-hi `/editor/`. Els exemples són ficticis: substitueix animals, fotos i contactes.
-4. A Contactes, afegeix les teves dades i confirma que les vols publicar. Assigna’ls a cada animal. A Configuració, verifica l’URL públic i desactiva l’avís de dades fictícies.
+4. A Contactes, afegeix les teves dades i confirma que les vols publicar. Assigna’ls a cada animal. A Configuració, verifica l’URL públic.
 5. Edita, previsualitza i fes servir **Exportar fitxers**. Extreu el ZIP: substitueix `data/` i combina `assets/pets/` al repositori. Confirma els canvis i espera que acabi Actions.
 6. Obre cada perfil publicat, genera’n el QR i comprova l’enllaç i la impressió amb diversos telèfons.
 

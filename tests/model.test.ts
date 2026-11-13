@@ -169,6 +169,16 @@ test('minimal optional profile renders without a photo or contact', () => {
     pet = petSchema.parse({ id: 'minimal-pet', name: 'Bird', species: 'Bird' });
   assert.match(renderProfile(c, pet, 'en'), /No public contact is available/);
 });
+
+test('profiles use one standard appearance and no demonstration banner even with legacy settings', () => {
+  const c = fixture(),
+    pet = c.pets[0];
+  pet.theme = { accent: '#ff0000', background: 'sand', icon: 'heart' };
+  c.site.fictional = true;
+  const html = renderProfile(c, pet, 'en');
+  assert.doesNotMatch(html, /theme-sand|#ff0000|pet-decoration|Fictional examples|demo-note/);
+  assert.doesNotMatch(renderIndex(c, 'en'), /Fictional examples|demo-note/);
+});
 test('translation fallback uses the configured language, then available content', () => {
   assert.equal(textOf({ ca: 'Hola' }, 'en', 'es'), 'Hola');
   assert.equal(textOf({ en: 'Hello', es: 'Hola' }, 'ca', 'es'), 'Hola');

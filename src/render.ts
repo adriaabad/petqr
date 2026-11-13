@@ -18,8 +18,8 @@ export function controls(lang: Language): string {
 export function brand(href: string): string {
   return `<a class="brand" href="${esc(href)}">${paw}<span>PetQR</span></a>`;
 }
-export function footer(config: Config, lang: Language): string {
-  return `<footer><p>${t('Public information. Share only what you are comfortable publishing.', lang)}</p>${config.site.attribution ? `<p>PetQR · ${config.site.sourceUrl ? `<a href="${esc(config.site.sourceUrl)}" rel="noopener noreferrer">${t('Open-source project', lang)}</a>` : 'MIT · Open source'}</p>` : ''}</footer>`;
+export function footer(config: Config, lang: Language, prefix = ''): string {
+  return `<footer><p>${t('Public information. Share only what you are comfortable publishing.', lang)}</p><p><a href="${esc(prefix)}PHOTO_CREDITS.txt">${t('Photo credits', lang)}</a></p>${config.site.attribution ? `<p>PetQR · ${config.site.sourceUrl ? `<a href="${esc(config.site.sourceUrl)}" rel="noopener noreferrer">${t('Open-source project', lang)}</a>` : 'MIT · Open source'}</p>` : ''}</footer>`;
 }
 export function photo(pet: Pet, lang: Language, prefix: string, lazy = false): string {
   const p = pet.photos[0];
@@ -85,9 +85,9 @@ export function renderProfile(
         : '';
     })
     .join('');
-  return `<header class="public-header">${brand(config.site.ownerIndex ? prefix : '#main')}${controls(lang)}</header><main id="main" class="profile theme-${pet.theme.background}" style="--pet-accent:${pet.theme.accent}">
-  ${config.site.fictional ? `<p class="demo-note">${tr('Fictional examples. Replace all demo data before publishing.')}</p>` : ''}
-  <div class="profile-top"><div class="profile-photo">${photo(pet, lang, prefix)}${pet.theme.icon !== 'none' ? `<span class="pet-decoration" aria-hidden="true">${pet.theme.icon === 'heart' ? '♡' : paw}</span>` : ''}</div><div class="profile-intro"><div class="name-row"><h1>${esc(pet.name)}</h1></div><p class="species">${esc(local(pet.species))}${pet.breed ? ` · ${esc(local(pet.breed))}` : ''}</p><p class="introduction">${esc(local(pet.introduction) || tr('Please contact my people so I can get home safely.'))}</p>
+  return `<header class="public-header">${brand(config.site.ownerIndex ? prefix : '#main')}${controls(lang)}</header><main id="main" class="profile">
+
+  <div class="profile-top"><div class="profile-photo">${photo(pet, lang, prefix)}</div><div class="profile-intro"><div class="name-row"><h1>${esc(pet.name)}</h1></div><p class="species">${esc(local(pet.species))}${pet.breed ? ` · ${esc(local(pet.breed))}` : ''}</p><p class="introduction">${esc(local(pet.introduction) || tr('Please contact my people so I can get home safely.'))}</p>
   ${identification}
   <section class="contacts-public" aria-label="${tr('Contact my people')}"><h2>${tr('Contact my people')}</h2>${
     contacts.length
@@ -112,21 +112,22 @@ export function renderProfile(
   }</section>
   ${contacts.some((c) => c.whatsapp) && !preview ? `<details class="location-share enhanced-only"><summary>${tr('Share my location')}</summary><p>${tr('Your browser will ask for location permission. A map link will be prepared in WhatsApp. You choose whether to send it. PetQR does not store your location.')}</p><button class="button" data-share-location="${esc(contacts.find((c) => c.whatsapp)!.whatsapp)}">${tr('Share my location')}</button><div data-location-result aria-live="polite"></div></details>` : ''}</div></div>
   ${warnings ? `<section class="critical-section" aria-label="${tr('Important information')}">${warnings}</section>` : ''}
-  <details class="full-details"><summary>${tr('Full details')}</summary>${details || `<p>${esc(local(pet.species))}</p>`}${
+  ${
     pet.photos.length > 1
-      ? `<section><h3>${tr('More photos')}</h3><div class="gallery">${pet.photos
+      ? `<section class="additional-photos"><h2>${tr('More photos')}</h2><div class="gallery">${pet.photos
           .slice(1)
           .map(
             (p) =>
-              `<img src="${esc(prefix + p.path)}" alt="${esc(local(p.alt) || pet.name)}" width="600" height="450" loading="lazy">`,
+              `<a href="${esc(prefix + p.path)}" target="_blank" rel="noopener noreferrer"><img src="${esc(prefix + p.path)}" alt="${esc(local(p.alt) || pet.name)}" width="600" height="450" loading="lazy"></a>`,
           )
           .join('')}</div></section>`
       : ''
-  }</details>
-  ${config.site.ownerIndex ? `<a class="back-link" href="${esc(prefix)}">← ${tr('All pets')}</a>` : ''}</main>${!preview ? quick : ''}${footer(config, lang)}<div class="toast" role="status" aria-live="polite" id="toast"></div>`;
+  }
+  <details class="full-details"><summary>${tr('Full details')}</summary>${details || `<p>${esc(local(pet.species))}</p>`}</details>
+  ${config.site.ownerIndex ? `<a class="back-link" href="${esc(prefix)}">← ${tr('All pets')}</a>` : ''}</main>${!preview ? quick : ''}${footer(config, lang, prefix)}<div class="toast" role="status" aria-live="polite" id="toast"></div>`;
 }
 export function renderIndex(config: Config, lang: Language): string {
-  return `<header class="public-header">${brand('./')}${controls(lang)}</header><main id="main" class="owner-index"><div class="page-heading"><div><h1>${esc(config.site.title)}</h1><p>${t('Your pets, their people, always connected.', lang)}</p></div><a class="button" href="editor/">${t('Local editor', lang)}</a></div>${config.site.fictional ? `<p class="demo-note">${t('Fictional examples. Replace all demo data before publishing.', lang)}</p>` : ''}${config.site.ownerIndex ? `<div class="pet-grid">${config.pets.map((p) => `<article class="pet-card"><a class="card-photo" href="${petPath(p)}">${photo(p, lang, '', true)}</a><div class="card-body"><div class="name-row"><h2><a href="${petPath(p)}">${esc(p.name)}</a></h2></div><p class="species">${esc(textOf(p.species, lang))}</p><a class="button primary" href="${petPath(p)}">${t('View profile', lang)} <span aria-hidden="true">↗</span></a></div></article>`).join('')}</div>` : `<p>${t('Profiles are public, including when the index is disabled.', lang)}</p>`}</main>${footer(config, lang)}<div class="toast" role="status" id="toast"></div>`;
+  return `<header class="public-header">${brand('./')}${controls(lang)}</header><main id="main" class="owner-index"><div class="page-heading"><div><h1>${esc(config.site.title)}</h1><p>${t('Your pets, their people, always connected.', lang)}</p></div><a class="button" href="editor/">${t('Local editor', lang)}</a></div>${config.site.ownerIndex ? `<div class="pet-grid">${config.pets.map((p) => `<article class="pet-card"><a class="card-photo" href="${petPath(p)}">${photo(p, lang, '', true)}</a><div class="card-body"><div class="name-row"><h2><a href="${petPath(p)}">${esc(p.name)}</a></h2></div><p class="species">${esc(textOf(p.species, lang))}</p><a class="button primary" href="${petPath(p)}">${t('View profile', lang)} <span aria-hidden="true">↗</span></a></div></article>`).join('')}</div>` : `<p>${t('Profiles are public, including when the index is disabled.', lang)}</p>`}</main>${footer(config, lang)}<div class="toast" role="status" id="toast"></div>`;
 }
 export function htmlDocument(
   body: string,

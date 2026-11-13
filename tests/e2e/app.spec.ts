@@ -80,6 +80,30 @@ test('profile works on mobile without lost status under subdirectory hosting wit
     fullPage: true,
   });
 });
+test('additional photos remain visible outside collapsed details and fit the mobile gallery', async ({
+  page,
+}) => {
+  await page.route('**/p/cooper-7f2a/profile.json', async (route) => {
+    const response = await route.fetch();
+    const config = await response.json();
+    config.pets[0].photos.push({ path: 'assets/pets/luna.webp', alt: 'Additional photograph' });
+    await route.fulfill({ json: config });
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('p/cooper-7f2a/');
+  const image = page.locator('.additional-photos img');
+  await expect(image).toBeVisible();
+  await image.evaluate((image) => (image as HTMLImageElement).decode());
+  const box = (await image.boundingBox())!;
+  expect(box.width).toBeGreaterThan(200);
+  expect(box.height).toBeLessThan(box.width);
+  await expect(page.locator('.full-details')).not.toHaveAttribute('open');
+  await expect(page.locator('.additional-photos a')).toHaveAttribute(
+    'href',
+    /assets\/pets\/luna.webp$/,
+  );
+});
+
 test('emergency contact and warnings remain available without JavaScript', async ({ browser }) => {
   const context = await browser.newContext({
     javaScriptEnabled: false,
@@ -134,6 +158,62 @@ test('simple pet form exports chip and registration only with explicit consent a
   expect(fields.find((f) => f.key === 'registration')?.value).toBe('REG-00042');
   expect(result.config.pets[0].id).toBe('cooper-7f2a');
 });
+test('standard health and behavior text boxes preserve privacy and export together', async ({
+  page,
+}) => {
+  await page.goto('editor/');
+  await page.getByRole('button', { name: 'Edit', exact: true }).nth(2).click();
+  await expect(page.locator('details[data-section="appearance"]')).toHaveCount(0);
+  await expect(page.getByLabel('Accent color', { exact: true })).toHaveCount(0);
+  await expect(page.locator('.demo-note')).toHaveCount(0);
+  const medical = page.locator('details[data-section="data-medical"]');
+  await medical.locator('summary').click();
+  await medical.getByLabel('Allergies', { exact: true }).fill('PRIVATE_ALLERGY');
+  await medical.getByLabel('Health conditions', { exact: true }).fill('PRIVATE_CONDITION');
+  await expect(page.locator('#profile-preview')).not.toHaveAttribute(
+    'srcdoc',
+    /PRIVATE_ALLERGY|PRIVATE_CONDITION/,
+  );
+  const allergy = medical
+    .locator('.field-row')
+    .filter({ has: page.getByLabel('Allergies', { exact: true }) });
+  page.once('dialog', (dialog) => dialog.dismiss());
+  await allergy.getByLabel('Publish', { exact: true }).click();
+  await expect(allergy.getByLabel('Publish', { exact: true })).not.toBeChecked();
+  for (const label of ['Allergies', 'Health conditions']) {
+    const field = medical
+      .locator('.field-row')
+      .filter({ has: page.getByLabel(label, { exact: true }) });
+    page.once('dialog', (dialog) => dialog.accept());
+    await field.getByLabel('Publish', { exact: true }).check();
+  }
+  const behavior = page.locator('details[data-section="data-behavior"]');
+  await behavior.locator('summary').click();
+  await behavior
+    .getByLabel('Behavior and handling notes', { exact: true })
+    .fill('Approach slowly and contact the owner.');
+  await behavior.getByLabel('Publish', { exact: true }).check();
+  await expect(page.locator('#profile-preview')).toHaveAttribute('srcdoc', /PRIVATE_ALLERGY/);
+  await expect(page.locator('#profile-preview')).toHaveAttribute('srcdoc', /PRIVATE_CONDITION/);
+  await expect(page.locator('#profile-preview')).toHaveAttribute(
+    'srcdoc',
+    /Approach slowly and contact the owner/,
+  );
+  await page.getByRole('button', { name: 'Export files', exact: true }).click();
+  const pending = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Confirm publication · ZIP' }).click();
+  const file = await pending;
+  const result = importArchive(new Uint8Array(await readFile((await file.path())!)));
+  const pet = result.config.pets[2];
+  const health = pet.sections.filter((section) => section.id === 'medical');
+  expect(health).toHaveLength(1);
+  expect(health[0].fields.map((field) => field.key).sort()).toEqual(['allergies', 'conditions']);
+  expect(health[0].fields.every((field) => field.publish && field.consent)).toBe(true);
+  expect(pet.sections.find((section) => section.id === 'behavior')?.fields[0].value).toBe(
+    'Approach slowly and contact the owner.',
+  );
+});
+
 test('QR settings require a public URL and produce SVG and PNG files', async ({ page }) => {
   await page.route('**/data/config.json', async (route) => {
     const response = await route.fetch();

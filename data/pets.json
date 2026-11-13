@@ -9,133 +9,42 @@
     },
     "breed": "Golden retriever",
     "introduction": {
-      "en": "Hi, I’m Cooper. If you found me, thank you! Please contact my people so I can get home safely.",
-      "es": "Hola, soy Cooper. Si me has encontrado, ¡gracias! Contacta con mi gente para que pueda volver a casa.",
-      "ca": "Hola, soc en Cooper. Si m’has trobat, gràcies! Contacta amb la meva gent perquè pugui tornar a casa."
+      "en": "If you have found me, please contact my owner. Thank you for helping me get home.",
+      "es": "Si me has encontrado, contacta con mi responsable. Gracias por ayudarme a volver a casa.",
+      "ca": "Si m’has trobat, contacta amb la persona responsable. Gràcies per ajudar-me a tornar a casa."
     },
     "status": "safe",
     "photos": [
       {
-        "path": "assets/pets/cooper.webp",
+        "path": "assets/pets/cooper-1.webp",
         "alt": {
-          "en": "Cooper, a golden retriever in a garden",
-          "es": "Cooper, un golden retriever en un jardín",
-          "ca": "En Cooper, un golden retriever en un jardí"
+          "en": "Golden retriever outdoors",
+          "es": "Golden retriever al aire libre",
+          "ca": "Golden retriever a l’exterior"
+        }
+      },
+      {
+        "path": "assets/pets/cooper-2.webp",
+        "alt": {
+          "en": "Golden retriever outdoors",
+          "es": "Golden retriever al aire libre",
+          "ca": "Golden retriever a l’exterior"
         }
       }
     ],
     "contacts": [
       {
-        "id": "demo-alex"
+        "id": "contact-aina"
       },
       {
-        "id": "demo-sam"
+        "id": "contact-nil"
       }
     ],
-    "sections": [
-      {
-        "id": "identity",
-        "title": {
-          "en": "About Cooper",
-          "es": "Sobre Cooper",
-          "ca": "Sobre en Cooper"
-        },
-        "fields": [
-          {
-            "key": "age",
-            "label": {
-              "en": "Age",
-              "es": "Edad",
-              "ca": "Edat"
-            },
-            "value": {
-              "en": "4 years",
-              "es": "4 años",
-              "ca": "4 anys"
-            },
-            "publish": true,
-            "sensitive": false,
-            "consent": false,
-            "kind": "text"
-          },
-          {
-            "key": "markings",
-            "label": {
-              "en": "Distinctive markings",
-              "es": "Rasgos distintivos",
-              "ca": "Trets distintius"
-            },
-            "value": {
-              "en": "Golden coat, small white patch on chest",
-              "es": "Pelaje dorado, pequeña mancha blanca en el pecho",
-              "ca": "Pelatge daurat, petita taca blanca al pit"
-            },
-            "publish": true,
-            "sensitive": false,
-            "consent": false,
-            "kind": "text"
-          }
-        ]
-      },
-      {
-        "id": "behavior",
-        "title": {
-          "en": "Handling instructions",
-          "es": "Instrucciones de manejo",
-          "ca": "Instruccions de maneig"
-        },
-        "fields": [
-          {
-            "key": "handling",
-            "label": {
-              "en": "Keep me on a leash",
-              "es": "Llévame con correa",
-              "ca": "Porta’m amb corretja"
-            },
-            "value": {
-              "en": "I’m friendly, but I may run toward other dogs. Approach calmly and contact my people.",
-              "es": "Soy sociable, pero puedo correr hacia otros perros. Acércate con calma y contacta con mi gente.",
-              "ca": "Soc sociable, però puc córrer cap a altres gossos. Apropa’t amb calma i contacta amb la meva gent."
-            },
-            "publish": true,
-            "sensitive": false,
-            "consent": false,
-            "kind": "warning"
-          }
-        ]
-      },
-      {
-        "id": "medical",
-        "title": {
-          "en": "Health",
-          "es": "Salud",
-          "ca": "Salut"
-        },
-        "fields": [
-          {
-            "key": "foodAllergies",
-            "label": {
-              "en": "Food allergy",
-              "es": "Alergia alimentaria",
-              "ca": "Al·lèrgia alimentària"
-            },
-            "value": {
-              "en": "Chicken allergy. Please do not offer treats.",
-              "es": "Alergia al pollo. No me ofrezcas premios.",
-              "ca": "Al·lèrgia al pollastre. No m’ofereixis premis."
-            },
-            "publish": true,
-            "sensitive": true,
-            "consent": true,
-            "kind": "warning"
-          }
-        ]
-      }
-    ],
+    "sections": [],
     "theme": {
       "accent": "#27634b",
       "background": "sage",
-      "icon": "paw"
+      "icon": "none"
     },
     "indexing": false
   },
@@ -153,114 +62,45 @@
       "ca": "Europeu de pèl curt"
     },
     "introduction": {
-      "en": "I’m Luna, a curious explorer. My family is looking for me.",
-      "es": "Soy Luna, una exploradora curiosa. Mi familia me está buscando.",
-      "ca": "Soc la Luna, una exploradora curiosa. La meva família m’està buscant."
+      "en": "If you have found me, please contact my owner. Thank you for helping me get home.",
+      "es": "Si me has encontrado, contacta con mi responsable. Gracias por ayudarme a volver a casa.",
+      "ca": "Si m’has trobat, contacta amb la persona responsable. Gràcies per ajudar-me a tornar a casa."
     },
-    "status": "missing",
-    "emergency": {
-      "en": "Please do not chase me. Call my family as soon as you see me.",
-      "es": "No me persigas. Llama a mi familia en cuanto me veas.",
-      "ca": "No em persegueixis. Truca a la meva família tan aviat com em vegis."
-    },
+    "status": "safe",
     "photos": [
       {
-        "path": "assets/pets/luna.webp",
+        "path": "assets/pets/luna-1.webp",
         "alt": {
-          "en": "Luna, a tabby-and-white cat with green eyes",
-          "es": "Luna, una gata atigrada y blanca de ojos verdes",
-          "ca": "La Luna, una gata tigrada i blanca d’ulls verds"
+          "en": "Black cat outdoors",
+          "es": "Gato negro al aire libre",
+          "ca": "Gat negre a l’exterior"
+        }
+      },
+      {
+        "path": "assets/pets/luna-2.webp",
+        "alt": {
+          "en": "Black cat outdoors",
+          "es": "Gato negro al aire libre",
+          "ca": "Gat negre a l’exterior"
         }
       }
     ],
     "contacts": [
       {
-        "id": "demo-sam"
+        "id": "contact-nil"
       },
       {
-        "id": "demo-alex",
+        "id": "contact-aina",
         "overrides": {
-          "preferred": "email"
+          "preferred": "phone"
         }
       }
     ],
-    "sections": [
-      {
-        "id": "emergency",
-        "title": {
-          "en": "Last seen",
-          "es": "Última vez vista",
-          "ca": "Darrera vegada vista"
-        },
-        "fields": [
-          {
-            "key": "lastLocation",
-            "label": {
-              "en": "Location",
-              "es": "Ubicación",
-              "ca": "Ubicació"
-            },
-            "value": {
-              "en": "Near the community garden (fictional)",
-              "es": "Cerca del huerto comunitario (ficticio)",
-              "ca": "A prop de l’hort comunitari (fictici)"
-            },
-            "publish": true,
-            "sensitive": false,
-            "consent": false,
-            "kind": "text"
-          },
-          {
-            "key": "wearing",
-            "label": {
-              "en": "Wearing",
-              "es": "Llevaba",
-              "ca": "Portava"
-            },
-            "value": {
-              "en": "Teal collar",
-              "es": "Collar verde azulado",
-              "ca": "Collar verd blavós"
-            },
-            "publish": true,
-            "sensitive": false,
-            "consent": false,
-            "kind": "text"
-          }
-        ]
-      },
-      {
-        "id": "behavior",
-        "title": {
-          "en": "Safe approach",
-          "es": "Cómo acercarse",
-          "ca": "Com apropar-se"
-        },
-        "fields": [
-          {
-            "key": "approach",
-            "label": {
-              "en": "A little shy",
-              "es": "Algo tímida",
-              "ca": "Una mica tímida"
-            },
-            "value": {
-              "en": "Keep your distance and speak softly. Avoid sudden movements.",
-              "es": "Mantén la distancia y habla suavemente. Evita movimientos bruscos.",
-              "ca": "Mantén la distància i parla suaument. Evita moviments bruscos."
-            },
-            "publish": true,
-            "sensitive": false,
-            "consent": false,
-            "kind": "warning"
-          }
-        ]
-      }
-    ],
+    "sections": [],
     "theme": {
-      "accent": "#906038",
-      "background": "sand",
-      "icon": "heart"
+      "accent": "#27634b",
+      "background": "sage",
+      "icon": "none"
     },
     "indexing": false
   },
@@ -278,59 +118,39 @@
       "ca": "Bèller holandès"
     },
     "introduction": {
-      "en": "Small paws, big personality. Thank you for helping me find my way home.",
-      "es": "Patas pequeñas, gran personalidad. Gracias por ayudarme a volver a casa.",
-      "ca": "Potes petites, gran personalitat. Gràcies per ajudar-me a tornar a casa."
+      "en": "If you have found me, please contact my owner. Thank you for helping me get home.",
+      "es": "Si me has encontrado, contacta con mi responsable. Gracias por ayudarme a volver a casa.",
+      "ca": "Si m’has trobat, contacta amb la persona responsable. Gràcies per ajudar-me a tornar a casa."
     },
     "status": "safe",
     "photos": [
       {
-        "path": "assets/pets/mochi.webp",
+        "path": "assets/pets/mochi-1.webp",
         "alt": {
-          "en": "Mochi, a tan-and-white lop rabbit in a garden",
-          "es": "Mochi, un conejo belier blanco y marrón en un jardín",
-          "ca": "En Mochi, un conill bèller blanc i marró en un jardí"
+          "en": "Holland lop rabbit",
+          "es": "Conejo belier",
+          "ca": "Conill bèlier"
+        }
+      },
+      {
+        "path": "assets/pets/mochi-2.webp",
+        "alt": {
+          "en": "Holland lop rabbit",
+          "es": "Conejo belier",
+          "ca": "Conill bèlier"
         }
       }
     ],
     "contacts": [
       {
-        "id": "demo-alex"
+        "id": "contact-aina"
       }
     ],
-    "sections": [
-      {
-        "id": "care",
-        "title": {
-          "en": "Everyday care",
-          "es": "Cuidados diarios",
-          "ca": "Cures diàries"
-        },
-        "fields": [
-          {
-            "key": "environment",
-            "label": {
-              "en": "A quiet place",
-              "es": "Un lugar tranquilo",
-              "ca": "Un lloc tranquil"
-            },
-            "value": {
-              "en": "My owner asks that you keep me in a quiet, secure space away from dogs. Contact them for instructions.",
-              "es": "Mi responsable pide que me dejes en un espacio tranquilo y seguro, lejos de perros. Pídele instrucciones.",
-              "ca": "El meu responsable demana que em deixis en un espai tranquil i segur, lluny de gossos. Demana-li instruccions."
-            },
-            "publish": true,
-            "sensitive": false,
-            "consent": false,
-            "kind": "text"
-          }
-        ]
-      }
-    ],
+    "sections": [],
     "theme": {
-      "accent": "#38677c",
-      "background": "sky",
-      "icon": "paw"
+      "accent": "#27634b",
+      "background": "sage",
+      "icon": "none"
     },
     "indexing": false
   },
@@ -360,16 +180,24 @@
         "alt": {
           "ca": "tORTOISE"
         }
+      },
+      {
+        "path": "assets/pets/tortoise-2.webp",
+        "alt": {
+          "en": "Painted turtle on grass",
+          "es": "Tortuga pintada sobre la hierba",
+          "ca": "Tortuga pintada damunt l’herba"
+        }
       }
     ],
     "contacts": [
       {
-        "id": "demo-alex"
+        "id": "contact-aina"
       }
     ],
     "sections": [],
     "theme": {
-      "accent": "#2f654f",
+      "accent": "#27634b",
       "background": "sage",
       "icon": "none"
     },

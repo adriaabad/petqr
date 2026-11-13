@@ -1,0 +1,10 @@
+node_modules/
+dist/
+.test-site/
+.unused/
+test-results/
+playwright-report/
+*.local
+.DS_Store
+Thumbs.db
+private-draft*

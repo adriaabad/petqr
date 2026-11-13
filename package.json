@@ -1,0 +1,34 @@
+{
+  "name": "petqr",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "dev": "tsx scripts/build.ts && vite dist --host 127.0.0.1 --port 5173",
+    "build": "tsc --noEmit && tsx scripts/build.ts",
+    "validate": "tsx scripts/validate.ts",
+    "test": "tsx --test tests/*.test.ts",
+    "test:e2e": "tsx scripts/build-test-site.ts && playwright test",
+    "preview": "vite preview --host 127.0.0.1 --port 4173"
+  },
+  "dependencies": {
+    "fflate": "^0.8.2",
+    "qrcode": "^1.5.4",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
+    "@playwright/test": "^1.55.0",
+    "@types/node": "^24.0.0",
+    "@types/qrcode": "^1.5.5",
+    "jsqr": "^1.4.0",
+    "prettier": "^3.10.1",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0",
+    "vite": "^7.1.0"
+  }
+}

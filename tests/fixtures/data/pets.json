@@ -1,0 +1,232 @@
+[
+  {
+    "id": "cooper-7f2a",
+    "name": "Cooper",
+    "species": { "en": "Dog", "es": "Perro", "ca": "Gos" },
+    "breed": "Golden retriever",
+    "introduction": {
+      "en": "Hi, I’m Cooper. If you found me, thank you! Please contact my people so I can get home safely.",
+      "es": "Hola, soy Cooper. Si me has encontrado, ¡gracias! Contacta con mi gente para que pueda volver a casa.",
+      "ca": "Hola, soc en Cooper. Si m’has trobat, gràcies! Contacta amb la meva gent perquè pugui tornar a casa."
+    },
+    "status": "safe",
+    "photos": [
+      {
+        "path": "assets/pets/cooper.webp",
+        "alt": {
+          "en": "Cooper, a golden retriever in a garden",
+          "es": "Cooper, un golden retriever en un jardín",
+          "ca": "En Cooper, un golden retriever en un jardí"
+        }
+      }
+    ],
+    "contacts": [{ "id": "demo-alex" }, { "id": "demo-sam" }],
+    "sections": [
+      {
+        "id": "identity",
+        "title": { "en": "About Cooper", "es": "Sobre Cooper", "ca": "Sobre en Cooper" },
+        "fields": [
+          {
+            "key": "age",
+            "label": { "en": "Age", "es": "Edad", "ca": "Edat" },
+            "value": { "en": "4 years", "es": "4 años", "ca": "4 anys" },
+            "publish": true
+          },
+          {
+            "key": "markings",
+            "label": {
+              "en": "Distinctive markings",
+              "es": "Rasgos distintivos",
+              "ca": "Trets distintius"
+            },
+            "value": {
+              "en": "Golden coat, small white patch on chest",
+              "es": "Pelaje dorado, pequeña mancha blanca en el pecho",
+              "ca": "Pelatge daurat, petita taca blanca al pit"
+            },
+            "publish": true
+          }
+        ]
+      },
+      {
+        "id": "behavior",
+        "title": {
+          "en": "Handling instructions",
+          "es": "Instrucciones de manejo",
+          "ca": "Instruccions de maneig"
+        },
+        "fields": [
+          {
+            "key": "handling",
+            "label": {
+              "en": "Keep me on a leash",
+              "es": "Llévame con correa",
+              "ca": "Porta’m amb corretja"
+            },
+            "value": {
+              "en": "I’m friendly, but I may run toward other dogs. Approach calmly and contact my people.",
+              "es": "Soy sociable, pero puedo correr hacia otros perros. Acércate con calma y contacta con mi gente.",
+              "ca": "Soc sociable, però puc córrer cap a altres gossos. Apropa’t amb calma i contacta amb la meva gent."
+            },
+            "kind": "warning",
+            "publish": true
+          }
+        ]
+      },
+      {
+        "id": "medical",
+        "title": { "en": "Health", "es": "Salud", "ca": "Salut" },
+        "fields": [
+          {
+            "key": "foodAllergies",
+            "label": {
+              "en": "Food allergy",
+              "es": "Alergia alimentaria",
+              "ca": "Al·lèrgia alimentària"
+            },
+            "value": {
+              "en": "Chicken allergy. Please do not offer treats.",
+              "es": "Alergia al pollo. No me ofrezcas premios.",
+              "ca": "Al·lèrgia al pollastre. No m’ofereixis premis."
+            },
+            "kind": "warning",
+            "publish": true,
+            "sensitive": true,
+            "consent": true
+          }
+        ]
+      }
+    ],
+    "theme": { "accent": "#27634b", "background": "sage", "icon": "paw" },
+    "indexing": false
+  },
+  {
+    "id": "luna-92bd",
+    "name": "Luna",
+    "species": { "en": "Cat", "es": "Gato", "ca": "Gat" },
+    "breed": {
+      "en": "European shorthair",
+      "es": "Europeo de pelo corto",
+      "ca": "Europeu de pèl curt"
+    },
+    "introduction": {
+      "en": "I’m Luna, a curious explorer. My family is looking for me.",
+      "es": "Soy Luna, una exploradora curiosa. Mi familia me está buscando.",
+      "ca": "Soc la Luna, una exploradora curiosa. La meva família m’està buscant."
+    },
+    "status": "missing",
+    "emergency": {
+      "en": "Please do not chase me. Call my family as soon as you see me.",
+      "es": "No me persigas. Llama a mi familia en cuanto me veas.",
+      "ca": "No em persegueixis. Truca a la meva família tan aviat com em vegis."
+    },
+    "photos": [
+      {
+        "path": "assets/pets/luna.webp",
+        "alt": {
+          "en": "Luna, a tabby-and-white cat with green eyes",
+          "es": "Luna, una gata atigrada y blanca de ojos verdes",
+          "ca": "La Luna, una gata tigrada i blanca d’ulls verds"
+        }
+      }
+    ],
+    "contacts": [
+      { "id": "demo-sam" },
+      { "id": "demo-alex", "overrides": { "preferred": "email" } }
+    ],
+    "sections": [
+      {
+        "id": "emergency",
+        "title": { "en": "Last seen", "es": "Última vez vista", "ca": "Darrera vegada vista" },
+        "fields": [
+          {
+            "key": "lastLocation",
+            "label": { "en": "Location", "es": "Ubicación", "ca": "Ubicació" },
+            "value": {
+              "en": "Near the community garden (fictional)",
+              "es": "Cerca del huerto comunitario (ficticio)",
+              "ca": "A prop de l’hort comunitari (fictici)"
+            },
+            "publish": true
+          },
+          {
+            "key": "wearing",
+            "label": { "en": "Wearing", "es": "Llevaba", "ca": "Portava" },
+            "value": {
+              "en": "Teal collar",
+              "es": "Collar verde azulado",
+              "ca": "Collar verd blavós"
+            },
+            "publish": true
+          }
+        ]
+      },
+      {
+        "id": "behavior",
+        "title": { "en": "Safe approach", "es": "Cómo acercarse", "ca": "Com apropar-se" },
+        "fields": [
+          {
+            "key": "approach",
+            "label": { "en": "A little shy", "es": "Algo tímida", "ca": "Una mica tímida" },
+            "value": {
+              "en": "Keep your distance and speak softly. Avoid sudden movements.",
+              "es": "Mantén la distancia y habla suavemente. Evita movimientos bruscos.",
+              "ca": "Mantén la distància i parla suaument. Evita moviments bruscos."
+            },
+            "kind": "warning",
+            "publish": true
+          }
+        ]
+      }
+    ],
+    "theme": { "accent": "#906038", "background": "sand", "icon": "heart" },
+    "indexing": false
+  },
+  {
+    "id": "mochi-3c81",
+    "name": "Mochi",
+    "species": { "en": "Rabbit", "es": "Conejo", "ca": "Conill" },
+    "breed": { "en": "Holland lop", "es": "Belier holandés", "ca": "Bèller holandès" },
+    "introduction": {
+      "en": "Small paws, big personality. Thank you for helping me find my way home.",
+      "es": "Patas pequeñas, gran personalidad. Gracias por ayudarme a volver a casa.",
+      "ca": "Potes petites, gran personalitat. Gràcies per ajudar-me a tornar a casa."
+    },
+    "status": "safe",
+    "photos": [
+      {
+        "path": "assets/pets/mochi.webp",
+        "alt": {
+          "en": "Mochi, a tan-and-white lop rabbit in a garden",
+          "es": "Mochi, un conejo belier blanco y marrón en un jardín",
+          "ca": "En Mochi, un conill bèller blanc i marró en un jardí"
+        }
+      }
+    ],
+    "contacts": [{ "id": "demo-alex" }],
+    "sections": [
+      {
+        "id": "care",
+        "title": { "en": "Everyday care", "es": "Cuidados diarios", "ca": "Cures diàries" },
+        "fields": [
+          {
+            "key": "environment",
+            "label": {
+              "en": "A quiet place",
+              "es": "Un lugar tranquilo",
+              "ca": "Un lloc tranquil"
+            },
+            "value": {
+              "en": "My owner asks that you keep me in a quiet, secure space away from dogs. Contact them for instructions.",
+              "es": "Mi responsable pide que me dejes en un espacio tranquilo y seguro, lejos de perros. Pídele instrucciones.",
+              "ca": "El meu responsable demana que em deixis en un espai tranquil i segur, lluny de gossos. Demana-li instruccions."
+            },
+            "publish": true
+          }
+        ]
+      }
+    ],
+    "theme": { "accent": "#38677c", "background": "sky", "icon": "paw" },
+    "indexing": false
+  }
+]

@@ -1,0 +1,66 @@
+name: Validate, test & deploy PetQR
+on:
+  push:
+    paths:
+      [
+        'src/**',
+        'scripts/**',
+        'data/**',
+        'assets/**',
+        'tests/**',
+        'package*.json',
+        'tsconfig.json',
+        'vite.config.ts',
+        'playwright.config.ts',
+        '.github/workflows/**',
+      ]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: petqr-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    if: github.event_name == 'pull_request' || github.ref_name == github.event.repository.default_branch
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: read
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Get independent repository Pages URL
+        if: github.event_name != 'pull_request'
+        id: pages
+        uses: actions/configure-pages@v5
+      - run: npm run validate
+      - run: npm run build
+        env:
+          PAGES_BASE_URL: ${{ steps.pages.outputs.base_url }}
+      - run: npm test
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+      - uses: actions/upload-pages-artifact@v4
+        if: github.event_name != 'pull_request'
+        with:
+          path: dist
+  deploy:
+    if: github.event_name != 'pull_request' && github.ref_name == github.event.repository.default_branch
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy independent static site
+        id: deployment
+        uses: actions/deploy-pages@v4

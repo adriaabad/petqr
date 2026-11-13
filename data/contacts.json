@@ -1,0 +1,39 @@
+[
+  {
+    "id": "demo-alex",
+    "name": "Alex (fictional)",
+    "relationship": { "en": "My person", "es": "Mi persona", "ca": "La meva persona" },
+    "phone": "+1 202 555 0142",
+    "whatsapp": "+1 202 555 0142",
+    "email": "alex@example.com",
+    "preferred": "phone",
+    "language": "en",
+    "availability": {
+      "en": "Fictional example — do not call",
+      "es": "Ejemplo ficticio — no llamar",
+      "ca": "Exemple fictici — no trucar"
+    },
+    "publish": true,
+    "consent": true
+  },
+  {
+    "id": "demo-sam",
+    "name": "Sam (fictional)",
+    "relationship": {
+      "en": "Emergency contact",
+      "es": "Contacto de emergencia",
+      "ca": "Contacte d’emergència"
+    },
+    "phone": "+1 202 555 0188",
+    "email": "sam@example.com",
+    "preferred": "phone",
+    "language": "ca",
+    "availability": {
+      "en": "Fictional example — do not call",
+      "es": "Ejemplo ficticio — no llamar",
+      "ca": "Exemple fictici — no trucar"
+    },
+    "publish": true,
+    "consent": true
+  }
+]

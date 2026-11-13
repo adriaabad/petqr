@@ -26,6 +26,9 @@ Public HTML contains usable contact links and warnings before scripts load. Java
 - `src/preview.ts`: scoped public previews that warn about incomplete optional contact methods without mutating the draft or relaxing export validation.
 - `src/archive.ts`: whitelist-based ZIP import and filtered export; bounded extraction sizes.
 - `src/draft.ts`: opt-in IndexedDB draft persistence, including processed images.
+- `src/deployment.ts` / `src/github.ts`: independent deployment metadata, in-memory GitHub authorization, allowed-file checks and atomic, non-forced publication.
+- `src/publishing-ui.ts` / `src/publishing-i18n.ts`: connection, public-data review, save/deployment status and translated messages.
+- `src/public-files.ts`: shared public-only file assembly for ZIP export and direct publishing.
 - `src/qr.ts`: bundled QR encoder, contrast validation, SVG composition and tag layout.
 - `scripts/config.ts`, `validate.ts`, `build.ts`: configuration loading, image existence limits, clean build and route/SEO generation.
 
@@ -55,4 +58,4 @@ Keep the lockfile and dependency licenses. Dependencies are build-time or locall
 
 Preview frames allow same-origin image access so newly processed local Blob photos render; `allow-scripts` stays absent, owner text is escaped and no scripts are inserted into preview documents. Never enable both same-origin and scripts for these frames.
 
-Future ideas, not implemented: authorized GitHub writes, cross-device draft synchronization, additional languages and a physical tag scanning lab. They are deliberately unnecessary for the current static workflow.
+Authorized direct GitHub writes are optional and documented in [GITHUB_SAVE.md](GITHUB_SAVE.md). Future ideas, not implemented: OAuth login with a separately hosted authorization service, cross-device private draft synchronization, additional languages and a physical tag scanning lab.

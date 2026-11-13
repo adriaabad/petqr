@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.1.0 — 2026-11-13
+
+- Add optional Save and publish directly from the browser using a temporary, single-repository fine-grained GitHub access key; no authentication backend or central domain.
+- Save privacy-filtered configuration and photos atomically, preserve unrelated source changes, reject stale data and racing edits, and never force an overwrite.
+- Keep credentials only in tab memory, forget them on disconnect/navigation/expiry, restrict authenticated destinations and add an editor CSP.
+- Detect each template copy's repository from its own Actions deployment, and show saved versus published status.
+- Retain the local draft and ZIP workflows; document initial key creation, permission limits and revocation.
+
 ## 1.0.1 — 2026-11-13
 
 - Accept optional Telegram usernames, @usernames and public profile links, with translated inline validation instead of regex errors.

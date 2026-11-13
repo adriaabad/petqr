@@ -1,6 +1,10 @@
 import { languages } from './core';
 import type { Language } from './model';
 const phrases: Record<string, [string, string]> = {
+  'Changes stay on this device until you publish or export.': [
+    'Los cambios se quedan en este dispositivo hasta que publiques o exportes.',
+    'Els canvis es queden en aquest dispositiu fins que publiquis o exportis.',
+  ],
   'Enter a Telegram username, @username or https://t.me/username. Leave blank if you do not use Telegram.':
     [
       'Introduce un usuario de Telegram, @usuario o https://t.me/usuario. Déjalo vacío si no usas Telegram.',

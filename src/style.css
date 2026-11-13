@@ -201,6 +201,31 @@
   }
 }
 @layer components {
+  .editor-top-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+    min-width: 0;
+  }
+  .publishing-buttons {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .publishing-status {
+    max-width: 500px;
+    text-align: right;
+    margin-top: 6px;
+    font-size: 0.75rem;
+  }
+  .publishing-status:empty {
+    display: none;
+  }
+  .topbar {
+    align-items: flex-start;
+  }
   .field-error {
     color: var(--danger);
     font-size: 0.8rem;
@@ -1099,6 +1124,25 @@
   }
 }
 @layer responsive {
+  @media (max-width: 620px) {
+    .topbar {
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .editor-top-actions {
+      width: 100%;
+      align-items: flex-start;
+    }
+    .publishing-buttons {
+      justify-content: flex-start;
+    }
+    .publishing-status {
+      text-align: left;
+    }
+    .publishing-buttons .button {
+      font-size: 0.8rem;
+    }
+  }
   @media (max-width: 620px) {
     .quick-contact {
       display: flex;

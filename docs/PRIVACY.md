@@ -14,9 +14,10 @@ This classification is guidance, not a guarantee that every use is safe. A pet p
 
 ## What the software does
 
-- The editor holds changes in browser memory until export or an explicit local save. Nothing automatically uploads to GitHub or a PetQR service.
+- The editor holds changes in browser memory until export, explicit local save, or an explicitly authorized **Save and publish** action. Nothing uploads automatically to GitHub or a PetQR service.
 - Save draft writes the configuration and processed images to this browser's IndexedDB. Anyone using the device/browser may access it. Restore/Forget are explicit actions. Browser clearing, quota failures or private browsing may prevent persistence.
 - Public ZIP export creates a new filtered configuration, removing unselected fields, unconfirmed sensitive fields, unpublished contacts and private contact overrides. It includes only referenced local images. The current draft is not replaced by this filtered version.
+- Direct GitHub saving uses the same public filter. A fine-grained access key is held only in tab memory for a short connection, never saved in drafts, files, URLs or exported data. Only GitHub API requests carry it. The key grants repository content access and must be protected; read [the security details](GITHUB_SAVE.md). Unpublished fields are not uploaded by this feature.
 - The build rejects configuration carrying unpublished/unconfirmed values. Strict schemas reject unknown properties instead of silently allowing hidden data. This is an error detector, not protection for a file already committed.
 - New photo uploads are drawn to a canvas, cropped/rotated and re-encoded as WebP (JPEG fallback), without copying original EXIF/GPS metadata, and compressed to at most 300 KB. Source decoding is local and depends on the browser/device. The visible image can still reveal a location. Files imported from an existing ZIP are already-public assets and are not automatically re-encoded again.
 - Individual profiles default to noindex/nofollow; only deliberately indexed profiles appear in the sitemap. These are crawler hints, not access control.

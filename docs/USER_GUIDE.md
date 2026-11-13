@@ -42,6 +42,8 @@ Use a flat, durable, high-contrast surface. Preserve at least four clear modules
 
 ## Import, export and local drafts
 
+For direct publication, use **Connect GitHub** at the top of the editor. Create a fine-grained key for only this repository with **Contents: Read and write**, paste it into the masked field and connect. The key stays only in tab memory for a 30-minute connection. Edit, then **Save and publish → Publish changes**. The app saves data/photos together and shows the deployment status. Visitors without a key granting write access cannot publish. Closing/reloading the editor forgets the connection. See [setup and security](GITHUB_SAVE.md).
+
 Export files shows a public-data warning, then downloads a ZIP. It contains four JSON files under data/ and referenced images under assets/pets/. Replace the repository's data/ and upload/merge the photos, commit to the default branch and wait for deployment. Files do not upload themselves.
 
 Import files accepts the complete public ZIP or one complete configuration JSON. It replaces your draft after confirmation. Individual site/contacts/pets JSON fragments must be combined into the complete version/site/contacts/pets shape, or loaded together as a ZIP. No source JSON editing is necessary for routine use.

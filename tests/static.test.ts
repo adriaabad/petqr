@@ -10,6 +10,24 @@ test('static distribution includes project and dependency license notices', asyn
   const licenses = await readFile('dist/THIRD_PARTY_LICENSES.txt', 'utf8');
   for (const name of ['qrcode', 'fflate', 'zod']) assert.ok(licenses.includes(name));
 });
+test('publishing metadata contains source file hashes, and the editor restricts credential network destinations', async () => {
+  const metadata = JSON.parse(await readFile('dist/data/deployment.json', 'utf8'));
+  for (const path of [
+    'data/version.json',
+    'data/site.json',
+    'data/contacts.json',
+    'data/pets.json',
+  ])
+    assert.match(metadata.dataShas[path], /^[a-f0-9]{40}$/);
+  assert.doesNotMatch(
+    JSON.stringify(metadata),
+    /access_token|client_secret|authorization|github_pat_/i,
+  );
+  const editor = await readFile('dist/editor/index.html', 'utf8');
+  assert.match(editor, /Content-Security-Policy/);
+  assert.match(editor, /connect-src 'self' https:\/\/api.github.com/);
+  assert.match(editor, /object-src 'none'/);
+});
 test('all configured standalone routes have HTML, metadata, assets and scoped JSON', async () => {
   for (const pet of config.pets) {
     const path = resolve('dist', petPath(pet.id), 'index.html'),

@@ -29,6 +29,7 @@ import { exportArchive, importArchive, type ImageFiles } from './archive';
 import { download } from './download';
 import { draftStore } from './draft';
 import { icon } from './icons';
+import { PublishingUI } from './publishing-ui';
 
 const base = new URL(/* @vite-ignore */ '../', import.meta.url);
 let config: Config,
@@ -41,6 +42,7 @@ let screen: 'pets' | 'contacts' | 'settings' | 'help' | 'edit' = 'pets',
   dirty = false,
   previewCSS = '';
 let images: ImageFiles = new Map();
+let publishing: PublishingUI | null = null;
 const imageURLs = new Map<string, string>();
 const binding = new Map<string, (value: string | boolean) => void>(),
   actions = new Map<string, () => void | Promise<void>>();
@@ -187,10 +189,10 @@ function shell(content: string) {
     )
     .join(
       '',
-    )}</nav><p class="sidebar-note">${tr('Local only. Nothing is uploaded automatically.')}</p></aside><main class="app-main" id="main"><div class="topbar"><span class="context">PetQR / ${tr('Local editor')}</span>${controls(lang)}</div><div id="errors" class="error-box" role="alert"></div>${content}</main></div><div class="toast" role="status" aria-live="polite" id="toast"></div>`;
+    )}</nav><p class="sidebar-note">${tr('Local only. Nothing is uploaded automatically.')}</p></aside><main class="app-main" id="main"><div class="topbar"><span class="context">PetQR / ${tr('Local editor')}</span><div class="editor-top-actions">${controls(lang)}<div id="github-publishing"></div></div></div><div id="errors" class="error-box" role="alert"></div>${content}</main></div><div class="toast" role="status" aria-live="polite" id="toast"></div>`;
 }
 function exportStrip() {
-  return `<div class="export-strip"><div><strong>${tr('Changes stay on this device. Export when you’re ready.')}</strong><p>${tr('Only selected public fields are exported. Unpublished fields remain in this browser session.')}</p></div>${button('Export files', openExport)}</div>`;
+  return `<div class="export-strip"><div><strong>${tr('Changes stay on this device until you publish or export.')}</strong><p>${tr('Only selected public fields are exported. Unpublished fields remain in this browser session.')}</p></div>${button('Export files', openExport)}</div>`;
 }
 function dashboard() {
   return `<div class="page-heading"><div><h1>${tr('A little tag. A way home.')}</h1><p>${tr('Your pets, their people, always connected.')}</p></div>${button(
@@ -773,6 +775,8 @@ function render() {
     contentLang = next;
     render();
   });
+  const publishingRoot = document.getElementById('github-publishing');
+  if (publishingRoot) publishing?.mount(publishingRoot);
   document.body.onclick = (event) => {
     const target = (event.target as Element).closest<HTMLElement>('[data-action]');
     if (!target) return;
@@ -803,9 +807,12 @@ window.addEventListener('beforeunload', (event) => {
   }
 });
 async function start() {
-  const [response, css] = await Promise.all([
+  const [response, css, metadata] = await Promise.all([
     fetch(new URL('data/config.json', base)),
     fetch(new URL('assets/style.css', base)),
+    fetch(new URL('data/deployment.json', base), { cache: 'no-store' })
+      .then((response) => (response.ok ? response.json() : null))
+      .catch(() => null),
   ]);
   if (!response.ok) throw new Error('Could not load public configuration');
   config = parseConfig(await response.json());
@@ -813,6 +820,17 @@ async function start() {
   previewCSS = await css.text();
   lang = preferredLanguage(config.site.defaultLanguage);
   contentLang = lang;
+  publishing = new PublishingUI({
+    base,
+    deployment: metadata,
+    language: () => lang,
+    draft: () => config,
+    images: () => images,
+    onError: showError,
+    onSaved: () => {
+      dirty = JSON.stringify(parseConfig(config)) !== JSON.stringify(publicConfig(config));
+    },
+  });
   render();
 }
 void start().catch((error) => {

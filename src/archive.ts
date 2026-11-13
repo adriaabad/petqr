@@ -1,27 +1,13 @@
-import { zipSync, unzipSync, strToU8, strFromU8 } from 'fflate';
-import { parseConfig, publicConfig, localImage, type Config } from './model';
-export type ImageFiles = Map<string, Uint8Array>;
+import { zipSync, unzipSync, strFromU8 } from 'fflate';
+import { parseConfig, localImage, type Config } from './model';
+import { publicFiles, type ImageFiles } from './public-files';
+export type { ImageFiles } from './public-files';
 export async function exportArchive(
   draft: Config,
   images: ImageFiles,
   base: URL,
 ): Promise<Uint8Array> {
-  const config = publicConfig(draft);
-  const files: Record<string, Uint8Array> = {};
-  for (const key of ['version', 'site', 'contacts', 'pets'] as const)
-    files[`data/${key}.json`] = strToU8(JSON.stringify(config[key], null, 2) + '\n');
-  const paths = new Set(config.pets.flatMap((p) => p.photos.map((photo) => photo.path)));
-  await Promise.all(
-    [...paths].map(async (path) => {
-      if (images.has(path)) {
-        files[path] = images.get(path)!;
-        return;
-      }
-      const response = await fetch(new URL(path, base));
-      if (!response.ok) throw new Error(`Missing photo: ${path}`);
-      files[path] = new Uint8Array(await response.arrayBuffer());
-    }),
-  );
+  const files = await publicFiles(draft, images, base);
   return zipSync(files, { level: 0 });
 }
 export function importArchive(bytes: Uint8Array): { config: Config; images: ImageFiles } {

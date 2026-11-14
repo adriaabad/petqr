@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.4 — 2026-11-14
+
+- Add home address, authorized outdoor access and usual roaming area/instructions. Address and area publication require explicit consent; permitted outings appear directly on the public profile without restoring lost/found status.
+- Attach optional author/source/license/modification metadata to each photo and preserve it in public JSON and ZIP round trips.
+- Generate `PHOTO_CREDITS.txt` from only the photos referenced by the current configuration, both on export and build. Hide the credits link when a profile has no supplied attribution metadata.
+- Keep new uploads free of inherited authorship or license claims. Replacing a photo removes its old credit from the current publication without changing anyone's legal rights.
+
 ## 1.1.3 — 2026-11-13
 
 - Replace generated profile photos with locally hosted real public-domain/CC0 stock photos; give every current pet two photos and preserve the owner's uploaded turtle image.

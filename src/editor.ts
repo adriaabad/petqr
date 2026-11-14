@@ -303,6 +303,37 @@ function identificationInput(pet: Pet, key: 'microchip' | 'registration', label:
     },
   )}<p class="hint">${tr('Optional. Published identification numbers can be read by anyone.')}</p></div>`;
 }
+function photoAttribution(photo: Pet['photos'][number]) {
+  const fields: [keyof NonNullable<typeof photo.credit>, string, string?][] = [
+    ['author', 'Photo author'],
+    ['source', 'Photo source URL', 'url'],
+    ['license', 'Photo license or permission'],
+    ['licenseUrl', 'License URL (optional)', 'url'],
+    ['changes', 'Photo modifications (optional)'],
+  ];
+  return `<details class="optional-contact-method"><summary>${tr('Photo authorship and license (optional)')}</summary><div class="section-content"><p class="hint">${tr('A new photo does not inherit the previous author. Add the actual author and permission for this photo. Uploading does not transfer copyright.')}</p><div class="stack">${fields
+    .map(([key, label, type]) =>
+      input(
+        label,
+        photo.credit?.[key] || '',
+        (value) => {
+          const credit = {
+            author: '',
+            source: '',
+            license: '',
+            licenseUrl: '',
+            changes: '',
+            ...photo.credit,
+            [key]: value,
+          };
+          if (Object.values(credit).some((entry) => entry.trim())) photo.credit = credit;
+          else delete photo.credit;
+        },
+        { type },
+      ),
+    )
+    .join('')}</div></div></details>`;
+}
 function editor() {
   const pet = currentPet();
   if (!pet) {
@@ -360,7 +391,7 @@ function editor() {
             render();
           },
           'danger',
-        )}</div></div>`,
+        )}</div>${photoAttribution(p)}</div>`,
     )
     .join('')}</div>`;
   return `<div class="page-heading"><div><div class="row">${button(
@@ -384,7 +415,30 @@ function editor() {
     },
   )}</div><div class="spacer"></div><div class="editor-layout"><div class="editor-form">${section(tr('Identity'), identity, 'identity', true)}${section(tr('Contacts'), contactContent, 'contacts')}${section(tr('Photos'), photoContent, 'photos')}${dataSections(pet)}</div><aside class="preview-panel"><div class="row spread preview-heading"><span>${tr('Preview profile')}</span>${button('Preview profile', () => openPreview(pet), 'subtle')}</div><iframe title="${tr('Preview profile')}" id="profile-preview" sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox"></iframe></aside></div>`;
 }
-const standardDetails: Record<string, { key: string; aliases: string[]; label: string }[]> = {
+const standardDetails: Record<
+  string,
+  { key: string; aliases: string[]; label: string; sensitive?: boolean; options?: string[] }[]
+> = {
+  location: [
+    {
+      key: 'homeAddress',
+      aliases: ['homeAddress', 'address'],
+      label: 'Home address',
+      sensitive: true,
+    },
+    {
+      key: 'outdoorAccess',
+      aliases: ['outdoorAccess'],
+      label: 'Outdoor access',
+      options: ['Stays at home', 'May go out independently', 'Only goes out accompanied'],
+    },
+    {
+      key: 'roamingArea',
+      aliases: ['roamingArea'],
+      label: 'Usual area and outdoor instructions',
+      sensitive: true,
+    },
+  ],
   medical: [
     { key: 'allergies', aliases: ['foodAllergies', 'allergies'], label: 'Allergies' },
     { key: 'conditions', aliases: ['conditions'], label: 'Health conditions' },
@@ -405,7 +459,7 @@ function standardDetail(
       key: definition.key,
       label: { en: definition.label, es: t(definition.label, 'es'), ca: t(definition.label, 'ca') },
       value: '',
-      sensitive: sectionId === 'medical',
+      sensitive: sectionId === 'medical' || definition.sensitive,
       kind: sectionId === 'medical' ? 'warning' : 'text',
     });
   return fieldEditor(
@@ -425,6 +479,24 @@ function standardDetail(
       if (!data.fields.includes(field)) data.fields.push(field);
     },
     definition.label,
+    definition.options
+      ? (setValue) => {
+          const current = textOf(field.value, 'en', config.site.defaultLanguage);
+          const choices = [...definition.options!];
+          if (current && !choices.includes(current)) choices.push(current);
+          return select(
+            definition.label,
+            current,
+            [
+              { value: '', label: 'Not specified' },
+              ...choices.map((value) => ({ value, label: value })),
+            ],
+            (value) => {
+              setValue(value ? { en: value, es: t(value, 'es'), ca: t(value, 'ca') } : '');
+            },
+          );
+        }
+      : undefined,
   );
 }
 function dataSections(pet: Pet) {
@@ -449,7 +521,7 @@ function dataSections(pet: Pet) {
       const sensitive = s.id === 'medical' || s.id === 'identification';
       return section(
         local(s.title),
-        `${sensitive ? `<p class="sensitive-note">${tr('Sensitive details can identify an animal or expose health information. Publish only with informed consent.')}</p>` : ''}${standards.map((definition) => standardDetail(pet, s.id, definition)).join('')}${
+        `${sensitive ? `<p class="sensitive-note">${tr('Sensitive details can identify an animal or expose health information. Publish only with informed consent.')}</p>` : ''}${s.id === 'location' ? `<p class="sensitive-note">${tr('Publish only the address or area you want anyone scanning the QR to see. Outdoor access describes permitted outings, not a lost/found status.')}</p>` : ''}${standards.map((definition) => standardDetail(pet, s.id, definition)).join('')}${
           visibleFields
             .map((f) =>
               fieldEditor(s.id, f, () => {
@@ -471,16 +543,15 @@ function fieldEditor(
   remove?: () => void,
   onChange = () => {},
   label = local(field.label),
+  valueEditor?: (setValue: (value: Localized) => void) => string,
 ) {
-  return `<div class="field-row">${textInput(
-    label,
-    field.value,
-    (v) => {
-      onChange();
-      field.value = v;
-    },
-    true,
-  )}<div class="field-options">${check('Publish', field.publish, (v) => {
+  const setValue = (value: Localized) => {
+    onChange();
+    field.value = value;
+  };
+  return `<div class="field-row">${
+    valueEditor ? valueEditor(setValue) : textInput(label, field.value, setValue, true)
+  }<div class="field-options">${check('Publish', field.publish, (v) => {
     if (v && needsConsent(sectionId, field) && !field.consent) {
       if (
         !confirm(
@@ -574,7 +645,7 @@ function settings() {
       { value: 'ca', label: 'Català' },
     ],
     (v) => (s.defaultLanguage = v as Language),
-  )}${check('Show public pet index', s.ownerIndex, (v) => (s.ownerIndex = v))}<p class="hint">${tr('Profiles are public, including when the index is disabled.')}</p>${check('Show attribution', s.attribution, (v) => (s.attribution = v))}${input('Project source URL (optional)', s.sourceUrl, (v) => (s.sourceUrl = v), { type: 'url' })}<div class="notice warning"><h2>${tr('Publishing & privacy')}</h2><p>${tr('Everything uploaded to GitHub Pages is public. Unlisted URLs and noindex do not provide privacy. Never upload confidential records or precise home addresses.')}</p></div></div><div class="settings-actions">${button('Import files', importFiles)}${button(
+  )}${check('Show public pet index', s.ownerIndex, (v) => (s.ownerIndex = v))}<p class="hint">${tr('Profiles are public, including when the index is disabled.')}</p>${check('Show attribution', s.attribution, (v) => (s.attribution = v))}${input('Project source URL (optional)', s.sourceUrl, (v) => (s.sourceUrl = v), { type: 'url' })}<div class="notice warning"><h2>${tr('Publishing & privacy')}</h2><p>${tr('Everything uploaded to GitHub Pages is public. Keep confidential records private. Publish an address only if you want it visible to anyone scanning the QR.')}</p></div></div><div class="settings-actions">${button('Import files', importFiles)}${button(
     'Save draft on this device',
     async () => {
       await draftStore('save', { config: parseConfig(config), images });
@@ -611,7 +682,7 @@ function settings() {
   )}</div>${exportStrip()}</div>`;
 }
 function help() {
-  return `<div class="help-content"><h1>${tr('Help')}</h1><h2>${tr('Export & publish')}</h2><p>${tr('Download the ZIP, extract it, then replace the data/ folder and merge assets/pets/ into your repository. Commit the changes and wait for Pages to deploy.')}</p><h2>${tr('Publishing & privacy')}</h2><p>${tr('Everything uploaded to GitHub Pages is public. Unlisted URLs and noindex do not provide privacy. Never upload confidential records or precise home addresses.')}</p><h2>${tr('Photos')}</h2><p>${tr('Photos are converted and compressed on this device to WebP or JPEG, up to 1200 px and 300 KB. Animated images use the first frame.')}</p><h2>${tr('QR code')}</h2><p>${tr('Keep at least four clear modules around the code. Print at least 25 mm, larger for long URLs. Test with multiple phones before engraving.')}</p><h2>${tr('Stable ID')}</h2><p>${tr('Keep this ID unchanged once a tag is printed.')}</p><div class="settings-actions">${button('Import files', importFiles)}${button('Export files', openExport, 'primary')}</div></div>`;
+  return `<div class="help-content"><h1>${tr('Help')}</h1><h2>${tr('Export & publish')}</h2><p>${tr('Download the ZIP, extract it, then replace the data/ folder and merge assets/pets/ into your repository. Commit the changes and wait for Pages to deploy.')}</p><h2>${tr('Publishing & privacy')}</h2><p>${tr('Everything uploaded to GitHub Pages is public. Keep confidential records private. Publish an address only if you want it visible to anyone scanning the QR.')}</p><h2>${tr('Photos')}</h2><p>${tr('Photos are converted and compressed on this device to WebP or JPEG, up to 1200 px and 300 KB. Animated images use the first frame.')}</p><h2>${tr('QR code')}</h2><p>${tr('Keep at least four clear modules around the code. Print at least 25 mm, larger for long URLs. Test with multiple phones before engraving.')}</p><h2>${tr('Stable ID')}</h2><p>${tr('Keep this ID unchanged once a tag is printed.')}</p><div class="settings-actions">${button('Import files', importFiles)}${button('Export files', openExport, 'primary')}</div></div>`;
 }
 function clearImageURLs() {
   for (const url of imageURLs.values()) URL.revokeObjectURL(url);
@@ -691,7 +762,7 @@ function openExport() {
   const dialog = document.createElement('dialog');
   dialog.setAttribute('aria-label', tr('Export & publish'));
   const safe = publicConfig(config);
-  dialog.innerHTML = `<div class="modal-heading"><h2>${tr('Export & publish')}</h2><button class="button" data-close>${tr('Close')}</button></div><div class="notice warning">${tr('Everything uploaded to GitHub Pages is public. Unlisted URLs and noindex do not provide privacy. Never upload confidential records or precise home addresses.')}</div><div class="spacer"></div><p>${tr('Only selected public fields are exported. Unpublished fields remain in this browser session.')}</p><p class="hint">${safe.pets.length} ${tr('My pets')} · ${safe.contacts.length} ${tr('Contacts')}</p><div class="divider"></div><p>${tr('Download the ZIP, extract it, then replace the data/ folder and merge assets/pets/ into your repository. Commit the changes and wait for Pages to deploy.')}</p><div class="qr-output-actions"><button class="button primary" data-download>${tr('Confirm publication')} · ZIP</button></div><p class="error-box" data-error role="alert"></p>`;
+  dialog.innerHTML = `<div class="modal-heading"><h2>${tr('Export & publish')}</h2><button class="button" data-close>${tr('Close')}</button></div><div class="notice warning">${tr('Everything uploaded to GitHub Pages is public. Keep confidential records private. Publish an address only if you want it visible to anyone scanning the QR.')}</div><div class="spacer"></div><p>${tr('Only selected public fields are exported. Unpublished fields remain in this browser session.')}</p><p class="hint">${safe.pets.length} ${tr('My pets')} · ${safe.contacts.length} ${tr('Contacts')}</p><div class="divider"></div><p>${tr('Download the ZIP, extract it, then replace the data/ folder and merge assets/pets/ into your repository. Commit the changes and wait for Pages to deploy.')}</p><div class="qr-output-actions"><button class="button primary" data-download>${tr('Confirm publication')} · ZIP</button></div><p class="error-box" data-error role="alert"></p>`;
   document.body.append(dialog);
   dialog.showModal();
   dialog.querySelector<HTMLElement>('[data-close]')!.onclick = () => dialog.close();

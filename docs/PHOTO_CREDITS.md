@@ -1,5 +1,7 @@
 # Photo credits / Crèdits de les fotografies
 
+This is the source catalog for the original bundled image assets. The live website's `PHOTO_CREDITS.txt` is generated separately from the photos currently selected in `data/pets.json`, using their per-photo credit metadata. New uploads do not inherit these authors or licenses, and removed photos are omitted from the live credits. This catalog may still document original assets present in repository history.
+
 The following are real stock photographs, reused from Wikimedia Commons under CC0 or a public-domain dedication. They are locally resized and re-encoded as WebP; EXIF data is removed. They are not AI-generated images. Stock photos are not verified photographs of the profile owners’ animals.
 
 | Local image | Author | License | Source |

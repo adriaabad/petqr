@@ -1,6 +1,7 @@
 import { contactLink, resolvedContacts, textOf, petPath } from './core';
 import type { Config, Pet, Language, Localized } from './model';
 import { t } from './i18n';
+import { creditedPhotos } from './photo-credits';
 export function esc(value: unknown): string {
   return String(value ?? '').replace(
     /[&<>"']/g,
@@ -19,7 +20,7 @@ export function brand(href: string): string {
   return `<a class="brand" href="${esc(href)}">${paw}<span>PetQR</span></a>`;
 }
 export function footer(config: Config, lang: Language, prefix = ''): string {
-  return `<footer><p>${t('Public information. Share only what you are comfortable publishing.', lang)}</p><p><a href="${esc(prefix)}PHOTO_CREDITS.txt">${t('Photo credits', lang)}</a></p>${config.site.attribution ? `<p>PetQR · ${config.site.sourceUrl ? `<a href="${esc(config.site.sourceUrl)}" rel="noopener noreferrer">${t('Open-source project', lang)}</a>` : 'MIT · Open source'}</p>` : ''}</footer>`;
+  return `<footer><p>${t('Public information. Share only what you are comfortable publishing.', lang)}</p>${creditedPhotos(config).length ? `<p><a href="${esc(prefix)}PHOTO_CREDITS.txt">${t('Photo credits', lang)}</a></p>` : ''}${config.site.attribution ? `<p>PetQR · ${config.site.sourceUrl ? `<a href="${esc(config.site.sourceUrl)}" rel="noopener noreferrer">${t('Open-source project', lang)}</a>` : 'MIT · Open source'}</p>` : ''}</footer>`;
 }
 export function photo(pet: Pet, lang: Language, prefix: string, lazy = false): string {
   const p = pet.photos[0];
@@ -54,6 +55,27 @@ export function renderProfile(
   const sections = pet.sections.filter((section) => section.id !== 'emergency');
   const isIdentifier = (section: string, key: string) =>
     section === 'identification' && ['microchip', 'registration', 'registry'].includes(key);
+  const residenceLabels: Record<string, string> = {
+    homeAddress: 'Home address',
+    address: 'Home address',
+    outdoorAccess: 'Outdoor access',
+    roamingArea: 'Usual area and outdoor instructions',
+  };
+  const isResidence = (section: string, key: string) =>
+    section === 'location' && Object.hasOwn(residenceLabels, key);
+  const residence = sections
+    .filter((section) => section.id === 'location')
+    .flatMap((section) => section.fields)
+    .filter(
+      (field) =>
+        Object.hasOwn(residenceLabels, field.key) &&
+        field.publish &&
+        (field.key === 'outdoorAccess' || field.consent) &&
+        local(field.value).trim(),
+    );
+  const residenceHTML = residence.length
+    ? `<section class="residence-public" aria-label="${tr('Address & outdoor access')}"><h2>${tr('Address & outdoor access')}</h2><dl class="pet-identifiers">${residence.map((field) => `<div><dt>${tr(residenceLabels[field.key])}</dt><dd>${esc(local(field.value))}</dd></div>`).join('')}</dl></section>`
+    : '';
   const identifiers = sections
     .filter((section) => section.id === 'identification')
     .flatMap((section) => section.fields)
@@ -70,7 +92,9 @@ export function renderProfile(
   const warnings = sections
     .flatMap((s) =>
       s.fields
-        .filter((f) => f.kind === 'warning' && !isIdentifier(s.id, f.key))
+        .filter(
+          (f) => f.kind === 'warning' && !isIdentifier(s.id, f.key) && !isResidence(s.id, f.key),
+        )
         .map(
           (f) =>
             `<div class="notice warning"><strong>${esc(local(f.label))}</strong><p>${esc(local(f.value))}</p></div>`,
@@ -79,7 +103,9 @@ export function renderProfile(
     .join('');
   const details = sections
     .map((s) => {
-      const values = s.fields.filter((f) => f.kind !== 'warning' && !isIdentifier(s.id, f.key));
+      const values = s.fields.filter(
+        (f) => f.kind !== 'warning' && !isIdentifier(s.id, f.key) && !isResidence(s.id, f.key),
+      );
       return values.length
         ? `<section class="detail-section"><h3>${esc(local(s.title))}</h3><dl>${values.map((f) => `<div><dt>${esc(local(f.label))}</dt><dd>${f.kind === 'link' ? `<a href="${esc(local(f.value))}" rel="noopener noreferrer">${esc(local(f.value))}</a>` : esc(local(f.value))}</dd></div>`).join('')}</dl></section>`
         : '';
@@ -89,6 +115,7 @@ export function renderProfile(
 
   <div class="profile-top"><div class="profile-photo">${photo(pet, lang, prefix)}</div><div class="profile-intro"><div class="name-row"><h1>${esc(pet.name)}</h1></div><p class="species">${esc(local(pet.species))}${pet.breed ? ` · ${esc(local(pet.breed))}` : ''}</p><p class="introduction">${esc(local(pet.introduction) || tr('Please contact my people so I can get home safely.'))}</p>
   ${identification}
+  ${residenceHTML}
   <section class="contacts-public" aria-label="${tr('Contact my people')}"><h2>${tr('Contact my people')}</h2>${
     contacts.length
       ? contacts

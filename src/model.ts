@@ -28,10 +28,25 @@ const id = z
 export function localImage(value: string): boolean {
   return /^assets\/pets\/[a-zA-Z0-9_-]+\.(webp|png|jpg|jpeg)$/i.test(value);
 }
+const creditURL = z
+  .string()
+  .max(2000)
+  .refine((value) => !value || safeURL(value), 'Use an HTTP(S) URL.')
+  .default('');
+export const photoCreditSchema = z
+  .object({
+    author: z.string().max(200).default(''),
+    source: creditURL,
+    license: z.string().max(200).default(''),
+    licenseUrl: creditURL,
+    changes: z.string().max(500).default(''),
+  })
+  .strict();
 export const imageSchema = z
   .object({
     path: z.string().refine(localImage, 'Use a local assets/pets/ filename (WebP, PNG or JPEG).'),
     alt: localized,
+    credit: photoCreditSchema.optional(),
   })
   .strict();
 export const fieldSchema = z
@@ -231,7 +246,9 @@ export function needsConsent(section: string, field: Field): boolean {
   return (
     field.sensitive ||
     section === 'medical' ||
-    /microchip|tattoo|registration|registry|identification.number/i.test(field.key)
+    /microchip|tattoo|registration|registry|identification.number|address|roamingArea/i.test(
+      field.key,
+    )
   );
 }
 export function publicConfig(input: Config): Config {

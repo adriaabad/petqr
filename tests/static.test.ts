@@ -3,12 +3,14 @@ import assert from 'node:assert/strict';
 import { readFile, stat, readdir } from 'node:fs/promises';
 import { resolve, dirname } from 'node:path';
 import { parseConfig, petPath } from '../src/model';
+import { photoCreditsText } from '../src/photo-credits';
 const config = parseConfig(JSON.parse(await readFile('dist/data/config.json', 'utf8')));
 
 test('static distribution includes project and dependency license notices', async () => {
   assert.match(await readFile('dist/LICENSE.txt', 'utf8'), /MIT License/);
   const licenses = await readFile('dist/THIRD_PARTY_LICENSES.txt', 'utf8');
   for (const name of ['qrcode', 'fflate', 'zod']) assert.ok(licenses.includes(name));
+  assert.equal(await readFile('dist/PHOTO_CREDITS.txt', 'utf8'), photoCreditsText(config));
 });
 test('all configured standalone routes have HTML, metadata, assets and scoped JSON', async () => {
   for (const pet of config.pets) {

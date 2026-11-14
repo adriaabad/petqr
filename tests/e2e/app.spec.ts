@@ -5,6 +5,7 @@ import { tmpdir } from 'node:os';
 import { readFile } from 'node:fs/promises';
 import { importArchive } from '../../src/archive';
 import jsQR from 'jsqr';
+import { unzipSync, strFromU8 } from 'fflate';
 test.beforeEach(async ({ page }) => {
   await page.addInitScript(() => {
     try {
@@ -214,6 +215,105 @@ test('standard health and behavior text boxes preserve privacy and export togeth
   );
 });
 
+test('home address, roaming permission and usual area are opt-in and export together', async ({
+  page,
+}) => {
+  await page.goto('editor/');
+  await page.getByRole('button', { name: 'Add pet', exact: true }).click();
+  const location = page.locator('details[data-section="data-location"]');
+  await location.locator('summary').click();
+  await expect(location.getByLabel('Outdoor access', { exact: true })).toHaveValue('');
+  await location.getByLabel('Home address', { exact: true }).fill('PRIVATE_ADDRESS_123');
+  await location
+    .getByLabel('Usual area and outdoor instructions', { exact: true })
+    .fill('PRIVATE_AREA_123');
+  await location
+    .getByLabel('Outdoor access', { exact: true })
+    .selectOption('May go out independently');
+  await expect(page.locator('#profile-preview')).not.toHaveAttribute(
+    'srcdoc',
+    /PRIVATE_ADDRESS_123|PRIVATE_AREA_123/,
+  );
+  const address = location
+    .locator('.field-row')
+    .filter({ has: page.getByLabel('Home address', { exact: true }) });
+  page.once('dialog', (dialog) => dialog.dismiss());
+  await address.getByLabel('Publish', { exact: true }).click();
+  await expect(address.getByLabel('Publish', { exact: true })).not.toBeChecked();
+  for (const label of ['Home address', 'Usual area and outdoor instructions']) {
+    page.once('dialog', (dialog) => dialog.accept());
+    await location
+      .locator('.field-row')
+      .filter({ has: page.getByLabel(label, { exact: true }) })
+      .getByLabel('Publish', { exact: true })
+      .check();
+  }
+  await location
+    .locator('.field-row')
+    .filter({ has: page.getByLabel('Outdoor access', { exact: true }) })
+    .getByLabel('Publish', { exact: true })
+    .check();
+  const residence = page.frameLocator('#profile-preview').locator('.residence-public');
+  await expect(residence).toContainText('PRIVATE_ADDRESS_123');
+  await expect(residence).toContainText('PRIVATE_AREA_123');
+  await expect(residence).toContainText('May go out independently');
+  await page.getByRole('button', { name: 'Export files', exact: true }).click();
+  const pending = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Confirm publication · ZIP' }).click();
+  const file = await pending;
+  const result = importArchive(new Uint8Array(await readFile((await file.path())!)));
+  const sections = result.config.pets
+    .at(-1)!
+    .sections.filter((section) => section.id === 'location');
+  expect(sections).toHaveLength(1);
+  expect(sections[0].fields).toHaveLength(3);
+  expect(sections[0].fields.find((field) => field.key === 'homeAddress')?.consent).toBe(true);
+});
+
+test('replacing an attributed photo with a new upload removes stale authorship and preserves new credit in the ZIP', async ({
+  page,
+}) => {
+  await page.route('**/data/config.json', async (route) => {
+    const response = await route.fetch();
+    const config = await response.json();
+    config.pets[0].photos[0].credit = {
+      author: 'STOCK_AUTHOR',
+      source: 'https://example.com/stock',
+      license: 'CC BY 4.0',
+    };
+    await route.fulfill({ json: config });
+  });
+  await page.goto('editor/');
+  await page.getByRole('button', { name: 'Edit', exact: true }).first().click();
+  await page.locator('details[data-section="photos"] > summary').click();
+  await page.getByText('Photo authorship and license (optional)', { exact: true }).click();
+  await expect(page.getByLabel('Photo author', { exact: true })).toHaveValue('STOCK_AUTHOR');
+  await page.locator('.photo-item').getByRole('button', { name: 'Remove', exact: true }).click();
+  const chooser = page.waitForEvent('filechooser');
+  await page.getByRole('button', { name: 'Add photo', exact: true }).click();
+  await (await chooser).setFiles('tests/fixtures/assets/pets/luna.webp');
+  await expect(page.locator('.crop-canvas')).toBeVisible();
+  await page.getByRole('button', { name: 'Use photo', exact: true }).click();
+  await page.getByText('Photo authorship and license (optional)', { exact: true }).click();
+  await expect(page.getByLabel('Photo author', { exact: true })).toHaveValue('');
+  await expect(page.getByLabel('Photo license or permission', { exact: true })).toHaveValue('');
+  await expect(
+    page.frameLocator('#profile-preview').getByRole('link', { name: 'Photo credits', exact: true }),
+  ).toHaveCount(0);
+  await page.getByLabel('Photo author', { exact: true }).fill('MY_PHOTO_AUTHOR');
+  await page.getByRole('button', { name: 'Export files', exact: true }).click();
+  const pending = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Confirm publication · ZIP' }).click();
+  const file = await pending;
+  const bytes = new Uint8Array(await readFile((await file.path())!));
+  const config = importArchive(bytes).config;
+  expect(config.pets[0].photos[0].credit?.author).toBe('MY_PHOTO_AUTHOR');
+  expect(config.pets[0].photos[0].credit?.license).toBe('');
+  const credits = strFromU8(unzipSync(bytes)['PHOTO_CREDITS.txt']);
+  expect(credits).toContain('MY_PHOTO_AUTHOR');
+  expect(credits).not.toContain('STOCK_AUTHOR');
+});
+
 test('QR settings require a public URL and produce SVG and PNG files', async ({ page }) => {
   await page.route('**/data/config.json', async (route) => {
     const response = await route.fetch();
@@ -270,7 +370,7 @@ test('QR settings require a public URL and produce SVG and PNG files', async ({ 
 test('image crop, rotate and publication ZIP include the processed photo', async ({ page }) => {
   await page.goto('editor/');
   await page.getByRole('button', { name: 'Edit', exact: true }).first().click();
-  await page.locator('details[data-section=photos] summary').click();
+  await page.locator('details[data-section=photos] > summary').click();
   const chooser = page.waitForEvent('filechooser');
   await page.getByRole('button', { name: 'Add photo', exact: true }).click();
   await (await chooser).setFiles('tests/fixtures/assets/pets/luna.webp');
@@ -309,7 +409,7 @@ test('an invalid optional Telegram does not block a photo over 15 MB, and the ex
     /Some contact methods are incomplete/,
   );
   await expect(page.locator('#errors')).toBeEmpty();
-  await page.locator('details[data-section=photos] summary').click();
+  await page.locator('details[data-section=photos] > summary').click();
   const width = 2400,
     height = 2400,
     stride = width * 3,

@@ -1,10 +1,10 @@
 export const categoryNames = {
   identity: ['Identity', 'Identidad', 'Identitat'],
   identification: ['Identification', 'Identificación', 'Identificació'],
+  location: ['Address & outdoor access', 'Dirección y salidas', 'Adreça i sortides'],
   medical: ['Health & emergency', 'Salud y emergencias', 'Salut i emergències'],
   behavior: ['Behavior & handling', 'Comportamiento y manejo', 'Comportament i maneig'],
   care: ['Everyday care', 'Cuidados diarios', 'Cures diàries'],
-  location: ['General location', 'Ubicación general', 'Ubicació general'],
   emergency: ['Lost-pet information', 'Información de pérdida', 'Informació de pèrdua'],
 } as const;
 // [stable machine key, English, Spanish, Catalan]. Custom fields use exactly the same rendering pipeline.

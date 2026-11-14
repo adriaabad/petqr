@@ -26,6 +26,10 @@ Microchip and registration numbers are text, so leading zeros and registry prefi
 
 Changing names, numbers, photos or instructions never changes the ID/URL. Always export/upload/deploy to update the page behind the printed QR. There is no direct GitHub connection or access-key field. The local preview intentionally shows only publishable data, so a draft identification or medical field will not appear until you select Publish and confirm.
 
+## Address and outdoor access
+
+Open **Address & outdoor access** to enter a complete home address, choose whether the animal stays home, may go out independently or only goes out accompanied, and describe its usual area and instructions. The default is **Not specified**; the app never assumes a cat may roam. Each field has its own Publish checkbox. Home addresses and areas require an explicit consent confirmation and are excluded from public ZIPs/previews until confirmed. Published details appear directly on the profile, so finders can distinguish authorized outings from a reason to contact the owner. This is not a lost/found status.
+
 ## Photos
 
 Add photo opens a local crop canvas. Use zoom and horizontal/vertical position sliders, Rotate, then Use photo. Processing stays on the device and strips original metadata during re-encoding. The picker accepts browser-decodable photos: common JPEG, PNG, WebP, GIF, AVIF and BMP, plus HEIC/HEIF when natively supported. MIME-less camera exports can also be selected. SVG and documents are rejected. Animated images use the first frame.
@@ -33,6 +37,12 @@ Add photo opens a local crop canvas. Use zoom and horizontal/vertical position s
 There is no fixed input MB or megapixel limit in the app. The browser must still decode the original; very large images may exceed device memory, and compression cannot supply an unavailable decoder. Errors suggest another browser or JPEG/PNG conversion. Large decoded photos are downscaled for smooth editing. The crop starts at 1200×900, then quality and, if needed, dimensions are reduced until the WebP (JPEG fallback) output is at most 300 KB. A notification shows original and resulting sizes.
 
 Add descriptive alt text. The first image is featured; Make featured, Move up/down and Remove manage the gallery. Additional images appear directly on the public page, outside collapsed details, and can be opened at their full saved size. There are at most 30 images per pet. Small photos may be enlarged; choose a clear source. Current stock-image sources and licenses are linked in Photo credits.
+
+Open **Photo authorship and license (optional)** for a photo to record its actual author, source URL, license/permission, license URL and modifications. New uploads do not inherit the removed photo's author or receive CC0 automatically. Uploading, optimizing and exporting do not change the applicable rights. Keep any legally required attribution and modification notices for third-party photos. The current bundled stock photos are CC0/public domain; photos you supply retain their own rights.
+
+Exports include a generated `PHOTO_CREDITS.txt` and embed the credit metadata in each selected photo's JSON entry. Import preserves it. The website build regenerates the file from current selected photos, so uploading only the exported `data/` and referenced images updates the credits too. Removed photos no longer appear; retained third-party photos keep their credits. A profile with no supplied credit metadata hides the footer credits link. The documentation source catalog is a separate record of the original bundled assets.
+
+If you overwrite an image file directly in GitHub using the same filename, update its credit metadata too. The app cannot infer the photographer or license from changed pixels. The editor's Add photo flow creates a new file and does not copy the previous credit.
 
 ## QR and tags
 

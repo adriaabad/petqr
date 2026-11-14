@@ -1,5 +1,6 @@
 import { zipSync, unzipSync, strToU8, strFromU8 } from 'fflate';
 import { parseConfig, publicConfig, localImage, type Config } from './model';
+import { photoCreditsText } from './photo-credits';
 export type ImageFiles = Map<string, Uint8Array>;
 export async function exportArchive(
   draft: Config,
@@ -8,6 +9,7 @@ export async function exportArchive(
 ): Promise<Uint8Array> {
   const config = publicConfig(draft);
   const files: Record<string, Uint8Array> = {};
+  files['PHOTO_CREDITS.txt'] = strToU8(photoCreditsText(config));
   for (const key of ['version', 'site', 'contacts', 'pets'] as const)
     files[`data/${key}.json`] = strToU8(JSON.stringify(config[key], null, 2) + '\n');
   const paths = new Set(config.pets.flatMap((p) => p.photos.map((photo) => photo.path)));

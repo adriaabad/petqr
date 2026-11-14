@@ -39,7 +39,7 @@ An ordered array. Each pet has:
 | status | Legacy compatibility: `safe`, `missing`, `found`, `custom`; no longer displayed or editable |
 | statusLabel | Legacy compatibility only; no longer displayed |
 | emergency | Legacy loss instructions; retained in data but no longer displayed |
-| photos | Up to 30 `{path, alt}` objects. First is featured. Path must be a flat filename under `assets/pets/`, ending in .webp/.png/.jpg/.jpeg. No external image URLs, SVG or traversal. |
+| photos | Up to 30 `{path, alt, credit?}` objects. First is featured. Path must be a flat filename under `assets/pets/`, ending in .webp/.png/.jpg/.jpeg. No external image URLs, SVG or traversal. Optional credit has `author`, `source`, `license`, `licenseUrl`, `changes` strings. Source/license URLs accept HTTP(S) or empty values. No license is inferred for uploads. |
 | contacts | Ordered `{id, overrides?}` assignments. Order determines priority. Overrides can replace a name, relationship, method, phone, WhatsApp, email, Telegram, language, availability or publication flags. Unset values inherit; empty strings clear an optional method. |
 | sections | Custom or built-in `{id, title, fields}` sections |
 | theme | Legacy compatibility only. The renderer uses a fixed standard appearance and the editor no longer offers per-pet colors, backgrounds or decorations. |
@@ -48,6 +48,10 @@ An ordered array. Each pet has:
 Basic identity, introduction and photos are inherently public. Microchip and registration numbers are stored as fields in the `identification` section, with keys `microchip` and `registration`; legacy `registry` is also supported. These are text values, not numeric values. Both require Publish and consent before export/display. All contacts need confirmation before use. Override publication is evaluated against the confirmed shared contact; private override values are removed from exports rather than hidden in the UI.
 
 ## Extensible sections and fields
+
+The `location` section supports `homeAddress`, `outdoorAccess` and `roamingArea`. Address/area values require Publish plus consent even when an imported field claims `sensitive:false`. Outdoor access is optional translated text; the editor offers Stays at home / May go out independently / Only goes out accompanied, with Not specified as the empty default. Publish is still opt-in. These selected fields render directly on the profile and are omitted from repeated expanded details.
+
+`PHOTO_CREDITS.txt` is generated from selected `photos[].credit` metadata, not copied from the documentation's original asset catalog. It is included in exports, and the build regenerates it from source JSON. Removing a photo removes its current attribution entry; missing metadata never means a public-domain dedication.
 
 Existing category IDs: identity, identification, medical, behavior, care, location, emergency. Legacy `emergency` sections are preserved but no longer displayed. `src/fields.ts` retains compatible category labels and keys. The simplified editor edits existing fields without an Advanced builder. Custom sections and fields can still be configured in source using the same schema and rendering path:
 

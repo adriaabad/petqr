@@ -1,6 +1,47 @@
 import { languages } from './core';
 import type { Language } from './model';
 const phrases: Record<string, [string, string]> = {
+  'Everything uploaded to GitHub Pages is public. Keep confidential records private. Publish an address only if you want it visible to anyone scanning the QR.':
+    [
+      'Todo lo que subes a GitHub Pages es público. Mantén privados los documentos confidenciales. Publica una dirección solo si quieres mostrarla a quien escanee el QR.',
+      'Tot el que puges a GitHub Pages és públic. Mantén privats els documents confidencials. Publica una adreça només si la vols mostrar a qui escanegi el QR.',
+    ],
+  'Address & outdoor access': ['Dirección y salidas', 'Adreça i sortides'],
+  'Home address': ['Dirección de casa', 'Adreça de casa'],
+  'Outdoor access': ['Salidas autorizadas', 'Sortides autoritzades'],
+  'Usual area and outdoor instructions': [
+    'Zona habitual e indicaciones de salida',
+    'Zona habitual i indicacions de sortida',
+  ],
+  'Not specified': ['No indicado', 'No indicat'],
+  'Stays at home': ['Debe estar en casa', 'Ha d’estar a casa'],
+  'May go out independently': [
+    'Puede salir y volver por su cuenta',
+    'Pot sortir i tornar pel seu compte',
+  ],
+  'Only goes out accompanied': ['Solo puede salir acompañado', 'Només pot sortir acompanyat'],
+  'Publish only the address or area you want anyone scanning the QR to see. Outdoor access describes permitted outings, not a lost/found status.':
+    [
+      'Publica solo la dirección o zona que quieras mostrar a quien escanee el QR. Las salidas indican qué tiene permitido hacer el animal; no son un estado de perdido/encontrado.',
+      'Publica només l’adreça o zona que vulguis mostrar a qui escanegi el QR. Les sortides indiquen què té permès fer l’animal; no són un estat de perdut/trobat.',
+    ],
+  'Photo author': ['Autor de la foto', 'Autor de la foto'],
+  'Photo source URL': ['URL de origen de la foto', 'URL d’origen de la foto'],
+  'Photo license or permission': ['Licencia o permiso de la foto', 'Llicència o permís de la foto'],
+  'License URL (optional)': ['URL de la licencia (opcional)', 'URL de la llicència (opcional)'],
+  'Photo modifications (optional)': [
+    'Modificaciones de la foto (opcional)',
+    'Modificacions de la foto (opcional)',
+  ],
+  'Photo authorship and license (optional)': [
+    'Autoría y licencia de la foto (opcional)',
+    'Autoria i llicència de la foto (opcional)',
+  ],
+  'A new photo does not inherit the previous author. Add the actual author and permission for this photo. Uploading does not transfer copyright.':
+    [
+      'Una foto nueva no hereda la autoría anterior. Indica el autor y el permiso de esta foto. Subirla no transfiere los derechos de autor.',
+      'Una foto nova no hereta l’autoria anterior. Indica l’autor i el permís d’aquesta foto. Pujar-la no transfereix els drets d’autor.',
+    ],
   Allergies: ['Alergias', 'Al·lèrgies'],
   'Health conditions': ['Condiciones de salud', 'Condicions de salut'],
   'Behavior and handling notes': [

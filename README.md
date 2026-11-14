@@ -38,7 +38,7 @@ The project works with `https://USERNAME.github.io/REPOSITORY/`, `https://USERNA
 
 **Only put information you intend to publish in this repository.** Every committed source file, photo, JSON file and generated asset can be read. Health records, contact details and identification numbers may be sensitive. An unpublished editor field stays in the current browser session and is excluded from the public ZIP; saving a local draft is optional and uses this browser's local storage database. Anyone with access to the browser/device may access that draft.
 
-The build **rejects** unpublished/unconfirmed configuration in the repository; it does not turn a public repository into a private vault. Medical fields and identification numbers require explicit publication consent. Uploaded photographs are re-encoded locally to remove the original EXIF metadata. Never upload original personal documents, precise home addresses, secrets or local draft files.
+The build **rejects** unpublished/unconfirmed configuration in the repository; it does not turn a public repository into a private vault. Medical fields and identification numbers require explicit publication consent. Uploaded photographs are re-encoded locally to remove the original EXIF metadata. Keep confidential documents, secrets and local drafts out of the repository. Publish a complete home address or roaming area only with explicit consent, knowing anyone scanning the QR can see it.
 
 Disabling the owner index removes the overview links, but the public editor configuration still contains all **published** profiles. `noindex`, `robots.txt` and hard-to-guess URLs are not privacy controls. Deleting data from a later deployment does not remove Git history, caches or other people's copies. See the [privacy guide](docs/PRIVACY.md).
 
@@ -59,6 +59,10 @@ Photos are automatically converted to WebP (JPEG fallback), at most 1200 px / 30
 **Telegram is optional:** under More contact methods, enter `username`, `@username` or a public `https://t.me/username` link, or leave blank. PetQR does not require a Telegram account, bot or API. Incomplete contact methods show a preview warning without blocking photo editing; correct them before exporting.
 
 **Health and handling:** Every pet has Allergies, Health conditions and Behavior and handling notes text areas. Publish only the information you intend to share; medical details require confirmation. All pets use one standard design, without an Appearance section. Site settings controls the public index and attribution.
+
+**Address and outings:** Add a complete home address, permitted outdoor access and usual area/instructions. Fields are opt-in; addresses and areas require publication consent. Permission to roam is shown directly on the profile and is separate from lost/found status.
+
+**Photo credits:** Each selected photo can carry its actual author, source and license/permission. The generated credits follow only the photos retained in the publication and survive ZIP export/import. Own uploads do not inherit the previous author or get an automatic CC0 license. The app does not change image rights.
 
 **Keep a draft:** Site settings → Save draft on this device. It is never automatically uploaded. Restore or forget it explicitly. Clearing browser data may erase it. Public ZIPs are portable backups of **published** information only.
 

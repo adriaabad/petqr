@@ -1,19 +1,20 @@
 # Photo credits / Crèdits de les fotografies
 
-This is the source catalog for the original bundled image assets. The live website's `PHOTO_CREDITS.txt` is generated separately from the photos currently selected in `data/pets.json`, using their per-photo credit metadata. New uploads do not inherit these authors or licenses, and removed photos are omitted from the live credits. This catalog may still document original assets present in repository history.
+The current ten photos were supplied by the repository owner as Pexels downloads. The photographer identifiers and original photo IDs below come from the supplied filenames; the individual photo pages have not been independently verified. All photos are locally resized (longest edge 1,400 pixels), re-encoded as WebP and stripped of EXIF metadata. The originals supplied by the owner are unchanged.
 
-The following are real stock photographs, reused from Wikimedia Commons under CC0 or a public-domain dedication. They are locally resized and re-encoded as WebP; EXIF data is removed. They are not AI-generated images. Stock photos are not verified photographs of the profile owners’ animals.
+These stock photos illustrate four fictional profiles; they do not verify the identity, history or health of actual animals. The images remain subject to the [Pexels License](https://www.pexels.com/license/), which permits free use and modification without mandatory attribution. They are not being relicensed as MIT or CC0.
 
-| Local image | Author | License | Source |
-| --- | --- | --- | --- |
-| assets/pets/mochi-1.webp | Orlandkurtenbach | Public domain | [Original photograph](https://commons.wikimedia.org/wiki/File:Holland_lop_bunny.JPG) |
-| assets/pets/cooper-1.webp | Johan Spaedtke | CC0 | [Original photograph](https://commons.wikimedia.org/wiki/File:Golden_Retriever_adult.jpg) |
-| assets/pets/cooper-2.webp | A throne man | CC0 | [Original photograph](https://commons.wikimedia.org/wiki/File:Image_of_golden_retriever.jpg) |
-| assets/pets/tortoise-2.webp | Gastronomepalindrome | CC0 | [Original photograph](https://commons.wikimedia.org/wiki/File:Eastern_Painted_Turtle_August_2020.jpg) |
-| assets/pets/mochi-2.webp | Orlandkurtenbach | Public domain | [Original photograph](https://commons.wikimedia.org/wiki/File:Holland_lop.JPG) |
-| assets/pets/luna-2.webp | 매일 누군가가 도둑맞을 때마다 | CC0 | [Original photograph](https://commons.wikimedia.org/wiki/File:Black_cat_-_20260928_105428.jpg) |
-| assets/pets/luna-1.webp | 매일 누군가가 도둑맞을 때마다 | CC0 | [Original photograph](https://commons.wikimedia.org/wiki/File:Black_cat_20260928_110335.jpg) |
+| Local image | Photographer identifier from filename | Source |
+| --- | --- | --- |
+| assets/pets/cooper-pexels-20041100.webp | gorkemraw | [Pexels photo](https://www.pexels.com/photo/20041100/) |
+| assets/pets/cooper-pexels-17057424.webp | beyzaa-279977530 | [Pexels photo](https://www.pexels.com/photo/17057424/) |
+| assets/pets/cooper-pexels-17057426.webp | beyzaa-279977530 | [Pexels photo](https://www.pexels.com/photo/17057426/) |
+| assets/pets/luna-pexels-32140841.webp | alispective | [Pexels photo](https://www.pexels.com/photo/32140841/) |
+| assets/pets/luna-pexels-38325480.webp | fox-58267 | [Pexels photo](https://www.pexels.com/photo/38325480/) |
+| assets/pets/luna-pexels-28058037.webp | thejourneyofframes | [Pexels photo](https://www.pexels.com/photo/28058037/) |
+| assets/pets/mochi-pexels-38349010.webp | ivett | [Pexels photo](https://www.pexels.com/photo/38349010/) |
+| assets/pets/mochi-pexels-38349003.webp | ivett | [Pexels photo](https://www.pexels.com/photo/38349003/) |
+| assets/pets/tuga-pexels-4720896.webp | isaaccortes | [Pexels photo](https://www.pexels.com/photo/4720896/) |
+| assets/pets/tuga-pexels-4720888.webp | isaaccortes | [Pexels photo](https://www.pexels.com/photo/4720888/) |
 
-[CC0 public-domain dedication](https://creativecommons.org/publicdomain/zero/1.0/)
-
-The existing image `assets/pets/4c88a4ec-428c-44b1-b48d-abf5d92ec985.webp` was provided by the repository owner and is preserved. No new license or authorship claim is made for it.
+The live website and exported ZIP generate `PHOTO_CREDITS.txt` only from currently selected photos and their per-photo metadata. These details survive ZIP export/import; new personal uploads do not inherit the removed photo’s credits. Earlier Wikimedia Commons assets and notices are retained in repository history. Isolated regression fixtures are not published.

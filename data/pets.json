@@ -9,52 +9,229 @@
     },
     "breed": "Golden retriever",
     "introduction": {
-      "en": "If you have found me, please contact my owner. Thank you for helping me get home.",
-      "es": "Si me has encontrado, contacta con mi responsable. Gracias por ayudarme a volver a casa.",
-      "ca": "Si m’has trobat, contacta amb la persona responsable. Gràcies per ajudar-me a tornar a casa."
+      "en": "I’m Cooper, a sociable golden retriever. I go out with my responsible person. If you find me alone, please contact them.",
+      "es": "Soy Cooper, un golden retriever sociable. Salgo acompañado de mi responsable. Si me encuentras solo, contacta con esa persona.",
+      "ca": "Soc en Cooper, un golden retriever sociable. Surto acompanyat de la persona responsable. Si em trobes sol, contacta-hi."
     },
     "status": "safe",
     "photos": [
       {
-        "path": "assets/pets/cooper-1.webp",
+        "path": "assets/pets/cooper-pexels-20041100.webp",
         "alt": {
-          "en": "Golden retriever outdoors",
-          "es": "Golden retriever al aire libre",
-          "ca": "Golden retriever a l’exterior"
+          "en": "Golden retriever sitting outdoors",
+          "es": "Golden retriever sentado en el exterior",
+          "ca": "Golden retriever assegut a l’exterior"
         },
         "credit": {
-          "author": "Johan Spaedtke",
-          "source": "https://commons.wikimedia.org/wiki/File:Golden_Retriever_adult.jpg",
-          "license": "CC0",
-          "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "author": "gorkemraw",
+          "source": "https://www.pexels.com/photo/20041100/",
+          "license": "Pexels License",
+          "licenseUrl": "https://www.pexels.com/license/",
           "changes": "Resized and re-encoded as WebP; EXIF metadata removed."
         }
       },
       {
-        "path": "assets/pets/cooper-2.webp",
+        "path": "assets/pets/cooper-pexels-17057424.webp",
         "alt": {
-          "en": "Golden retriever outdoors",
-          "es": "Golden retriever al aire libre",
-          "ca": "Golden retriever a l’exterior"
+          "en": "Golden retriever puppy resting",
+          "es": "Cachorro de golden retriever descansando",
+          "ca": "Cadell de golden retriever descansant"
         },
         "credit": {
-          "author": "A throne man",
-          "source": "https://commons.wikimedia.org/wiki/File:Image_of_golden_retriever.jpg",
-          "license": "CC0",
-          "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "author": "beyzaa-279977530",
+          "source": "https://www.pexels.com/photo/17057424/",
+          "license": "Pexels License",
+          "licenseUrl": "https://www.pexels.com/license/",
+          "changes": "Resized and re-encoded as WebP; EXIF metadata removed."
+        }
+      },
+      {
+        "path": "assets/pets/cooper-pexels-17057426.webp",
+        "alt": {
+          "en": "Golden retriever puppy lying down",
+          "es": "Cachorro de golden retriever tumbado",
+          "ca": "Cadell de golden retriever estirat"
+        },
+        "credit": {
+          "author": "beyzaa-279977530",
+          "source": "https://www.pexels.com/photo/17057426/",
+          "license": "Pexels License",
+          "licenseUrl": "https://www.pexels.com/license/",
           "changes": "Resized and re-encoded as WebP; EXIF metadata removed."
         }
       }
     ],
     "contacts": [
       {
-        "id": "contact-aina"
-      },
-      {
-        "id": "contact-nil"
+        "id": "contact-alex"
       }
     ],
-    "sections": [],
+    "sections": [
+      {
+        "id": "identification",
+        "title": {
+          "en": "Identification",
+          "es": "Identificación",
+          "ca": "Identificació"
+        },
+        "fields": [
+          {
+            "key": "microchip",
+            "label": {
+              "en": "Microchip number",
+              "es": "Número de microchip",
+              "ca": "Número de microxip"
+            },
+            "value": "000000000000000",
+            "publish": true,
+            "sensitive": true,
+            "consent": true,
+            "kind": "text"
+          },
+          {
+            "key": "registration",
+            "label": {
+              "en": "Registration number",
+              "es": "Número de registro",
+              "ca": "Número de registre"
+            },
+            "value": "REG-000000",
+            "publish": true,
+            "sensitive": true,
+            "consent": true,
+            "kind": "text"
+          }
+        ]
+      },
+      {
+        "id": "location",
+        "title": {
+          "en": "Address & outdoor access",
+          "es": "Dirección y salidas",
+          "ca": "Adreça i sortides"
+        },
+        "fields": [
+          {
+            "key": "homeAddress",
+            "label": {
+              "en": "Home address",
+              "es": "Dirección de casa",
+              "ca": "Adreça de casa"
+            },
+            "value": "Carrer de les Petjades, 00\n00000 Vila Imaginària",
+            "publish": true,
+            "sensitive": true,
+            "consent": true,
+            "kind": "text"
+          },
+          {
+            "key": "outdoorAccess",
+            "label": {
+              "en": "Outdoor access",
+              "es": "Salidas al exterior",
+              "ca": "Sortides a l’exterior"
+            },
+            "value": {
+              "en": "Only goes out accompanied",
+              "es": "Solo sale acompañado",
+              "ca": "Només surt acompanyat"
+            },
+            "publish": true,
+            "sensitive": false,
+            "consent": true,
+            "kind": "text"
+          },
+          {
+            "key": "roamingArea",
+            "label": {
+              "en": "Usual area and outdoor instructions",
+              "es": "Zona habitual e instrucciones de salida",
+              "ca": "Zona habitual i instruccions de sortida"
+            },
+            "value": {
+              "en": "Walks near home with the responsible person. If alone, contact Alex.",
+              "es": "Pasea cerca de casa con su responsable. Si está solo, contacta con Alex.",
+              "ca": "Passeja a prop de casa amb la persona responsable. Si està sol, contacta amb l’Alex."
+            },
+            "publish": true,
+            "sensitive": true,
+            "consent": true,
+            "kind": "text"
+          }
+        ]
+      },
+      {
+        "id": "medical",
+        "title": {
+          "en": "Health & emergency",
+          "es": "Salud y emergencias",
+          "ca": "Salut i emergències"
+        },
+        "fields": [
+          {
+            "key": "allergies",
+            "label": {
+              "en": "Allergies",
+              "es": "Alergias",
+              "ca": "Al·lèrgies"
+            },
+            "value": {
+              "en": "No known allergies reported.",
+              "es": "No se han comunicado alergias conocidas.",
+              "ca": "No s’han comunicat al·lèrgies conegudes."
+            },
+            "publish": true,
+            "sensitive": true,
+            "consent": true,
+            "kind": "warning"
+          },
+          {
+            "key": "conditions",
+            "label": {
+              "en": "Health conditions",
+              "es": "Condiciones de salud",
+              "ca": "Condicions de salut"
+            },
+            "value": {
+              "en": "No health conditions reported. For health information, contact the responsible person.",
+              "es": "No se han comunicado condiciones de salud. Para cualquier consulta, contacta con la persona responsable.",
+              "ca": "No s’han comunicat condicions de salut. Per a qualsevol consulta, contacta amb la persona responsable."
+            },
+            "publish": true,
+            "sensitive": true,
+            "consent": true,
+            "kind": "warning"
+          }
+        ]
+      },
+      {
+        "id": "behavior",
+        "title": {
+          "en": "Behavior & handling",
+          "es": "Comportamiento y manejo",
+          "ca": "Comportament i maneig"
+        },
+        "fields": [
+          {
+            "key": "handling",
+            "label": {
+              "en": "Behavior and handling notes",
+              "es": "Notas de comportamiento y manejo",
+              "ca": "Notes de comportament i maneig"
+            },
+            "value": {
+              "en": "Sociable and attentive to people. Speak calmly and contact Alex to arrange collection.",
+              "es": "Es sociable y está atento a las personas. Háblale con calma y contacta con Alex para acordar la recogida.",
+              "ca": "És sociable i està atent a les persones. Parla-li amb calma i contacta amb l’Alex per acordar la recollida."
+            },
+            "publish": true,
+            "sensitive": false,
+            "consent": true,
+            "kind": "text"
+          }
+        ]
+      }
+    ],
     "theme": {
       "accent": "#27634b",
       "background": "sage",
@@ -70,61 +247,230 @@
       "es": "Gato",
       "ca": "Gat"
     },
-    "breed": {
-      "en": "European shorthair",
-      "es": "Europeo de pelo corto",
-      "ca": "Europeu de pèl curt"
-    },
     "introduction": {
-      "en": "If you have found me, please contact my owner. Thank you for helping me get home.",
-      "es": "Si me has encontrado, contacta con mi responsable. Gracias por ayudarme a volver a casa.",
-      "ca": "Si m’has trobat, contacta amb la persona responsable. Gràcies per ajudar-me a tornar a casa."
+      "en": "I’m Luna, a curious cat. I sometimes go out on my own near home. If you see me far from my usual area or need to ask about me, contact my responsible person.",
+      "es": "Soy Luna, una gata curiosa. A veces salgo sola cerca de casa. Si me ves lejos de mi zona habitual o necesitas preguntar por mí, contacta con mi responsable.",
+      "ca": "Soc la Luna, una gata curiosa. De vegades surto sola a prop de casa. Si em veus lluny de la meva zona habitual o vols preguntar per mi, contacta amb la persona responsable."
     },
     "status": "safe",
     "photos": [
       {
-        "path": "assets/pets/luna-1.webp",
+        "path": "assets/pets/luna-pexels-32140841.webp",
         "alt": {
-          "en": "Black cat outdoors",
-          "es": "Gato negro al aire libre",
-          "ca": "Gat negre a l’exterior"
+          "en": "White cat wearing a collar",
+          "es": "Gato blanco con collar",
+          "ca": "Gat blanc amb collar"
         },
         "credit": {
-          "author": "매일 누군가가 도둑맞을 때마다",
-          "source": "https://commons.wikimedia.org/wiki/File:Black_cat_20260928_110335.jpg",
-          "license": "CC0",
-          "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "author": "alispective",
+          "source": "https://www.pexels.com/photo/32140841/",
+          "license": "Pexels License",
+          "licenseUrl": "https://www.pexels.com/license/",
           "changes": "Resized and re-encoded as WebP; EXIF metadata removed."
         }
       },
       {
-        "path": "assets/pets/luna-2.webp",
+        "path": "assets/pets/luna-pexels-38325480.webp",
         "alt": {
-          "en": "Black cat outdoors",
-          "es": "Gato negro al aire libre",
-          "ca": "Gat negre a l’exterior"
+          "en": "White cat with amber eyes",
+          "es": "Gato blanco de ojos ámbar",
+          "ca": "Gat blanc d’ulls ambre"
         },
         "credit": {
-          "author": "매일 누군가가 도둑맞을 때마다",
-          "source": "https://commons.wikimedia.org/wiki/File:Black_cat_-_20260928_105428.jpg",
-          "license": "CC0",
-          "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "author": "fox-58267",
+          "source": "https://www.pexels.com/photo/38325480/",
+          "license": "Pexels License",
+          "licenseUrl": "https://www.pexels.com/license/",
+          "changes": "Resized and re-encoded as WebP; EXIF metadata removed."
+        }
+      },
+      {
+        "path": "assets/pets/luna-pexels-28058037.webp",
+        "alt": {
+          "en": "Cream and white cat",
+          "es": "Gato de pelaje crema y blanco",
+          "ca": "Gat de pelatge crema i blanc"
+        },
+        "credit": {
+          "author": "thejourneyofframes",
+          "source": "https://www.pexels.com/photo/28058037/",
+          "license": "Pexels License",
+          "licenseUrl": "https://www.pexels.com/license/",
           "changes": "Resized and re-encoded as WebP; EXIF metadata removed."
         }
       }
     ],
     "contacts": [
       {
-        "id": "contact-nil"
-      },
-      {
-        "id": "contact-aina",
-        "overrides": {
-          "preferred": "phone"
-        }
+        "id": "contact-nora"
       }
     ],
-    "sections": [],
+    "sections": [
+      {
+        "id": "identification",
+        "title": {
+          "en": "Identification",
+          "es": "Identificación",
+          "ca": "Identificació"
+        },
+        "fields": [
+          {
+            "key": "microchip",
+            "label": {
+              "en": "Microchip number",
+              "es": "Número de microchip",
+              "ca": "Número de microxip"
+            },
+            "value": "000000000000000",
+            "publish": true,
+            "sensitive": true,
+            "consent": true,
+            "kind": "text"
+          },
+          {
+            "key": "registration",
+            "label": {
+              "en": "Registration number",
+              "es": "Número de registro",
+              "ca": "Número de registre"
+            },
+            "value": "REG-000000",
+            "publish": true,
+            "sensitive": true,
+            "consent": true,
+            "kind": "text"
+          }
+        ]
+      },
+      {
+        "id": "location",
+        "title": {
+          "en": "Address & outdoor access",
+          "es": "Dirección y salidas",
+          "ca": "Adreça i sortides"
+        },
+        "fields": [
+          {
+            "key": "homeAddress",
+            "label": {
+              "en": "Home address",
+              "es": "Dirección de casa",
+              "ca": "Adreça de casa"
+            },
+            "value": "Carrer dels Bigotis, 00\n00000 Vila Imaginària",
+            "publish": true,
+            "sensitive": true,
+            "consent": true,
+            "kind": "text"
+          },
+          {
+            "key": "outdoorAccess",
+            "label": {
+              "en": "Outdoor access",
+              "es": "Salidas al exterior",
+              "ca": "Sortides a l’exterior"
+            },
+            "value": {
+              "en": "May go out independently",
+              "es": "Puede salir por su cuenta",
+              "ca": "Pot sortir pel seu compte"
+            },
+            "publish": true,
+            "sensitive": false,
+            "consent": true,
+            "kind": "text"
+          },
+          {
+            "key": "roamingArea",
+            "label": {
+              "en": "Usual area and outdoor instructions",
+              "es": "Zona habitual e instrucciones de salida",
+              "ca": "Zona habitual i instruccions de sortida"
+            },
+            "value": {
+              "en": "Usually stays in the garden and nearby streets of Vila Imaginària. Contact Nora if found outside this area.",
+              "es": "Suele estar en el jardín y las calles próximas de Vila Imaginària. Contacta con Nora si aparece fuera de esta zona.",
+              "ca": "Acostuma a estar al jardí i als carrers propers de Vila Imaginària. Contacta amb la Nora si apareix fora d’aquesta zona."
+            },
+            "publish": true,
+            "sensitive": true,
+            "consent": true,
+            "kind": "text"
+          }
+        ]
+      },
+      {
+        "id": "medical",
+        "title": {
+          "en": "Health & emergency",
+          "es": "Salud y emergencias",
+          "ca": "Salut i emergències"
+        },
+        "fields": [
+          {
+            "key": "allergies",
+            "label": {
+              "en": "Allergies",
+              "es": "Alergias",
+              "ca": "Al·lèrgies"
+            },
+            "value": {
+              "en": "No known allergies reported.",
+              "es": "No se han comunicado alergias conocidas.",
+              "ca": "No s’han comunicat al·lèrgies conegudes."
+            },
+            "publish": true,
+            "sensitive": true,
+            "consent": true,
+            "kind": "warning"
+          },
+          {
+            "key": "conditions",
+            "label": {
+              "en": "Health conditions",
+              "es": "Condiciones de salud",
+              "ca": "Condicions de salut"
+            },
+            "value": {
+              "en": "No health conditions reported. For health information, contact the responsible person.",
+              "es": "No se han comunicado condiciones de salud. Para cualquier consulta, contacta con la persona responsable.",
+              "ca": "No s’han comunicat condicions de salut. Per a qualsevol consulta, contacta amb la persona responsable."
+            },
+            "publish": true,
+            "sensitive": true,
+            "consent": true,
+            "kind": "warning"
+          }
+        ]
+      },
+      {
+        "id": "behavior",
+        "title": {
+          "en": "Behavior & handling",
+          "es": "Comportamiento y manejo",
+          "ca": "Comportament i maneig"
+        },
+        "fields": [
+          {
+            "key": "handling",
+            "label": {
+              "en": "Behavior and handling notes",
+              "es": "Notas de comportamiento y manejo",
+              "ca": "Notes de comportament i maneig"
+            },
+            "value": {
+              "en": "Curious but cautious with strangers. Allow space and contact Nora if help is needed.",
+              "es": "Es curiosa, pero prudente con desconocidos. Dale espacio y contacta con Nora si necesita ayuda.",
+              "ca": "És curiosa, però prudent amb desconeguts. Dona-li espai i contacta amb la Nora si necessita ajuda."
+            },
+            "publish": true,
+            "sensitive": false,
+            "consent": true,
+            "kind": "text"
+          }
+        ]
+      }
+    ],
     "theme": {
       "accent": "#27634b",
       "background": "sage",
@@ -140,55 +486,215 @@
       "es": "Conejo",
       "ca": "Conill"
     },
-    "breed": {
-      "en": "Holland lop",
-      "es": "Belier holandés",
-      "ca": "Bèller holandès"
-    },
     "introduction": {
-      "en": "If you have found me, please contact my owner. Thank you for helping me get home.",
-      "es": "Si me has encontrado, contacta con mi responsable. Gracias por ayudarme a volver a casa.",
-      "ca": "Si m’has trobat, contacta amb la persona responsable. Gràcies per ajudar-me a tornar a casa."
+      "en": "I’m Mochi, a brown and white rabbit with upright ears. I live at home and do not go out on my own. If you find me outside, please contact my responsible person.",
+      "es": "Soy Mochi, un conejo marrón y blanco de orejas erguidas. Vivo en casa y no salgo solo. Si me encuentras fuera, contacta con mi responsable.",
+      "ca": "Soc en Mochi, un conill marró i blanc d’orelles dretes. Visc a casa i no surto sol. Si em trobes fora, contacta amb la persona responsable."
     },
     "status": "safe",
     "photos": [
       {
-        "path": "assets/pets/mochi-1.webp",
+        "path": "assets/pets/mochi-pexels-38349010.webp",
         "alt": {
-          "en": "Holland lop rabbit",
-          "es": "Conejo belier",
-          "ca": "Conill bèlier"
+          "en": "Brown and white rabbit seen from the front",
+          "es": "Conejo marrón y blanco visto de frente",
+          "ca": "Conill marró i blanc vist de davant"
         },
         "credit": {
-          "author": "Orlandkurtenbach",
-          "source": "https://commons.wikimedia.org/wiki/File:Holland_lop_bunny.JPG",
-          "license": "Public domain",
-          "licenseUrl": "https://commons.wikimedia.org/wiki/File:Holland_lop_bunny.JPG#Licensing",
+          "author": "ivett",
+          "source": "https://www.pexels.com/photo/38349010/",
+          "license": "Pexels License",
+          "licenseUrl": "https://www.pexels.com/license/",
           "changes": "Resized and re-encoded as WebP; EXIF metadata removed."
         }
       },
       {
-        "path": "assets/pets/mochi-2.webp",
+        "path": "assets/pets/mochi-pexels-38349003.webp",
         "alt": {
-          "en": "Holland lop rabbit",
-          "es": "Conejo belier",
-          "ca": "Conill bèlier"
+          "en": "Brown and white rabbit with upright ears",
+          "es": "Conejo marrón y blanco de orejas erguidas",
+          "ca": "Conill marró i blanc d’orelles dretes"
         },
         "credit": {
-          "author": "Orlandkurtenbach",
-          "source": "https://commons.wikimedia.org/wiki/File:Holland_lop.JPG",
-          "license": "Public domain",
-          "licenseUrl": "https://commons.wikimedia.org/wiki/File:Holland_lop.JPG#Licensing",
+          "author": "ivett",
+          "source": "https://www.pexels.com/photo/38349003/",
+          "license": "Pexels License",
+          "licenseUrl": "https://www.pexels.com/license/",
           "changes": "Resized and re-encoded as WebP; EXIF metadata removed."
         }
       }
     ],
     "contacts": [
       {
-        "id": "contact-aina"
+        "id": "contact-nil"
       }
     ],
-    "sections": [],
+    "sections": [
+      {
+        "id": "identification",
+        "title": {
+          "en": "Identification",
+          "es": "Identificación",
+          "ca": "Identificació"
+        },
+        "fields": [
+          {
+            "key": "microchip",
+            "label": {
+              "en": "Microchip number",
+              "es": "Número de microchip",
+              "ca": "Número de microxip"
+            },
+            "value": "000000000000000",
+            "publish": true,
+            "sensitive": true,
+            "consent": true,
+            "kind": "text"
+          },
+          {
+            "key": "registration",
+            "label": {
+              "en": "Registration number",
+              "es": "Número de registro",
+              "ca": "Número de registre"
+            },
+            "value": "REG-000000",
+            "publish": true,
+            "sensitive": true,
+            "consent": true,
+            "kind": "text"
+          }
+        ]
+      },
+      {
+        "id": "location",
+        "title": {
+          "en": "Address & outdoor access",
+          "es": "Dirección y salidas",
+          "ca": "Adreça i sortides"
+        },
+        "fields": [
+          {
+            "key": "homeAddress",
+            "label": {
+              "en": "Home address",
+              "es": "Dirección de casa",
+              "ca": "Adreça de casa"
+            },
+            "value": "Carrer del Cau, 00\n00000 Vila Imaginària",
+            "publish": true,
+            "sensitive": true,
+            "consent": true,
+            "kind": "text"
+          },
+          {
+            "key": "outdoorAccess",
+            "label": {
+              "en": "Outdoor access",
+              "es": "Salidas al exterior",
+              "ca": "Sortides a l’exterior"
+            },
+            "value": {
+              "en": "Stays at home",
+              "es": "Se queda en casa",
+              "ca": "Es queda a casa"
+            },
+            "publish": true,
+            "sensitive": false,
+            "consent": true,
+            "kind": "text"
+          },
+          {
+            "key": "roamingArea",
+            "label": {
+              "en": "Usual area and outdoor instructions",
+              "es": "Zona habitual e instrucciones de salida",
+              "ca": "Zona habitual i instruccions de sortida"
+            },
+            "value": {
+              "en": "Lives indoors with access to an enclosed patio. Outdoor roaming is not authorized.",
+              "es": "Vive en el interior con acceso a un patio cerrado. No tiene autorizadas salidas por su cuenta.",
+              "ca": "Viu a l’interior amb accés a un pati tancat. No té autoritzades les sortides pel seu compte."
+            },
+            "publish": true,
+            "sensitive": true,
+            "consent": true,
+            "kind": "text"
+          }
+        ]
+      },
+      {
+        "id": "medical",
+        "title": {
+          "en": "Health & emergency",
+          "es": "Salud y emergencias",
+          "ca": "Salut i emergències"
+        },
+        "fields": [
+          {
+            "key": "allergies",
+            "label": {
+              "en": "Allergies",
+              "es": "Alergias",
+              "ca": "Al·lèrgies"
+            },
+            "value": {
+              "en": "No known allergies reported.",
+              "es": "No se han comunicado alergias conocidas.",
+              "ca": "No s’han comunicat al·lèrgies conegudes."
+            },
+            "publish": true,
+            "sensitive": true,
+            "consent": true,
+            "kind": "warning"
+          },
+          {
+            "key": "conditions",
+            "label": {
+              "en": "Health conditions",
+              "es": "Condiciones de salud",
+              "ca": "Condicions de salut"
+            },
+            "value": {
+              "en": "No health conditions reported. For health information, contact the responsible person.",
+              "es": "No se han comunicado condiciones de salud. Para cualquier consulta, contacta con la persona responsable.",
+              "ca": "No s’han comunicat condicions de salut. Per a qualsevol consulta, contacta amb la persona responsable."
+            },
+            "publish": true,
+            "sensitive": true,
+            "consent": true,
+            "kind": "warning"
+          }
+        ]
+      },
+      {
+        "id": "behavior",
+        "title": {
+          "en": "Behavior & handling",
+          "es": "Comportamiento y manejo",
+          "ca": "Comportament i maneig"
+        },
+        "fields": [
+          {
+            "key": "handling",
+            "label": {
+              "en": "Behavior and handling notes",
+              "es": "Notas de comportamiento y manejo",
+              "ca": "Notes de comportament i maneig"
+            },
+            "value": {
+              "en": "Timid around noise and sudden movements. Keep the surroundings quiet and contact Nil.",
+              "es": "Es tímido ante los ruidos y los movimientos bruscos. Mantén el entorno tranquilo y contacta con Nil.",
+              "ca": "És tímid davant dels sorolls i els moviments bruscos. Mantén l’entorn tranquil i contacta amb en Nil."
+            },
+            "publish": true,
+            "sensitive": false,
+            "consent": true,
+            "kind": "text"
+          }
+        ]
+      }
+    ],
     "theme": {
       "accent": "#27634b",
       "background": "sage",
@@ -198,43 +704,46 @@
   },
   {
     "id": "pet-e951fb41-995f-47d2-a863-d1d394c9860b",
-    "name": "tORTOISE",
+    "name": "Tuga",
     "species": {
-      "en": "",
-      "ca": "TORTUFA "
-    },
-    "breed": {
-      "ca": "RAÇA"
+      "en": "Land tortoise",
+      "es": "Tortuga terrestre",
+      "ca": "Tortuga terrestre"
     },
     "introduction": {
-      "ca": "JKDSFKJSKJBALABAL"
+      "en": "I’m Tuga, a land tortoise. I live in an enclosed garden and do not roam outside it. If you find me beyond the garden, please contact my responsible person.",
+      "es": "Soy Tuga, una tortuga terrestre. Vivo en un jardín cerrado y no paseo fuera de él. Si me encuentras más allá del jardín, contacta con mi responsable.",
+      "ca": "Soc la Tuga, una tortuga terrestre. Visc en un jardí tancat i no passejo fora del recinte. Si em trobes més enllà del jardí, contacta amb la persona responsable."
     },
     "status": "safe",
-    "statusLabel": {
-      "ca": "SOC "
-    },
-    "emergency": {
-      "ca": "DOEWO03 E0340"
-    },
     "photos": [
       {
-        "path": "assets/pets/4c88a4ec-428c-44b1-b48d-abf5d92ec985.webp",
+        "path": "assets/pets/tuga-pexels-4720896.webp",
         "alt": {
-          "ca": "tORTOISE"
+          "en": "Land tortoise on grass",
+          "es": "Tortuga terrestre sobre la hierba",
+          "ca": "Tortuga terrestre damunt l’herba"
+        },
+        "credit": {
+          "author": "isaaccortes",
+          "source": "https://www.pexels.com/photo/4720896/",
+          "license": "Pexels License",
+          "licenseUrl": "https://www.pexels.com/license/",
+          "changes": "Resized and re-encoded as WebP; EXIF metadata removed."
         }
       },
       {
-        "path": "assets/pets/tortoise-2.webp",
+        "path": "assets/pets/tuga-pexels-4720888.webp",
         "alt": {
-          "en": "Painted turtle on grass",
-          "es": "Tortuga pintada sobre la hierba",
-          "ca": "Tortuga pintada damunt l’herba"
+          "en": "Land tortoise seen from the side",
+          "es": "Tortuga terrestre vista de lado",
+          "ca": "Tortuga terrestre vista de costat"
         },
         "credit": {
-          "author": "Gastronomepalindrome",
-          "source": "https://commons.wikimedia.org/wiki/File:Eastern_Painted_Turtle_August_2020.jpg",
-          "license": "CC0",
-          "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+          "author": "isaaccortes",
+          "source": "https://www.pexels.com/photo/4720888/",
+          "license": "Pexels License",
+          "licenseUrl": "https://www.pexels.com/license/",
           "changes": "Resized and re-encoded as WebP; EXIF metadata removed."
         }
       }
@@ -244,7 +753,172 @@
         "id": "contact-aina"
       }
     ],
-    "sections": [],
+    "sections": [
+      {
+        "id": "identification",
+        "title": {
+          "en": "Identification",
+          "es": "Identificación",
+          "ca": "Identificació"
+        },
+        "fields": [
+          {
+            "key": "microchip",
+            "label": {
+              "en": "Microchip number",
+              "es": "Número de microchip",
+              "ca": "Número de microxip"
+            },
+            "value": "000000000000000",
+            "publish": true,
+            "sensitive": true,
+            "consent": true,
+            "kind": "text"
+          },
+          {
+            "key": "registration",
+            "label": {
+              "en": "Registration number",
+              "es": "Número de registro",
+              "ca": "Número de registre"
+            },
+            "value": "REG-000000",
+            "publish": true,
+            "sensitive": true,
+            "consent": true,
+            "kind": "text"
+          }
+        ]
+      },
+      {
+        "id": "location",
+        "title": {
+          "en": "Address & outdoor access",
+          "es": "Dirección y salidas",
+          "ca": "Adreça i sortides"
+        },
+        "fields": [
+          {
+            "key": "homeAddress",
+            "label": {
+              "en": "Home address",
+              "es": "Dirección de casa",
+              "ca": "Adreça de casa"
+            },
+            "value": "Carrer de la Closca, 00\n00000 Vila Imaginària",
+            "publish": true,
+            "sensitive": true,
+            "consent": true,
+            "kind": "text"
+          },
+          {
+            "key": "outdoorAccess",
+            "label": {
+              "en": "Outdoor access",
+              "es": "Salidas al exterior",
+              "ca": "Sortides a l’exterior"
+            },
+            "value": {
+              "en": "Stays at home",
+              "es": "Se queda en casa",
+              "ca": "Es queda a casa"
+            },
+            "publish": true,
+            "sensitive": false,
+            "consent": true,
+            "kind": "text"
+          },
+          {
+            "key": "roamingArea",
+            "label": {
+              "en": "Usual area and outdoor instructions",
+              "es": "Zona habitual e instrucciones de salida",
+              "ca": "Zona habitual i instruccions de sortida"
+            },
+            "value": {
+              "en": "Stays inside the enclosed garden. Contact Aina if found beyond the garden fence.",
+              "es": "Permanece dentro del jardín cerrado. Contacta con Aina si aparece fuera de la valla.",
+              "ca": "Es queda dins del jardí tancat. Contacta amb l’Aina si apareix fora de la tanca."
+            },
+            "publish": true,
+            "sensitive": true,
+            "consent": true,
+            "kind": "text"
+          }
+        ]
+      },
+      {
+        "id": "medical",
+        "title": {
+          "en": "Health & emergency",
+          "es": "Salud y emergencias",
+          "ca": "Salut i emergències"
+        },
+        "fields": [
+          {
+            "key": "allergies",
+            "label": {
+              "en": "Allergies",
+              "es": "Alergias",
+              "ca": "Al·lèrgies"
+            },
+            "value": {
+              "en": "No known allergies reported.",
+              "es": "No se han comunicado alergias conocidas.",
+              "ca": "No s’han comunicat al·lèrgies conegudes."
+            },
+            "publish": true,
+            "sensitive": true,
+            "consent": true,
+            "kind": "warning"
+          },
+          {
+            "key": "conditions",
+            "label": {
+              "en": "Health conditions",
+              "es": "Condiciones de salud",
+              "ca": "Condicions de salut"
+            },
+            "value": {
+              "en": "No health conditions reported. For health information, contact the responsible person.",
+              "es": "No se han comunicado condiciones de salud. Para cualquier consulta, contacta con la persona responsable.",
+              "ca": "No s’han comunicat condicions de salut. Per a qualsevol consulta, contacta amb la persona responsable."
+            },
+            "publish": true,
+            "sensitive": true,
+            "consent": true,
+            "kind": "warning"
+          }
+        ]
+      },
+      {
+        "id": "behavior",
+        "title": {
+          "en": "Behavior & handling",
+          "es": "Comportamiento y manejo",
+          "ca": "Comportament i maneig"
+        },
+        "fields": [
+          {
+            "key": "handling",
+            "label": {
+              "en": "Behavior and handling notes",
+              "es": "Notas de comportamiento y manejo",
+              "ca": "Notes de comportament i maneig"
+            },
+            "value": {
+              "en": "Moves slowly and usually stays in the garden. Contact Aina and describe where you have seen her.",
+              "es": "Se mueve despacio y suele permanecer en el jardín. Contacta con Aina e indica dónde la has visto.",
+              "ca": "Es mou a poc a poc i acostuma a quedar-se al jardí. Contacta amb l’Aina i indica on l’has vista."
+            },
+            "publish": true,
+            "sensitive": false,
+            "consent": true,
+            "kind": "text"
+          }
+        ]
+      }
+    ],
     "theme": {
       "accent": "#27634b",
       "background": "sage",

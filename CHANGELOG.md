@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.5 — 2026-11-16
+
+- Normalize four fictional profiles with invented responsible people, zero-filled telephone and identification numbers, reserved `.invalid` emails and fictional full addresses. Provide coherent introductions, authorized outings, health notes and handling text in English, Spanish and Catalan.
+- Replace all published photos with the ten supplied Pexels images, compressed to WebP below 300 KiB each. Preserve their source/license metadata in ZIP exports and keep existing profile IDs and QR addresses unchanged.
+- Fit complete portrait photos in dashboard cards and profile frames so faces and ears are not cropped.
+- Display obvious placeholder telephone numbers and emails as plain text, without call, email, WhatsApp or location-sharing actions. Real contact methods retain their existing actions.
+
 ## 1.1.4 — 2026-11-14
 
 - Add home address, authorized outdoor access and usual roaming area/instructions. Address and area publication require explicit consent; permitted outings appear directly on the public profile without restoring lost/found status.

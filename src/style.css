@@ -514,7 +514,7 @@
   .card-photo img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
     transition: transform 0.25s;
   }
   .card-photo:hover img {
@@ -622,7 +622,7 @@
   .profile-photo img {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
   }
   .profile-intro {
     padding: 10px 0;
@@ -666,6 +666,11 @@
     display: flex;
     gap: 8px;
     flex-wrap: wrap;
+  }
+  .contact-placeholder {
+    align-self: center;
+    overflow-wrap: anywhere;
+    padding: 0.5rem 0;
   }
   .contact-actions .button {
     flex: 1;

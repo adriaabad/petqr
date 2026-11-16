@@ -38,12 +38,17 @@ export function renderProfile(
   const tr = (key: string) => t(key, lang),
     local = (v: Localized | undefined) => textOf(v, lang, config.site.defaultLanguage);
   const contacts = resolvedContacts(config, pet);
-  const primary = contacts.find((c) => c.phone || c.whatsapp || c.email || c.telegram);
+  const primary = contacts.find((c) =>
+    (['phone', 'whatsapp', 'email', 'telegram'] as const).some(
+      (kind) => c[kind] && contactLink(kind, c[kind]!),
+    ),
+  );
+  const locationContact = contacts.find((c) => c.whatsapp && contactLink('whatsapp', c.whatsapp));
   const quick = primary
     ? `<nav class="quick-contact" aria-label="${tr('Contact my people')}">${(
         ['phone', 'whatsapp', 'email', 'telegram'] as const
       )
-        .filter((k) => primary[k])
+        .filter((k) => primary[k] && contactLink(k, primary[k]!))
         .sort((a, b) => Number(b === primary.preferred) - Number(a === primary.preferred))
         .slice(0, 2)
         .map(
@@ -126,9 +131,10 @@ export function renderProfile(
               )
                 .filter((k) => c[k])
                 .sort((a, b) => Number(b === c.preferred) - Number(a === c.preferred))
-                .map(
-                  (k, j) =>
-                    `<a class="button ${i === 0 && j === 0 ? 'primary' : ''}" href="${esc(contactLink(k, c[k]!))}" ${k === 'whatsapp' || k === 'telegram' ? 'rel="noopener noreferrer"' : ''}>${tr({ phone: 'Call', whatsapp: 'WhatsApp', email: 'Email', telegram: 'Telegram' }[k])}<span class="sr-only"> ${esc(c.name)}</span></a>`,
+                .map((k, j) =>
+                  contactLink(k, c[k]!)
+                    ? `<a class="button ${i === 0 && j === 0 ? 'primary' : ''}" href="${esc(contactLink(k, c[k]!))}" ${k === 'whatsapp' || k === 'telegram' ? 'rel="noopener noreferrer"' : ''}>${tr({ phone: 'Call', whatsapp: 'WhatsApp', email: 'Email', telegram: 'Telegram' }[k])}<span class="sr-only"> ${esc(c.name)}</span></a>`
+                    : `<span class="contact-placeholder">${esc(c[k])}</span>`,
                 )
                 .join(
                   '',
@@ -137,7 +143,7 @@ export function renderProfile(
           .join('')
       : `<p>${tr('No public contact is available.')}</p>`
   }</section>
-  ${contacts.some((c) => c.whatsapp) && !preview ? `<details class="location-share enhanced-only"><summary>${tr('Share my location')}</summary><p>${tr('Your browser will ask for location permission. A map link will be prepared in WhatsApp. You choose whether to send it. PetQR does not store your location.')}</p><button class="button" data-share-location="${esc(contacts.find((c) => c.whatsapp)!.whatsapp)}">${tr('Share my location')}</button><div data-location-result aria-live="polite"></div></details>` : ''}</div></div>
+  ${locationContact && !preview ? `<details class="location-share enhanced-only"><summary>${tr('Share my location')}</summary><p>${tr('Your browser will ask for location permission. A map link will be prepared in WhatsApp. You choose whether to send it. PetQR does not store your location.')}</p><button class="button" data-share-location="${esc(locationContact.whatsapp)}">${tr('Share my location')}</button><div data-location-result aria-live="polite"></div></details>` : ''}</div></div>
   ${warnings ? `<section class="critical-section" aria-label="${tr('Important information')}">${warnings}</section>` : ''}
   ${
     pet.photos.length > 1

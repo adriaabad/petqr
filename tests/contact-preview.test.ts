@@ -4,12 +4,43 @@ import { readFile } from 'node:fs/promises';
 import { telegramSchema, parseConfig, publicConfig, explainError, fieldSchema } from '../src/model';
 import { contactLink } from '../src/core';
 import { profilePreview } from '../src/preview';
+import { renderProfile } from '../src/render';
 const [site, contacts, pets] = await Promise.all(
   ['site', 'contacts', 'pets'].map(async (name) =>
     JSON.parse(await readFile(`tests/fixtures/data/${name}.json`, 'utf8')),
   ),
 );
 const fixture = () => parseConfig({ version: 1, site, contacts, pets });
+
+test('zero phone numbers and reserved invalid emails are displayed without call or message links', () => {
+  const config = fixture();
+  config.contacts = [
+    {
+      id: 'placeholder-contact',
+      name: 'Alex Riu',
+      phone: '00000000000',
+      whatsapp: '+00 (000) 000-000',
+      email: 'alex@example.invalid',
+      preferred: 'phone',
+      language: 'en',
+      publish: true,
+      consent: true,
+    },
+  ];
+  config.pets[0].contacts = [{ id: 'placeholder-contact' }];
+  const html = renderProfile(config, config.pets[0], 'en');
+  assert.match(html, /00000000000/);
+  assert.match(html, /alex@example.invalid/);
+  assert.doesNotMatch(
+    html,
+    /href="(?:tel:|mailto:|https:\/\/wa.me\/)|data-share-location|class="quick-contact"/,
+  );
+  assert.equal(contactLink('phone', '00000000000'), '');
+  assert.equal(contactLink('whatsapp', '+00 (000) 000-000'), '');
+  assert.equal(contactLink('email', 'Alex@EXAMPLE.INVALID'), '');
+  assert.equal(contactLink('email', 'alex@example.org'), 'mailto:alex@example.org');
+  assert.equal(contactLink('phone', '+1 202 555 0101'), 'tel:+12025550101');
+});
 
 test('optional Telegram accepts blank, username, @username and public profile links', () => {
   for (const value of ['', ' ', '\t']) assert.equal(telegramSchema.parse(value), '');

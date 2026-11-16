@@ -55,6 +55,10 @@ export function contactLink(
   value: string,
   message = '',
 ): string {
+  // Keep obvious example values visible without initiating calls or messages.
+  if (!value.trim()) return '';
+  if ((kind === 'phone' || kind === 'whatsapp') && /^0+$/.test(value.replace(/\D/g, ''))) return '';
+  if (kind === 'email' && /@[^@]*\.invalid$/i.test(value.trim())) return '';
   if (kind === 'phone') return `tel:${value.replace(/[^+0-9]/g, '')}`;
   if (kind === 'whatsapp')
     return `https://wa.me/${value.replace(/\D/g, '')}${message ? `?text=${encodeURIComponent(message)}` : ''}`;

@@ -1,5 +1,5 @@
-import { t } from './i18n';
-import type { Language } from './model';
+import { t } from '../shared/i18n';
+import type { Language } from '../shared/model';
 export const MAX_PHOTO_BYTES = 300 * 1024;
 
 async function decodePhoto(

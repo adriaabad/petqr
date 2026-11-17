@@ -2,15 +2,17 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile, stat, readdir } from 'node:fs/promises';
 import { resolve, dirname } from 'node:path';
-import { parseConfig, petPath } from '../src/model';
-import { photoCreditsText } from '../src/photo-credits';
+import { parseConfig, petPath } from '../../src/shared/model';
+import { photoCreditsText, creditedPhotos } from '../../src/shared/photo-credits';
 const config = parseConfig(JSON.parse(await readFile('dist/data/config.json', 'utf8')));
 
 test('static distribution includes project and dependency license notices', async () => {
   assert.match(await readFile('dist/LICENSE.txt', 'utf8'), /MIT License/);
   const licenses = await readFile('dist/THIRD_PARTY_LICENSES.txt', 'utf8');
   for (const name of ['qrcode', 'fflate', 'zod']) assert.ok(licenses.includes(name));
-  assert.equal(await readFile('dist/PHOTO_CREDITS.txt', 'utf8'), photoCreditsText(config));
+  if (creditedPhotos(config).length)
+    assert.equal(await readFile('dist/PHOTO_CREDITS.txt', 'utf8'), photoCreditsText(config));
+  else await assert.rejects(readFile('dist/PHOTO_CREDITS.txt'));
 });
 test('all configured standalone routes have HTML, metadata, assets and scoped JSON', async () => {
   for (const pet of config.pets) {
@@ -56,6 +58,16 @@ test('public build has editor and includes only explicitly indexed pet URLs in s
     const listed = sitemap.includes(petPath(pet));
     assert.equal(listed, pet.indexing && Boolean(config.site.publicUrl));
   }
+});
+test('tutorial route is a complete static visual guide with its own small enhancement', async () => {
+  const html = await readFile('dist/tutorial/index.html', 'utf8');
+  assert.match(html, /class="tutorial-hero"/);
+  assert.equal((html.match(/class="tutorial-step"/g) || []).length, 6);
+  assert.match(html, /\.\.\/assets\/tutorial.js/);
+  assert.doesNotMatch(html, /assets\/editor.js/);
+  const data = JSON.parse(await readFile('dist/data/tutorial.json', 'utf8'));
+  assert.deepEqual(Object.keys(data), ['site']);
+  await stat('dist/assets/tutorial.js');
 });
 test('public enhancement never bundles the editor, QR library or runtime validator', async () => {
   const modules = await readdir('dist/assets'),

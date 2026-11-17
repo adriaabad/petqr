@@ -1,5 +1,5 @@
 import type { Language } from './model';
-import { esc } from './render';
+import { esc } from '../public/render';
 
 export const templateURL =
   'https://github.com/new?template_owner=adriaabad&template_name=petqr&name=petqr&visibility=public';

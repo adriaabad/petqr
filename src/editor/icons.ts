@@ -1,4 +1,4 @@
-import { paw } from './render';
+import { paw } from '../public/render';
 const paths: Record<string, string> = {
   contacts:
     '<circle cx="9" cy="7" r="3"/><path d="M3 21v-3a6 6 0 0 1 12 0v3m1-17a3 3 0 0 1 0 6m2 5a5 5 0 0 1 3 5v1"/>',

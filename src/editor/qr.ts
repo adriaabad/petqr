@@ -1,9 +1,9 @@
 import QRCode, { type QRCodeErrorCorrectionLevel } from 'qrcode';
-import { publicPetURL, type Config, type Pet, type Language } from './model';
-import { t } from './i18n';
-import { esc } from './render';
+import { publicPetURL, type Config, type Pet, type Language } from '../shared/model';
+import { t } from '../shared/i18n';
+import { esc } from '../public/render';
 import { download, svgToPNG } from './download';
-import { copy, toast } from './preferences';
+import { copy, toast } from '../shared/preferences';
 export function luminance(hex: string): number {
   const rgb = hex
     .slice(1)

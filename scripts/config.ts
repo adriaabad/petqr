@@ -1,6 +1,6 @@
 import { readFile, stat } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import { parseConfig, assertPublishable, type Config } from '../src/model';
+import { parseConfig, assertPublishable, type Config } from '../src/shared/model';
 export async function loadConfig(root = process.cwd()): Promise<Config> {
   const [version, site, contacts, pets] = await Promise.all(
     ['version', 'site', 'contacts', 'pets'].map(async (name) =>

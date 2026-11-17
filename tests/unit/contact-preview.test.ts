@@ -1,10 +1,16 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { telegramSchema, parseConfig, publicConfig, explainError, fieldSchema } from '../src/model';
-import { contactLink } from '../src/core';
-import { profilePreview } from '../src/preview';
-import { renderProfile } from '../src/render';
+import {
+  telegramSchema,
+  parseConfig,
+  publicConfig,
+  explainError,
+  fieldSchema,
+} from '../../src/shared/model';
+import { contactLink } from '../../src/shared/core';
+import { profilePreview } from '../../src/shared/preview';
+import { renderProfile } from '../../src/public/render';
 const [site, contacts, pets] = await Promise.all(
   ['site', 'contacts', 'pets'].map(async (name) =>
     JSON.parse(await readFile(`tests/fixtures/data/${name}.json`, 'utf8')),

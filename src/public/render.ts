@@ -1,7 +1,7 @@
-import { contactLink, resolvedContacts, textOf, petPath } from './core';
-import type { Config, Pet, Language, Localized } from './model';
-import { t } from './i18n';
-import { creditedPhotos } from './photo-credits';
+import { contactLink, resolvedContacts, textOf, petPath } from '../shared/core';
+import type { Config, Pet, Language, Localized } from '../shared/model';
+import { t } from '../shared/i18n';
+import { creditedPhotos } from '../shared/photo-credits';
 export function esc(value: unknown): string {
   return String(value ?? '').replace(
     /[&<>"']/g,
@@ -19,8 +19,11 @@ export function controls(lang: Language): string {
 export function brand(href: string): string {
   return `<a class="brand" href="${esc(href)}">${paw}<span>PetQR</span></a>`;
 }
-export function footer(config: Config, lang: Language, prefix = ''): string {
-  return `<footer><p>${t('Public information. Share only what you are comfortable publishing.', lang)}</p>${creditedPhotos(config).length ? `<p><a href="${esc(prefix)}PHOTO_CREDITS.txt">${t('Photo credits', lang)}</a></p>` : ''}${config.site.attribution ? `<p>PetQR · ${config.site.sourceUrl ? `<a href="${esc(config.site.sourceUrl)}" rel="noopener noreferrer">${t('Open-source project', lang)}</a>` : 'MIT · Open source'}</p>` : ''}</footer>`;
+export function tutorialButton(lang: Language, prefix = '', classes = ''): string {
+  return `<a class="button tutorial-cta ${classes}" href="${esc(prefix + 'tutorial/')}">${t('I want my PetQR', lang)} <span aria-hidden="true">↗</span></a>`;
+}
+export function footer(config: Config, lang: Language, prefix = '', showTutorial = true): string {
+  return `<footer>${showTutorial ? `<div class="footer-tutorial">${tutorialButton(lang, prefix)}</div>` : ''}<p>${t('Public information. Share only what you are comfortable publishing.', lang)}</p>${creditedPhotos(config).length ? `<p><a href="${esc(prefix)}PHOTO_CREDITS.txt">${t('Photo credits', lang)}</a></p>` : ''}${config.site.attribution ? `<p>PetQR · ${config.site.sourceUrl ? `<a href="${esc(config.site.sourceUrl)}" rel="noopener noreferrer">${t('Open-source project', lang)}</a>` : 'MIT · Open source'}</p>` : ''}</footer>`;
 }
 export function photo(pet: Pet, lang: Language, prefix: string, lazy = false): string {
   const p = pet.photos[0];
@@ -151,7 +154,7 @@ export function renderProfile(
   ${config.site.ownerIndex ? `<a class="back-link" href="${esc(prefix)}">← ${tr('All pets')}</a>` : ''}</main>${!preview ? quick : ''}${footer(config, lang, prefix)}<div class="toast" role="status" aria-live="polite" id="toast"></div>`;
 }
 export function renderIndex(config: Config, lang: Language): string {
-  return `<header class="public-header">${brand('./')}${controls(lang)}</header><main id="main" class="owner-index"><div class="page-heading"><div><h1>${esc(config.site.title)}</h1><p>${t('Your pets, their people, always connected.', lang)}</p></div><a class="button" href="editor/">${t('Local editor', lang)}</a></div>${config.site.ownerIndex ? `<div class="pet-grid">${config.pets.map((p) => `<article class="pet-card"><a class="card-photo" href="${petPath(p)}">${photo(p, lang, '', true)}</a><div class="card-body"><div class="name-row"><h2><a href="${petPath(p)}">${esc(p.name)}</a></h2></div><p class="species">${esc(textOf(p.species, lang))}</p><a class="button primary" href="${petPath(p)}">${t('View profile', lang)} <span aria-hidden="true">↗</span></a></div></article>`).join('')}</div>` : `<p>${t('Profiles are public, including when the index is disabled.', lang)}</p>`}</main>${footer(config, lang)}<div class="toast" role="status" id="toast"></div>`;
+  return `<header class="public-header">${brand('./')}${controls(lang)}</header><main id="main" class="owner-index"><div class="page-heading"><div><h1>${esc(config.site.title)}</h1><p>${t('Your pets, their people, always connected.', lang)}</p></div><div class="page-actions">${tutorialButton(lang, '', 'primary')}<a class="button" href="editor/">${t('Local editor', lang)}</a></div></div>${config.site.ownerIndex ? `<div class="pet-grid">${config.pets.map((p) => `<article class="pet-card"><a class="card-photo" href="${petPath(p)}">${photo(p, lang, '', true)}</a><div class="card-body"><div class="name-row"><h2><a href="${petPath(p)}">${esc(p.name)}</a></h2></div><p class="species">${esc(textOf(p.species, lang))}</p><a class="button primary" href="${petPath(p)}">${t('View profile', lang)} <span aria-hidden="true">↗</span></a></div></article>`).join('')}</div>` : `<p>${t('Profiles are public, including when the index is disabled.', lang)}</p>`}</main>${footer(config, lang)}<div class="toast" role="status" id="toast"></div>`;
 }
 export function htmlDocument(
   body: string,

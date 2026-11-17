@@ -1,6 +1,7 @@
 import { languages } from './core';
 import type { Language } from './model';
 const phrases: Record<string, [string, string]> = {
+  'I want my PetQR': ['Quiero mi PetQR', 'Vull el meu PetQR'],
   'Everything uploaded to GitHub Pages is public. Keep confidential records private. Publish an address only if you want it visible to anyone scanning the QR.':
     [
       'Todo lo que subes a GitHub Pages es público. Mantén privados los documentos confidenciales. Publica una dirección solo si quieres mostrarla a quien escanee el QR.',

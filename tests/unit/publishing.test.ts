@@ -2,11 +2,11 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { unzipSync, strFromU8 } from 'fflate';
-import { parseConfig } from '../src/model';
-import { exportArchive, importArchive } from '../src/archive';
-import { publicationGuide, repositoryURL, templateURL } from '../src/publishing';
-import { icon } from '../src/icons';
-import { paw } from '../src/render';
+import { parseConfig } from '../../src/shared/model';
+import { exportArchive, importArchive } from '../../src/editor/archive';
+import { publicationGuide, repositoryURL, templateURL } from '../../src/shared/publishing';
+import { icon } from '../../src/editor/icons';
+import { paw } from '../../src/public/render';
 
 test('publication links use the independent repository, including root Pages sites, and reject misleading hosts', () => {
   assert.equal(

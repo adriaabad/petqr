@@ -1,8 +1,8 @@
-import type { Config, Language } from './model';
-import { contactLink } from './core';
+import type { Config, Language } from '../shared/model';
+import { contactLink } from '../shared/core';
 import { renderIndex, renderProfile, skipLink } from './render';
-import { preferredLanguage, t } from './i18n';
-import { bindPreferences, copy, toast } from './preferences';
+import { preferredLanguage, t } from '../shared/i18n';
+import { bindPreferences, copy, toast } from '../shared/preferences';
 import { bindPhotoGallery } from './gallery';
 document.documentElement.classList.add('js');
 const base = new URL(/* @vite-ignore */ '../', import.meta.url);

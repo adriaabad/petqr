@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.2.0 — 2026-11-17
+
+- Add a six-step visual tutorial at tutorial/, with illustrated GitHub/Pages/editor/ZIP/publication/QR steps, three languages and a static no-JavaScript fallback. Add I want my PetQR calls to action to the index, public-profile footer, editor navigation, Help and Export.
+- Remove optional credits from the ten owner-selected Pexels photos. Omit empty photo-credit files from site builds and exports; preserve optional metadata support for other images and all source/dependency licenses.
+- Organize source into public, editor, shared and styles; group unit tests, user/developer/legal/project documentation and GitHub community files. Preserve data/assets upload paths, generated website addresses, original and short profile URLs, and independent template deployment.
+
+
 ## 1.1.6 — 2026-11-17
 
 - Fill photo frames with fitted crops and per-photo focus, with selectable square thumbnails directly below the main profile photo. Keep original-photo links available without JavaScript, and enable selection inside the script-disabled editor preview without enabling iframe scripts.

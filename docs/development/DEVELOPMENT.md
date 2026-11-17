@@ -15,18 +15,18 @@ Public HTML contains usable contact links and warnings before scripts load. Java
 
 ## Modules
 
-- `src/model.ts`: Zod schemas, strong inferred types, public filtering, publication checks, errors and new IDs.
-- `src/core.ts`: dependency-free text/URL/contact helpers for public pages. The profile does not load Zod/QR/editor code.
-- `src/fields.ts`: translated category labels and extensible field suggestions.
-- `src/i18n.ts`: local UI phrases and language preference resolution.
-- `src/render.ts`: escaped semantic HTML rendering and SEO metadata.
-- `src/public.ts` / `src/preferences.ts`: small progressive enhancements.
-- `src/editor.ts`: dashboard/forms, draft state, contact assignments, previews and user actions.
-- `src/images.ts`: canvas crop/pan/rotate/re-encode workflow; no original metadata copied.
-- `src/preview.ts`: scoped public previews that warn about incomplete optional contact methods without mutating the draft or relaxing export validation.
-- `src/archive.ts`: whitelist-based ZIP import and filtered export; bounded extraction sizes.
-- `src/draft.ts`: opt-in IndexedDB draft persistence, including processed images.
-- `src/qr.ts`: bundled QR encoder, contrast validation, SVG composition and tag layout.
+- `src/shared/model.ts`: Zod schemas, strong inferred types, public filtering, publication checks, errors and new IDs.
+- `src/shared/core.ts`: dependency-free text/URL/contact helpers for public pages. The profile does not load Zod/QR/editor code.
+- `src/shared/fields.ts`: translated category labels and extensible field suggestions.
+- `src/shared/i18n.ts`: local UI phrases and language preference resolution.
+- `src/public/render.ts`: escaped semantic HTML rendering and SEO metadata.
+- `src/public/public.ts` / `src/shared/preferences.ts`: small progressive enhancements.
+- `src/editor/editor.ts`: dashboard/forms, draft state, contact assignments, previews and user actions.
+- `src/editor/images.ts`: canvas crop/pan/rotate/re-encode workflow; no original metadata copied.
+- `src/shared/preview.ts`: scoped public previews that warn about incomplete optional contact methods without mutating the draft or relaxing export validation.
+- `src/editor/archive.ts`: whitelist-based ZIP import and filtered export; bounded extraction sizes.
+- `src/editor/draft.ts`: opt-in IndexedDB draft persistence, including processed images.
+- `src/editor/qr.ts`: bundled QR encoder, contrast validation, SVG composition and tag layout.
 - `scripts/config.ts`, `validate.ts`, `build.ts`: configuration loading, image existence limits, clean build and route/SEO generation.
 
 The build runs programmatic Vite with independent TS entry points. The Vite CLI is only a local static preview. Source/config changes require a new build; browser editor changes immediately update the local preview. Assets resolve relative to each entry's emitted URL and continue working beneath arbitrary repository paths. New builds clean dist so removed pet pages disappear.

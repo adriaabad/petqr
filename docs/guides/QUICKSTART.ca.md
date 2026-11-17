@@ -15,4 +15,4 @@ A Identitat pots afegir el número de microxip i el número de registre. Marca P
 
 L’editor funciona en català, castellà i anglès. La fitxa té un únic formulari, sense mode Avançat ni estat de perdut/trobat. Els detalls addicionals ja existents es conserven. Fotos: retall, gir i compressió locals. QR: SVG, PNG, colors, marges i plaques imprimibles. Les modificacions locals no es desen automàticament a GitHub.
 
-La [guia completa](../README.md), la [guia de privacitat](PRIVACY.md) i la [guia de desplegament](DEPLOYMENT.md) inclouen tots els detalls. Per al desenvolupament local: `npm ci`, `npm run dev`. Per comprovar: `npm run build`, `npm test`, `npm run test:e2e` després d’instal·lar Playwright Chromium.
+La [guia completa](../../README.md), la [guia de privacitat](PRIVACY.md) i la [guia de desplegament](DEPLOYMENT.md) inclouen tots els detalls. Per al desenvolupament local: `npm ci`, `npm run dev`. Per comprovar: `npm run build`, `npm test`, `npm run test:e2e` després d’instal·lar Playwright Chromium.

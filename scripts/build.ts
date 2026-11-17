@@ -4,9 +4,10 @@ import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadConfig } from './config';
 import { dependencyLicenses } from './licenses';
-import { htmlDocument, renderProfile, renderIndex, esc, paw } from '../src/render';
-import { explainError, petPath, type Config } from '../src/model';
-import { photoCreditsText } from '../src/photo-credits';
+import { htmlDocument, renderProfile, renderIndex, esc, paw } from '../src/public/render';
+import { explainError, petPath, type Config } from '../src/shared/model';
+import { photoCreditsText, creditedPhotos } from '../src/shared/photo-credits';
+import { renderTutorial, tutorialTitle } from '../src/public/tutorial-view';
 
 export function deployedURL(
   config: Config,
@@ -38,7 +39,11 @@ export async function buildSite(
       emptyOutDir: true,
       target: 'es2022',
       rollupOptions: {
-        input: { editor: resolve('src/editor.ts'), public: resolve('src/public.ts') },
+        input: {
+          editor: resolve('src/editor/editor.ts'),
+          public: resolve('src/public/public.ts'),
+          tutorial: resolve('src/public/tutorial.ts'),
+        },
         output: {
           entryFileNames: 'assets/[name].js',
           chunkFileNames: 'assets/shared-[hash].js',
@@ -52,7 +57,7 @@ export async function buildSite(
     await mkdir(dirname(dest), { recursive: true });
     await writeFile(dest, data);
   }
-  await copyFile('src/style.css', resolve(outDir, 'assets/style.css'));
+  await copyFile('src/styles/style.css', resolve(outDir, 'assets/style.css'));
   await write(
     'favicon.svg',
     `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><rect width="40" height="40" rx="9" fill="#e6efe6"/><g transform="translate(4 4)" fill="#246049">${paw.replace(/^<svg[^>]*>|<\/svg>$/g, '')}</g></svg>`,
@@ -60,7 +65,19 @@ export async function buildSite(
   await write('.nojekyll', '');
   await write('LICENSE.txt', await readFile('LICENSE', 'utf8'));
   await write('THIRD_PARTY_LICENSES.txt', await dependencyLicenses());
-  await write('PHOTO_CREDITS.txt', photoCreditsText(config));
+  if (creditedPhotos(config).length) await write('PHOTO_CREDITS.txt', photoCreditsText(config));
+  await write('data/tutorial.json', JSON.stringify({ site: config.site }));
+  await write(
+    'tutorial/index.html',
+    htmlDocument(renderTutorial(config.site, config.site.defaultLanguage), {
+      title: tutorialTitle(config.site.defaultLanguage),
+      lang: config.site.defaultLanguage,
+      prefix: '../',
+      script: 'tutorial.js',
+      canonical: config.site.publicUrl ? `${config.site.publicUrl}/tutorial/` : undefined,
+      description: 'Create your own PetQR website with this visual, six-step tutorial.',
+    }),
+  );
   await write('data/config.json', JSON.stringify(config));
   // Disabled index must not embed or list pet identities. The editor still reads explicitly public data.
   const indexConfig = { ...config, pets: config.site.ownerIndex ? config.pets : [], contacts: [] };

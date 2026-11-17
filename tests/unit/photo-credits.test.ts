@@ -2,10 +2,10 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
 import { unzipSync, strFromU8 } from 'fflate';
-import { parseConfig, publicConfig, fieldSchema } from '../src/model';
-import { exportArchive, importArchive } from '../src/archive';
-import { photoCreditsText } from '../src/photo-credits';
-import { renderProfile } from '../src/render';
+import { parseConfig, publicConfig, fieldSchema } from '../../src/shared/model';
+import { exportArchive, importArchive } from '../../src/editor/archive';
+import { photoCreditsText } from '../../src/shared/photo-credits';
+import { renderProfile } from '../../src/public/render';
 
 async function fixture() {
   const values = await Promise.all(
@@ -57,7 +57,7 @@ test('photo authorship and license survive ZIP export/import and credits describ
   const ownFiles = unzipSync(ownZip),
     restored = importArchive(ownZip);
   assert.equal(ownFiles[oldPath], undefined);
-  assert.doesNotMatch(strFromU8(ownFiles['PHOTO_CREDITS.txt']), /ORIGINAL_AUTHOR|CC BY 4.0/);
+  assert.equal(ownFiles['PHOTO_CREDITS.txt'], undefined);
   assert.equal(restored.config.pets[0].photos[0].credit, undefined);
   assert.doesNotMatch(renderProfile(config, config.pets[0], 'en'), /PHOTO_CREDITS.txt/);
 });

@@ -51,9 +51,9 @@ Basic identity, introduction and photos are inherently public. Microchip and reg
 
 The `location` section supports `homeAddress`, `outdoorAccess` and `roamingArea`. Address/area values require Publish plus consent even when an imported field claims `sensitive:false`. Outdoor access is optional translated text; the editor offers Stays at home / May go out independently / Only goes out accompanied, with Not specified as the empty default. Publish is still opt-in. These selected fields render directly on the profile and are omitted from repeated expanded details.
 
-`PHOTO_CREDITS.txt` is generated from selected `photos[].credit` metadata, not copied from the documentation's original asset catalog. It is included in exports, and the build regenerates it from source JSON. Removing a photo removes its current attribution entry; missing metadata never means a public-domain dedication.
+`PHOTO_CREDITS.txt` is generated from selected `photos[].credit` metadata, not copied from the documentation's original asset catalog. It is included in exports only when selected photos contain credit metadata; the build follows the same rule. Removing a photo removes its current attribution entry; missing metadata never means a public-domain dedication.
 
-Existing category IDs: identity, identification, medical, behavior, care, location, emergency. Legacy `emergency` sections are preserved but no longer displayed. `src/fields.ts` retains compatible category labels and keys. The simplified editor edits existing fields without an Advanced builder. Custom sections and fields can still be configured in source using the same schema and rendering path:
+Existing category IDs: identity, identification, medical, behavior, care, location, emergency. Legacy `emergency` sections are preserved but no longer displayed. `src/shared/fields.ts` retains compatible category labels and keys. The simplified editor edits existing fields without an Advanced builder. Custom sections and fields can still be configured in source using the same schema and rendering path:
 
 ```json
 {

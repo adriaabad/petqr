@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 import { mkdtemp, mkdir, writeFile, readFile, stat, rm } from 'node:fs/promises';
 import { resolve, join, dirname, basename } from 'node:path';
 import { tmpdir } from 'node:os';
-import { buildSite } from '../scripts/build';
-import { parseConfig } from '../src/model';
+import { buildSite } from '../../scripts/build';
+import { parseConfig } from '../../src/shared/model';
 
 test('personalized and empty repositories build without demo identities, and test builds preserve production', async () => {
   const root = await mkdtemp(join(tmpdir(), 'petqr-config-test-'));

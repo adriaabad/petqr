@@ -18,20 +18,20 @@ import {
   type Language,
   type Localized,
   type Field,
-} from './model';
-import { preferredLanguage, t } from './i18n';
-import { brand, controls, photo, esc, renderProfile } from './render';
-import { bindPreferences, toast } from './preferences';
-import { categoryNames, tri } from './fields';
+} from '../shared/model';
+import { preferredLanguage, t } from '../shared/i18n';
+import { brand, controls, photo, esc, renderProfile, tutorialButton } from '../public/render';
+import { bindPreferences, toast } from '../shared/preferences';
+import { categoryNames, tri } from '../shared/fields';
 import { openQR } from './qr';
 import { processImage } from './images';
-import { profilePreview } from './preview';
+import { profilePreview } from '../shared/preview';
 import { exportArchive, importArchive, type ImageFiles } from './archive';
 import { download } from './download';
 import { draftStore } from './draft';
 import { icon } from './icons';
-import { publicationGuide } from './publishing';
-import { bindPhotoGallery } from './gallery';
+import { publicationGuide } from '../shared/publishing';
+import { bindPhotoGallery } from '../public/gallery';
 
 const base = new URL(/* @vite-ignore */ '../', import.meta.url);
 let config: Config,
@@ -190,7 +190,7 @@ function shell(content: string) {
     )
     .join(
       '',
-    )}</nav><p class="sidebar-note">${tr('Local only. Nothing is uploaded automatically.')}</p></aside><main class="app-main" id="main"><div class="topbar"><span class="context">PetQR / ${tr('Local editor')}</span>${controls(lang)}</div><div id="errors" class="error-box" role="alert"></div>${content}</main></div><div class="toast" role="status" aria-live="polite" id="toast"></div>`;
+    )}</nav>${tutorialButton(lang, base.href)}<p class="sidebar-note">${tr('Local only. Nothing is uploaded automatically.')}</p></aside><main class="app-main" id="main"><div class="topbar"><span class="context">PetQR / ${tr('Local editor')}</span>${controls(lang)}</div><div id="errors" class="error-box" role="alert"></div>${content}</main></div><div class="toast" role="status" aria-live="polite" id="toast"></div>`;
 }
 function exportStrip() {
   return `<div class="export-strip"><div><strong>${tr('Changes stay on this device. Export when you’re ready.')}</strong><p>${tr('Only selected public fields are exported. Unpublished fields remain in this browser session.')}</p></div>${button('Export files', openExport)}</div>`;
@@ -684,7 +684,7 @@ function settings() {
   )}</div>${exportStrip()}</div>`;
 }
 function help() {
-  return `<div class="help-content"><h1>${tr('Help')}</h1>${publicationGuide(config.site.publicUrl, lang, true)}<h2>${tr('Publishing & privacy')}</h2><p>${tr('Everything uploaded to GitHub Pages is public. Keep confidential records private. Publish an address only if you want it visible to anyone scanning the QR.')}</p><h2>${tr('Photos')}</h2><p>${tr('Photos are converted and compressed on this device to WebP or JPEG, up to 1200 px and 300 KB. Animated images use the first frame.')}</p><h2>${tr('QR code')}</h2><p>${tr('Keep at least four clear modules around the code. Print at least 25 mm, larger for long URLs. Test with multiple phones before engraving.')}</p><h2>${tr('Stable ID')}</h2><p>${tr('Keep this ID unchanged once a tag is printed.')}</p><div class="settings-actions">${button('Import files', importFiles)}${button('Export files', openExport, 'primary')}</div></div>`;
+  return `<div class="help-content"><h1>${tr('Help')}</h1><div class="help-tutorial">${tutorialButton(lang, base.href, 'primary')}</div>${publicationGuide(config.site.publicUrl, lang, true)}<h2>${tr('Publishing & privacy')}</h2><p>${tr('Everything uploaded to GitHub Pages is public. Keep confidential records private. Publish an address only if you want it visible to anyone scanning the QR.')}</p><h2>${tr('Photos')}</h2><p>${tr('Photos are converted and compressed on this device to WebP or JPEG, up to 1200 px and 300 KB. Animated images use the first frame.')}</p><h2>${tr('QR code')}</h2><p>${tr('Keep at least four clear modules around the code. Print at least 25 mm, larger for long URLs. Test with multiple phones before engraving.')}</p><h2>${tr('Stable ID')}</h2><p>${tr('Keep this ID unchanged once a tag is printed.')}</p><div class="settings-actions">${button('Import files', importFiles)}${button('Export files', openExport, 'primary')}</div></div>`;
 }
 function clearImageURLs() {
   for (const url of imageURLs.values()) URL.revokeObjectURL(url);
@@ -771,7 +771,7 @@ function openExport() {
   const dialog = document.createElement('dialog');
   dialog.setAttribute('aria-label', tr('Export & publish'));
   const safe = publicConfig(config);
-  dialog.innerHTML = `<div class="modal-heading"><h2>${tr('Export & publish')}</h2><button class="button" data-close>${tr('Close')}</button></div><div class="notice warning">${tr('Everything uploaded to GitHub Pages is public. Keep confidential records private. Publish an address only if you want it visible to anyone scanning the QR.')}</div><div class="spacer"></div><p>${tr('Only selected public fields are exported. Unpublished fields remain in this browser session.')}</p><p class="hint">${safe.pets.length} ${tr('My pets')} · ${safe.contacts.length} ${tr('Contacts')}</p><div class="divider"></div>${publicationGuide(config.site.publicUrl, lang)}<div class="qr-output-actions"><button class="button primary" data-download>${tr('Confirm publication')} · ZIP</button></div><p class="error-box" data-error role="alert"></p>`;
+  dialog.innerHTML = `<div class="modal-heading"><h2>${tr('Export & publish')}</h2><button class="button" data-close>${tr('Close')}</button></div><div class="help-tutorial">${tutorialButton(lang, base.href)}</div><div class="notice warning">${tr('Everything uploaded to GitHub Pages is public. Keep confidential records private. Publish an address only if you want it visible to anyone scanning the QR.')}</div><div class="spacer"></div><p>${tr('Only selected public fields are exported. Unpublished fields remain in this browser session.')}</p><p class="hint">${safe.pets.length} ${tr('My pets')} · ${safe.contacts.length} ${tr('Contacts')}</p><div class="divider"></div>${publicationGuide(config.site.publicUrl, lang)}<div class="qr-output-actions"><button class="button primary" data-download>${tr('Confirm publication')} · ZIP</button></div><p class="error-box" data-error role="alert"></p>`;
   document.body.append(dialog);
   dialog.showModal();
   dialog.querySelector<HTMLElement>('[data-close]')!.onclick = () => dialog.close();

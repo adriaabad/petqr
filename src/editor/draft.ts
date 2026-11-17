@@ -1,4 +1,4 @@
-import type { Config } from './model';
+import type { Config } from '../shared/model';
 import type { ImageFiles } from './archive';
 function open(): Promise<IDBDatabase> {
   return new Promise((ok, no) => {

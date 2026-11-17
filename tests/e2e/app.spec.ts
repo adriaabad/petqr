@@ -3,7 +3,7 @@ import AxeBuilder from '@axe-core/playwright';
 import { join } from 'node:path';
 import { tmpdir } from 'node:os';
 import { readFile } from 'node:fs/promises';
-import { importArchive } from '../../src/archive';
+import { importArchive } from '../../src/editor/archive';
 import jsQR from 'jsqr';
 import { unzipSync, strFromU8 } from 'fflate';
 test.beforeEach(async ({ page }) => {
@@ -14,6 +14,87 @@ test.beforeEach(async ({ page }) => {
       /* Sandboxed profile previews intentionally cannot access storage. */
     }
   });
+});
+test('PetQR calls to action open the six-step visual tutorial with languages and mobile layout', async ({
+  page,
+}) => {
+  const errors: string[] = [];
+  page.on('pageerror', (error) => errors.push(error.message));
+  await page.goto('./');
+  await page.locator('.page-actions .tutorial-cta').click();
+  await expect(page).toHaveURL(/\/test-repo\/tutorial\/$/);
+  await expect(
+    page.getByRole('heading', { name: 'Your PetQR, step by step.', exact: true }),
+  ).toBeVisible();
+  await expect(page.locator('.tutorial-step')).toHaveCount(6);
+  await expect(page.locator('.tutorial-visual')).toHaveCount(6);
+  await expect(page.locator('.tutorial-hero .button.primary')).toHaveAttribute(
+    'href',
+    /template_owner=adriaabad&template_name=petqr/,
+  );
+  await page.locator('a[href="#steps"]').click();
+  await expect(page.locator('#steps')).toBeInViewport();
+  await page.getByLabel('Language', { exact: true }).selectOption('ca');
+  await expect(page).toHaveTitle('Vull el meu PetQR · PetQR');
+  await expect(
+    page.getByRole('heading', { name: 'El teu PetQR, pas a pas.', exact: true }),
+  ).toBeVisible();
+  await page.setViewportSize({ width: 390, height: 844 });
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+  await page.locator('.tutorial-details > summary').click();
+  await expect(page.locator('.tutorial-details .publication-guide')).toBeVisible();
+  const result = await new AxeBuilder({ page })
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21aa', 'wcag22aa'])
+    .analyze();
+  expect(
+    result.violations.map((v) => ({ id: v.id, targets: v.nodes.map((n) => n.target) })),
+  ).toEqual([]);
+  await page.getByLabel('Tema', { exact: true }).selectOption('dark');
+  await expect(page.locator('html')).toHaveAttribute('data-theme', 'dark');
+  expect(errors).toEqual([]);
+});
+test('tutorial is reachable from profiles and remains complete without JavaScript', async ({
+  browser,
+}) => {
+  const context = await browser.newContext({ javaScriptEnabled: false });
+  const page = await context.newPage();
+  await page.goto('http://127.0.0.1:4174/test-repo/p/cooper-7f2a/');
+  await page.locator('footer .tutorial-cta').click();
+  await expect(page).toHaveURL(/\/test-repo\/tutorial\/$/);
+  await expect(page.locator('.tutorial-step')).toHaveCount(6);
+  await expect(
+    page.getByRole('heading', { name: 'Your PetQR, step by step.', exact: true }),
+  ).toBeVisible();
+  await expect(page.locator('.tutorial-ready a[href="../editor/"]')).toHaveAttribute(
+    'href',
+    '../editor/',
+  );
+  await context.close();
+});
+test('editor, Help and Export link to the visual tutorial and plain photos export without credits', async ({
+  page,
+}) => {
+  await page.goto('editor/');
+  await expect(page.locator('.sidebar .tutorial-cta')).toHaveAttribute(
+    'href',
+    /\/test-repo\/tutorial\/$/,
+  );
+  await page.getByRole('button', { name: 'Help', exact: true }).click();
+  await expect(page.locator('.help-content .tutorial-cta')).toHaveAttribute(
+    'href',
+    /\/test-repo\/tutorial\/$/,
+  );
+  await page.getByRole('button', { name: 'Export files', exact: true }).click();
+  await expect(page.getByRole('dialog').locator('.tutorial-cta')).toHaveAttribute(
+    'href',
+    /\/test-repo\/tutorial\/$/,
+  );
+  const pending = page.waitForEvent('download');
+  await page.getByRole('button', { name: 'Confirm publication · ZIP', exact: true }).click();
+  const file = await pending,
+    files = unzipSync(new Uint8Array(await readFile((await file.path())!)));
+  expect(files['PHOTO_CREDITS.txt']).toBeUndefined();
+  expect(files['PUBLISHING.txt']).toBeDefined();
 });
 test('desktop dashboard loads cleanly and manages multiple pets', async ({ page }) => {
   await page.route('**/data/config.json', async (route) => {

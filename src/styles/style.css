@@ -1,4 +1,576 @@
 @layer reset, base, components, responsive;
+@layer components {
+  .footer-tutorial {
+    margin-bottom: 24px;
+  }
+  .page-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .sidebar .tutorial-cta {
+    margin-top: 20px;
+    justify-content: center;
+  }
+  .help-tutorial {
+    margin: 18px 0 28px;
+  }
+  .tutorial-page .public-header {
+    max-width: 1160px;
+  }
+  .tutorial-main {
+    max-width: 1160px;
+    margin: auto;
+    padding: 0 24px 40px;
+  }
+  .tutorial-hero {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 60px;
+    align-items: center;
+    padding: 48px 0 64px;
+  }
+  .tutorial-eyebrow {
+    color: var(--green);
+    font-size: 0.73rem;
+    font-weight: 750;
+    letter-spacing: 0.12em;
+  }
+  .tutorial-hero h1 {
+    max-width: 600px;
+    font-size: clamp(2.6rem, 5vw, 4.2rem);
+    line-height: 1.08;
+    letter-spacing: -0.045em;
+    margin: 18px 0 24px;
+  }
+  .tutorial-lead {
+    max-width: 510px;
+    color: var(--muted);
+    font-size: 1.15rem;
+    line-height: 1.7;
+  }
+  .tutorial-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 26px;
+  }
+  .tutorial-benefit {
+    color: var(--muted);
+    font-size: 0.82rem;
+    margin-top: 18px;
+  }
+  .tutorial-hero-art {
+    position: relative;
+    height: 350px;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .hero-orbit {
+    position: absolute;
+    inset: 8px 18px 22px;
+    border: 1px dashed var(--border);
+    border-radius: 50%;
+    background: var(--soft);
+  }
+  .hero-pet-card {
+    position: absolute;
+    left: 8%;
+    top: 16px;
+    width: 62%;
+    max-width: 250px;
+    padding: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    transform: rotate(-6deg);
+    box-shadow: 0 14px 30px #153c3314;
+  }
+  .hero-pet-avatar {
+    display: grid;
+    place-items: center;
+    height: 135px;
+    border-radius: 12px;
+    background: var(--soft);
+    margin-bottom: 18px;
+  }
+  .hero-pet-avatar svg {
+    width: 70px;
+    color: var(--green);
+  }
+  .hero-pet-card > span {
+    display: block;
+    font-size: 0.63rem;
+    letter-spacing: 0.1em;
+    font-weight: 750;
+  }
+  .hero-line {
+    width: 68%;
+    height: 7px;
+    background: var(--border);
+    border-radius: 8px;
+    margin: 12px 0;
+  }
+  .hero-contact {
+    white-space: nowrap;
+    font-size: 0.65rem;
+    color: var(--green);
+    font-weight: 650;
+  }
+  .hero-pet-tag {
+    display: grid;
+    place-items: center;
+    gap: 6px;
+    position: absolute;
+    right: 7%;
+    bottom: 30px;
+    width: 110px;
+    padding: 16px 14px;
+    background: var(--green);
+    color: var(--bg);
+    border-radius: 28px;
+    transform: rotate(12deg);
+    box-shadow: 0 12px 25px #153c3320;
+  }
+  .hero-pet-tag svg {
+    width: 34px;
+  }
+  .hero-pet-tag > span {
+    font-size: 1.5rem;
+    font-weight: 750;
+    letter-spacing: 0.12em;
+  }
+  .hero-art-caption {
+    position: absolute;
+    bottom: 0;
+    left: 18px;
+    font-size: 0.73rem;
+    color: var(--muted);
+  }
+  .hero-art-caption b {
+    margin: 0 10px;
+  }
+  .tutorial-section-heading {
+    margin: 20px 0 30px;
+  }
+  .tutorial-section-heading h2 {
+    font-size: clamp(1.9rem, 3vw, 2.6rem);
+    line-height: 1.2;
+    letter-spacing: -0.03em;
+    margin: 10px 0 12px;
+  }
+  .tutorial-section-heading > p:last-child {
+    color: var(--muted);
+    max-width: 650px;
+  }
+  .tutorial-steps {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 22px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .tutorial-step {
+    min-width: 0;
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    background: var(--surface);
+  }
+  .tutorial-visual {
+    height: 208px;
+    padding: 22px;
+    background: var(--soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .tutorial-step-copy {
+    padding: 23px;
+  }
+  .tutorial-step-number {
+    display: inline-block;
+    color: var(--green);
+    font-size: 0.73rem;
+    font-weight: 750;
+    letter-spacing: 0.06em;
+    margin-bottom: 10px;
+  }
+  .tutorial-step h3 {
+    font-size: 1.18rem;
+    line-height: 1.3;
+    margin-bottom: 12px;
+    letter-spacing: -0.02em;
+  }
+  .tutorial-step-copy > p {
+    font-size: 0.89rem;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+  .mock-window {
+    width: 100%;
+    max-width: 285px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px #153c3308;
+  }
+  .mock-window-bar {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.68rem;
+  }
+  .mock-window-bar i {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--border);
+  }
+  .mock-window-bar > span {
+    margin-left: 7px;
+  }
+  .mock-window-bar b {
+    color: var(--muted);
+    padding: 0 8px;
+  }
+  .mock-window-body {
+    padding: 15px;
+    min-height: 122px;
+  }
+  .mock-repo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+  }
+  .mock-repo svg {
+    width: 20px;
+    color: var(--green);
+  }
+  .mock-badge {
+    margin-left: auto;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1px 7px;
+    font-size: 0.55rem;
+  }
+  .mock-line {
+    width: 85%;
+    height: 5px;
+    border-radius: 5px;
+    background: var(--border);
+    margin: 12px 0 8px;
+  }
+  .mock-line.short {
+    width: 55%;
+    margin-top: 0;
+  }
+  .mock-button {
+    margin-top: 14px;
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 10px;
+    background: var(--green);
+    color: var(--bg);
+    border-radius: 6px;
+    font-size: 0.65rem;
+    font-weight: 650;
+  }
+  .mock-label {
+    font-size: 0.61rem;
+    color: var(--muted);
+    display: block;
+    margin-bottom: 5px;
+  }
+  .mock-select {
+    display: flex;
+    justify-content: space-between;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.73rem;
+    padding: 8px 10px;
+  }
+  .mock-run {
+    text-align: right;
+    font-size: 0.63rem;
+    margin-top: 12px;
+    color: var(--green);
+    font-weight: 650;
+  }
+  .mock-run > span {
+    margin-right: 5px;
+  }
+  .mock-editor {
+    display: grid;
+    grid-template-columns: 54px 1fr;
+    gap: 12px;
+  }
+  .mock-avatar {
+    display: grid;
+    place-items: center;
+    align-self: start;
+    height: 58px;
+    background: var(--soft);
+    border-radius: 7px;
+  }
+  .mock-avatar svg {
+    width: 28px;
+    color: var(--green);
+  }
+  .mock-input {
+    height: 11px;
+    width: 100%;
+    background: var(--soft);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    margin-bottom: 9px;
+  }
+  .mock-input.short {
+    width: 75%;
+  }
+  .mock-photo-chips {
+    grid-column: 1/-1;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .mock-photo-chips i {
+    width: 22px;
+    height: 20px;
+    border-radius: 4px;
+    background: var(--soft);
+    border: 1px solid var(--border);
+  }
+  .mock-photo-chips > span {
+    font-size: 0.58rem;
+    color: var(--muted);
+    margin-left: 3px;
+  }
+  .mock-transfer,
+  .mock-finish {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    justify-content: center;
+  }
+  .mock-zip {
+    display: grid;
+    place-items: center;
+    gap: 10px;
+    width: 75px;
+    height: 97px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    border-radius: 8px 20px 8px 8px;
+    color: var(--green);
+  }
+  .mock-zip > span {
+    font-size: 1.5rem;
+  }
+  .mock-zip strong {
+    font-size: 0.85rem;
+  }
+  .mock-arrow {
+    font-size: 1.4rem;
+    color: var(--green);
+  }
+  .mock-folders > div {
+    padding: 7px 12px;
+    margin: 7px 0;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    border-radius: 7px;
+    font-size: 0.8rem;
+  }
+  .mock-folders > span {
+    font-size: 0.58rem;
+    color: var(--muted);
+    display: block;
+    text-align: center;
+  }
+  .mock-checks {
+    display: grid;
+    gap: 6px;
+    font-size: 0.7rem;
+    color: var(--green);
+  }
+  .mock-success {
+    border-top: 1px solid var(--border);
+    margin-top: 13px;
+    padding-top: 10px;
+    font-size: 0.64rem;
+    color: var(--green);
+  }
+  .mock-success span {
+    font-size: 0.6rem;
+    margin-right: 5px;
+  }
+  .mock-tag {
+    display: grid;
+    justify-items: center;
+    gap: 4px;
+    padding: 12px 14px 10px;
+    background: var(--green);
+    color: var(--bg);
+    border-radius: 22px;
+    width: 79px;
+    transform: rotate(-7deg);
+  }
+  .mock-tag svg {
+    width: 20px;
+  }
+  .mock-tag strong {
+    font-size: 0.68rem;
+  }
+  .mock-tag-hole {
+    border: 2px solid currentColor;
+    border-radius: 50%;
+    width: 5px;
+    height: 5px;
+  }
+  .mock-qr-icon {
+    display: block;
+    padding: 1px 5px;
+    border: 1px solid currentColor;
+    border-radius: 4px;
+    font-weight: 750;
+    font-size: 1rem;
+  }
+  .mock-phone {
+    width: 102px;
+    min-height: 146px;
+    border: 2px solid var(--text);
+    border-radius: 14px;
+    background: var(--surface);
+    padding: 10px 8px;
+    display: grid;
+    justify-items: center;
+    gap: 7px;
+  }
+  .mock-phone-paw {
+    background: var(--soft);
+    border-radius: 7px;
+    padding: 7px 15px;
+  }
+  .mock-phone-paw svg {
+    width: 23px;
+    color: var(--green);
+  }
+  .mock-phone > strong {
+    font-size: 0.46rem;
+    letter-spacing: 0.05em;
+  }
+  .mock-phone > span {
+    font-size: 0.43rem;
+    color: var(--muted);
+  }
+  .mock-phone-actions {
+    display: flex;
+    gap: 7px;
+  }
+  .mock-phone-actions span {
+    display: grid;
+    place-items: center;
+    width: 29px;
+    height: 21px;
+    border-radius: 5px;
+    border: 1px solid var(--border);
+    font-size: 0.6rem;
+  }
+  .tutorial-ready {
+    margin: 48px 0 28px;
+    padding: 34px;
+    background: var(--soft);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+  }
+  .tutorial-ready > div:first-child > svg {
+    width: 35px;
+    color: var(--green);
+    margin-bottom: 18px;
+  }
+  .tutorial-ready h2 {
+    font-size: 1.9rem;
+    line-height: 1.25;
+    letter-spacing: -0.03em;
+    margin-bottom: 14px;
+  }
+  .tutorial-ready > div > p {
+    max-width: 720px;
+    color: var(--muted);
+  }
+  .tutorial-ready > .hint {
+    margin-top: 14px;
+  }
+  .tutorial-details {
+    padding: 18px 22px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--surface);
+  }
+  .tutorial-details > summary {
+    font-weight: 650;
+  }
+}
+@layer responsive {
+  @media (max-width: 960px) {
+    .tutorial-steps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .tutorial-hero {
+      gap: 24px;
+    }
+  }
+  @media (max-width: 620px) {
+    .tutorial-main {
+      padding-inline: 18px;
+    }
+    .tutorial-page .public-header {
+      padding: 18px;
+    }
+    .tutorial-hero {
+      grid-template-columns: 1fr;
+      padding: 30px 0 28px;
+      gap: 26px;
+    }
+    .tutorial-hero h1 {
+      font-size: 2.8rem;
+    }
+    .tutorial-lead {
+      font-size: 1.02rem;
+    }
+    .tutorial-hero-art {
+      height: 310px;
+    }
+    .hero-pet-avatar {
+      height: 115px;
+    }
+    .tutorial-steps {
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+    .tutorial-visual {
+      height: 195px;
+    }
+    .tutorial-ready {
+      padding: 24px;
+      margin-top: 28px;
+    }
+    .tutorial-ready h2 {
+      font-size: 1.6rem;
+    }
+    .tutorial-actions .button {
+      flex-grow: 1;
+    }
+  }
+}
 @layer reset {
   *,
   *::before,

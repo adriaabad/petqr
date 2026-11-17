@@ -16,11 +16,11 @@ import {
   contactLink,
   resolvedContacts,
   explainError,
-} from '../src/model';
-import { renderProfile, renderIndex, htmlDocument } from '../src/render';
-import { qrSVG, validQRColors, tagSVG } from '../src/qr';
-import { importArchive, exportArchive } from '../src/archive';
-import { deployedURL } from '../scripts/build';
+} from '../../src/shared/model';
+import { renderProfile, renderIndex, htmlDocument } from '../../src/public/render';
+import { qrSVG, validQRColors, tagSVG } from '../../src/editor/qr';
+import { importArchive, exportArchive } from '../../src/editor/archive';
+import { deployedURL } from '../../scripts/build';
 import { strToU8, zipSync } from 'fflate';
 
 const site = JSON.parse(await readFile('tests/fixtures/data/site.json', 'utf8')),

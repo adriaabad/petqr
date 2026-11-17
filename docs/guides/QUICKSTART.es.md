@@ -15,4 +15,4 @@ En Identidad puedes añadir el número de microchip y el número de registro. Ma
 
 El editor funciona en catalán, castellano e inglés. La ficha tiene un único formulario, sin modo Avanzado ni estado de perdido/encontrado. Los detalles adicionales ya existentes se conservan. Fotos: recorte, giro y compresión locales. QR: SVG, PNG, colores, márgenes y placas imprimibles. Las modificaciones locales no se guardan automáticamente en GitHub.
 
-La [guía completa](../README.md), la [guía de privacidad](PRIVACY.md) y la [guía de despliegue](DEPLOYMENT.md) incluyen todos los detalles. Para desarrollo local: `npm ci`, `npm run dev`. Para comprobar: `npm run build`, `npm test`, `npm run test:e2e` tras instalar Playwright Chromium.
+La [guía completa](../../README.md), la [guía de privacidad](PRIVACY.md) y la [guía de despliegue](DEPLOYMENT.md) incluyen todos los detalles. Para desarrollo local: `npm ci`, `npm run dev`. Para comprobar: `npm run build`, `npm test`, `npm run test:e2e` tras instalar Playwright Chromium.

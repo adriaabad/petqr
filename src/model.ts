@@ -46,6 +46,10 @@ export const imageSchema = z
   .object({
     path: z.string().refine(localImage, 'Use a local assets/pets/ filename (WebP, PNG or JPEG).'),
     alt: localized,
+    focus: z
+      .object({ x: z.number().min(0).max(100), y: z.number().min(0).max(100) })
+      .strict()
+      .optional(),
     credit: photoCreditSchema.optional(),
   })
   .strict();

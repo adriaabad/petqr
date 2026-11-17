@@ -28,6 +28,10 @@
           "license": "Pexels License",
           "licenseUrl": "https://www.pexels.com/license/",
           "changes": "Resized and re-encoded as WebP; EXIF metadata removed."
+        },
+        "focus": {
+          "x": 50,
+          "y": 50
         }
       },
       {
@@ -43,6 +47,10 @@
           "license": "Pexels License",
           "licenseUrl": "https://www.pexels.com/license/",
           "changes": "Resized and re-encoded as WebP; EXIF metadata removed."
+        },
+        "focus": {
+          "x": 50,
+          "y": 60
         }
       },
       {
@@ -58,6 +66,10 @@
           "license": "Pexels License",
           "licenseUrl": "https://www.pexels.com/license/",
           "changes": "Resized and re-encoded as WebP; EXIF metadata removed."
+        },
+        "focus": {
+          "x": 50,
+          "y": 60
         }
       }
     ],
@@ -267,6 +279,10 @@
           "license": "Pexels License",
           "licenseUrl": "https://www.pexels.com/license/",
           "changes": "Resized and re-encoded as WebP; EXIF metadata removed."
+        },
+        "focus": {
+          "x": 50,
+          "y": 10
         }
       },
       {
@@ -282,6 +298,10 @@
           "license": "Pexels License",
           "licenseUrl": "https://www.pexels.com/license/",
           "changes": "Resized and re-encoded as WebP; EXIF metadata removed."
+        },
+        "focus": {
+          "x": 50,
+          "y": 40
         }
       },
       {
@@ -297,6 +317,10 @@
           "license": "Pexels License",
           "licenseUrl": "https://www.pexels.com/license/",
           "changes": "Resized and re-encoded as WebP; EXIF metadata removed."
+        },
+        "focus": {
+          "x": 50,
+          "y": 65
         }
       }
     ],
@@ -506,6 +530,10 @@
           "license": "Pexels License",
           "licenseUrl": "https://www.pexels.com/license/",
           "changes": "Resized and re-encoded as WebP; EXIF metadata removed."
+        },
+        "focus": {
+          "x": 50,
+          "y": 9
         }
       },
       {
@@ -521,6 +549,10 @@
           "license": "Pexels License",
           "licenseUrl": "https://www.pexels.com/license/",
           "changes": "Resized and re-encoded as WebP; EXIF metadata removed."
+        },
+        "focus": {
+          "x": 50,
+          "y": 50
         }
       }
     ],
@@ -730,6 +762,10 @@
           "license": "Pexels License",
           "licenseUrl": "https://www.pexels.com/license/",
           "changes": "Resized and re-encoded as WebP; EXIF metadata removed."
+        },
+        "focus": {
+          "x": 50,
+          "y": 75
         }
       },
       {
@@ -745,6 +781,10 @@
           "license": "Pexels License",
           "licenseUrl": "https://www.pexels.com/license/",
           "changes": "Resized and re-encoded as WebP; EXIF metadata removed."
+        },
+        "focus": {
+          "x": 50,
+          "y": 70
         }
       }
     ],

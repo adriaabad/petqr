@@ -2,7 +2,7 @@
 
 Una pequeña placa. Un camino a casa. Crea perfiles públicos y QR permanentes para varios animales, sin servidor, base de datos ni cuenta central de PetQR.
 
-1. En GitHub, usa **Use this template → Create a new repository** en tu cuenta. El mantenedor debe marcar primero el repositorio como plantilla. Elige un repositorio público para GitHub Pages gratuito.
+1. En GitHub, usa **Use this template → Create a new repository** en tu cuenta. La plantilla ya está activada. [Crea tu copia directamente](https://github.com/new?template_owner=adriaabad&template_name=petqr&name=petqr&visibility=public). Elige un repositorio público para GitHub Pages gratuito.
 2. Abre **Settings → Pages → Source → GitHub Actions**. Ejecuta **Actions → Validate, test & deploy PetQR → Run workflow** en la rama predeterminada.
 3. Abre la URL de Pages y añade `/editor/`. Los ejemplos son ficticios: sustituye animales, fotos y contactos.
 4. En Contactos, añade tus datos y confirma que quieres publicarlos. Asígnalos a cada animal. En Ajustes, verifica la URL pública.

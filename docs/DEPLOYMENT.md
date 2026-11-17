@@ -2,7 +2,9 @@
 
 ## GitHub template
 
-Maintainers: push this complete project to a new repository, then enable **Settings → General → Template repository**. This GitHub setting cannot be enabled by a file in a local checkout. No upstream account or domain is embedded. Do not upload `node_modules/`, `dist/`, test artifacts or browser drafts.
+Maintainers: push this complete project to a new repository, then enable **Settings → General → Template repository**. This GitHub setting cannot be enabled by a file in a local checkout. Public profile addresses are independent; the optional template-creation button links to the upstream template. Do not upload `node_modules/`, `dist/`, test artifacts or browser drafts.
+
+The upstream repository is already marked as a template. [Create a new copy directly](https://github.com/new?template_owner=adriaabad&template_name=petqr&name=petqr&visibility=public) after signing in. Help and Export include these steps in English, Spanish and Catalan, and each exported ZIP includes PUBLISHING.txt. Pages must be activated once in the new repository; automatic enablement would require additional GitHub credentials and is deliberately not requested.
 
 Users: **Use this template → Create a new repository**, choose your account/name, then **Settings → Pages → Source → GitHub Actions**. Public repositories can use GitHub Pages on GitHub Free. Organization rules may require allowing the official checkout/setup-node/configure-pages/upload-pages-artifact/deploy-pages actions. Open Actions and manually run **Validate, test & deploy PetQR** after the initial Pages setup.
 

@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.6 — 2026-11-17
+
+- Fill photo frames with fitted crops and per-photo focus, with selectable square thumbnails directly below the main profile photo. Keep original-photo links available without JavaScript, and enable selection inside the script-disabled editor preview without enabling iframe scripts.
+- Add fictional zero-filled WhatsApp numbers and restore call, WhatsApp and email links for example contacts, including all three mobile quick actions.
+- Use the brand paw for My pets and shorten the navigation/settings title to Settings (Configuració in Catalan).
+- Add a direct GitHub template creation link, one-time Pages setup and automatic-update guidance to Help and Export in all three languages. Include localized PUBLISHING.txt instructions in the public ZIP and derive repository/settings/workflow links from each standard Pages address.
+
 ## 1.1.5 — 2026-11-16
 
 - Normalize four fictional profiles with invented responsible people, zero-filled telephone and identification numbers, reserved `.invalid` emails and fictional full addresses. Provide coherent introductions, authorized outings, health notes and handling text in English, Spanish and Catalan.

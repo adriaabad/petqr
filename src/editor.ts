@@ -30,6 +30,8 @@ import { exportArchive, importArchive, type ImageFiles } from './archive';
 import { download } from './download';
 import { draftStore } from './draft';
 import { icon } from './icons';
+import { publicationGuide } from './publishing';
+import { bindPhotoGallery } from './gallery';
 
 const base = new URL(/* @vite-ignore */ '../', import.meta.url);
 let config: Config,
@@ -173,7 +175,7 @@ function shell(content: string) {
   const nav: [typeof screen, string][] = [
     ['pets', 'My pets'],
     ['contacts', 'Contacts'],
-    ['settings', 'Site settings'],
+    ['settings', 'Settings'],
     ['help', 'Help'],
   ];
   return `<div class="app-shell"><aside class="sidebar">${brand(base.href)}<nav aria-label="PetQR">${nav
@@ -636,7 +638,7 @@ function contactsScreen() {
 }
 function settings() {
   const s = config.site;
-  return `<div class="settings-panel"><div class="page-heading"><div><h1>${tr('Site settings')}</h1></div></div><div class="stack">${input('Site title', s.title, (v) => (s.title = v), { required: true, max: 100 })}${input('Public site URL', s.publicUrl, (v) => (s.publicUrl = v), { type: 'url', hint: 'Use the exact deployed site URL, including the repository path.' })}${select(
+  return `<div class="settings-panel"><div class="page-heading"><div><h1>${tr('Settings')}</h1></div></div><div class="stack">${input('Site title', s.title, (v) => (s.title = v), { required: true, max: 100 })}${input('Public site URL', s.publicUrl, (v) => (s.publicUrl = v), { type: 'url', hint: 'Use the exact deployed site URL, including the repository path.' })}${select(
     'Default language',
     s.defaultLanguage,
     [
@@ -682,7 +684,7 @@ function settings() {
   )}</div>${exportStrip()}</div>`;
 }
 function help() {
-  return `<div class="help-content"><h1>${tr('Help')}</h1><h2>${tr('Export & publish')}</h2><p>${tr('Download the ZIP, extract it, then replace the data/ folder and merge assets/pets/ into your repository. Commit the changes and wait for Pages to deploy.')}</p><h2>${tr('Publishing & privacy')}</h2><p>${tr('Everything uploaded to GitHub Pages is public. Keep confidential records private. Publish an address only if you want it visible to anyone scanning the QR.')}</p><h2>${tr('Photos')}</h2><p>${tr('Photos are converted and compressed on this device to WebP or JPEG, up to 1200 px and 300 KB. Animated images use the first frame.')}</p><h2>${tr('QR code')}</h2><p>${tr('Keep at least four clear modules around the code. Print at least 25 mm, larger for long URLs. Test with multiple phones before engraving.')}</p><h2>${tr('Stable ID')}</h2><p>${tr('Keep this ID unchanged once a tag is printed.')}</p><div class="settings-actions">${button('Import files', importFiles)}${button('Export files', openExport, 'primary')}</div></div>`;
+  return `<div class="help-content"><h1>${tr('Help')}</h1>${publicationGuide(config.site.publicUrl, lang, true)}<h2>${tr('Publishing & privacy')}</h2><p>${tr('Everything uploaded to GitHub Pages is public. Keep confidential records private. Publish an address only if you want it visible to anyone scanning the QR.')}</p><h2>${tr('Photos')}</h2><p>${tr('Photos are converted and compressed on this device to WebP or JPEG, up to 1200 px and 300 KB. Animated images use the first frame.')}</p><h2>${tr('QR code')}</h2><p>${tr('Keep at least four clear modules around the code. Print at least 25 mm, larger for long URLs. Test with multiple phones before engraving.')}</p><h2>${tr('Stable ID')}</h2><p>${tr('Keep this ID unchanged once a tag is printed.')}</p><div class="settings-actions">${button('Import files', importFiles)}${button('Export files', openExport, 'primary')}</div></div>`;
 }
 function clearImageURLs() {
   for (const url of imageURLs.values()) URL.revokeObjectURL(url);
@@ -731,6 +733,9 @@ function updatePreview() {
   const frame = document.querySelector<HTMLIFrameElement>('#profile-preview');
   if (!frame) return;
   try {
+    frame.onload = () => {
+      if (frame.contentDocument) bindPhotoGallery(frame.contentDocument);
+    };
     frame.srcdoc = previewDocument(currentPet());
     clearErrors();
   } catch (error) {
@@ -743,6 +748,10 @@ function openPreview(pet: Pet) {
     dialog.style.width = 'min(1000px,95vw)';
     dialog.setAttribute('aria-label', tr('Preview profile'));
     dialog.innerHTML = `<div class="modal-heading"><h2>${tr('Preview profile')}</h2><button class="button">${tr('Close')}</button></div><iframe title="${tr('Preview profile')}" sandbox="allow-same-origin allow-popups allow-popups-to-escape-sandbox" style="width:100%;height:72vh;border:0"></iframe>`;
+    dialog.querySelector('iframe')!.onload = () => {
+      const doc = dialog.querySelector('iframe')!.contentDocument;
+      if (doc) bindPhotoGallery(doc);
+    };
     dialog.querySelector('iframe')!.srcdoc = previewDocument(pet);
     dialog.querySelector('button')!.onclick = () => dialog.close();
     dialog.onclose = () => dialog.remove();
@@ -762,7 +771,7 @@ function openExport() {
   const dialog = document.createElement('dialog');
   dialog.setAttribute('aria-label', tr('Export & publish'));
   const safe = publicConfig(config);
-  dialog.innerHTML = `<div class="modal-heading"><h2>${tr('Export & publish')}</h2><button class="button" data-close>${tr('Close')}</button></div><div class="notice warning">${tr('Everything uploaded to GitHub Pages is public. Keep confidential records private. Publish an address only if you want it visible to anyone scanning the QR.')}</div><div class="spacer"></div><p>${tr('Only selected public fields are exported. Unpublished fields remain in this browser session.')}</p><p class="hint">${safe.pets.length} ${tr('My pets')} · ${safe.contacts.length} ${tr('Contacts')}</p><div class="divider"></div><p>${tr('Download the ZIP, extract it, then replace the data/ folder and merge assets/pets/ into your repository. Commit the changes and wait for Pages to deploy.')}</p><div class="qr-output-actions"><button class="button primary" data-download>${tr('Confirm publication')} · ZIP</button></div><p class="error-box" data-error role="alert"></p>`;
+  dialog.innerHTML = `<div class="modal-heading"><h2>${tr('Export & publish')}</h2><button class="button" data-close>${tr('Close')}</button></div><div class="notice warning">${tr('Everything uploaded to GitHub Pages is public. Keep confidential records private. Publish an address only if you want it visible to anyone scanning the QR.')}</div><div class="spacer"></div><p>${tr('Only selected public fields are exported. Unpublished fields remain in this browser session.')}</p><p class="hint">${safe.pets.length} ${tr('My pets')} · ${safe.contacts.length} ${tr('Contacts')}</p><div class="divider"></div>${publicationGuide(config.site.publicUrl, lang)}<div class="qr-output-actions"><button class="button primary" data-download>${tr('Confirm publication')} · ZIP</button></div><p class="error-box" data-error role="alert"></p>`;
   document.body.append(dialog);
   dialog.showModal();
   dialog.querySelector<HTMLElement>('[data-close]')!.onclick = () => dialog.close();
@@ -771,7 +780,7 @@ function openExport() {
     const button = dialog.querySelector<HTMLButtonElement>('[data-download]')!;
     button.disabled = true;
     try {
-      const bytes = await exportArchive(config, images, base);
+      const bytes = await exportArchive(config, images, base, lang);
       download(bytes as BlobPart, 'petqr-public.zip', 'application/zip');
       toast(tr('Files exported.'));
       dialog.close();

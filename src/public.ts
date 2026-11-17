@@ -3,6 +3,7 @@ import { contactLink } from './core';
 import { renderIndex, renderProfile, skipLink } from './render';
 import { preferredLanguage, t } from './i18n';
 import { bindPreferences, copy, toast } from './preferences';
+import { bindPhotoGallery } from './gallery';
 document.documentElement.classList.add('js');
 const base = new URL(/* @vite-ignore */ '../', import.meta.url);
 // This bundle only enhances already rendered static HTML. Network failure leaves emergency actions intact.
@@ -21,6 +22,7 @@ async function start() {
     document.body.innerHTML =
       skip + (marker ? renderProfile(config, config.pets[0], lang) : renderIndex(config, lang));
     bindPreferences(render);
+    bindPhotoGallery();
     document.querySelectorAll<HTMLElement>('[data-copy]').forEach(
       (b) =>
         (b.onclick = () => {

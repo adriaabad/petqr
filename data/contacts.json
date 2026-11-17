@@ -12,7 +12,8 @@
     "preferred": "phone",
     "language": "ca",
     "publish": true,
-    "consent": true
+    "consent": true,
+    "whatsapp": "00000000000"
   },
   {
     "id": "contact-nora",
@@ -27,7 +28,8 @@
     "preferred": "phone",
     "language": "ca",
     "publish": true,
-    "consent": true
+    "consent": true,
+    "whatsapp": "00000000000"
   },
   {
     "id": "contact-nil",
@@ -42,7 +44,8 @@
     "preferred": "phone",
     "language": "ca",
     "publish": true,
-    "consent": true
+    "consent": true,
+    "whatsapp": "00000000000"
   },
   {
     "id": "contact-aina",
@@ -57,6 +60,7 @@
     "preferred": "phone",
     "language": "ca",
     "publish": true,
-    "consent": true
+    "consent": true,
+    "whatsapp": "00000000000"
   }
 ]

@@ -139,6 +139,8 @@ const phrases: Record<string, [string, string]> = {
     'La placa debe medir entre 41 y 120 mm para que el QR tenga al menos 25 mm.',
     'La placa ha de mesurar entre 41 i 120 mm perquè el QR tingui almenys 25 mm.',
   ],
+  Settings: ['Configuración', 'Configuració'],
+  'View photo': ['Ver foto', 'Veure foto'],
   'My pets': ['Mis animales', 'Els meus animals'],
   Contacts: ['Contactos', 'Contactes'],
   'Site settings': ['Ajustes del sitio', 'Configuració del lloc'],
@@ -362,7 +364,7 @@ const phrases: Record<string, [string, string]> = {
   'Error correction': ['Corrección de errores', 'Correcció d’errors'],
   'Quiet zone (modules)': ['Margen (módulos)', 'Marge (mòduls)'],
   'Include pet name': ['Incluir nombre', 'Incloure nom'],
-  'QR codes require a final public URL. Configure it in Site settings before printing.': [
+  'QR codes require a final public URL. Configure it in Settings before printing.': [
     'Los QR necesitan una URL pública definitiva. Configúrala en Ajustes antes de imprimir.',
     'Els QR necessiten un URL públic definitiu. Configura’l a Configuració abans d’imprimir.',
   ],

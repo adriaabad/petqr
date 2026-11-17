@@ -81,7 +81,7 @@ test('profile works on mobile without lost status under subdirectory hosting wit
     fullPage: true,
   });
 });
-test('additional photos remain visible outside collapsed details and fit the mobile gallery', async ({
+test('photo thumbnails sit below the main photo and switch it without navigation on mobile', async ({
   page,
 }) => {
   await page.route('**/p/cooper-7f2a/profile.json', async (route) => {
@@ -92,17 +92,96 @@ test('additional photos remain visible outside collapsed details and fit the mob
   });
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('p/cooper-7f2a/');
-  const image = page.locator('.additional-photos img');
+  const image = page.locator('.additional-photos img').last();
   await expect(image).toBeVisible();
   await image.evaluate((image) => (image as HTMLImageElement).decode());
   const box = (await image.boundingBox())!;
-  expect(box.width).toBeGreaterThan(200);
-  expect(box.height).toBeLessThan(box.width);
+  expect(box.width).toBeGreaterThan(100);
+  expect(box.height).toBeCloseTo(box.width, 0);
   await expect(page.locator('.full-details')).not.toHaveAttribute('open');
-  await expect(page.locator('.additional-photos a')).toHaveAttribute(
+  await expect(page.locator('.additional-photos a').last()).toHaveAttribute(
     'href',
     /assets\/pets\/luna.webp$/,
   );
+  const main = page.locator('.profile-photo img');
+  const frame = (await page.locator('.profile-photo').boundingBox())!;
+  expect(box.y).toBeGreaterThanOrEqual(frame.y + frame.height);
+  expect(await main.evaluate((image) => getComputedStyle(image).objectFit)).toBe('cover');
+  await page.locator('.photo-thumbnail').last().click();
+  await expect(main).toHaveAttribute('src', /assets\/pets\/luna.webp$/);
+  await expect(main).toHaveAttribute('alt', 'Additional photograph');
+  await expect(page.locator('.photo-thumbnail').last()).toHaveAttribute('aria-current', 'true');
+  expect(page.url()).toMatch(/p\/cooper-7f2a\/$/);
+  await page.locator('.photo-thumbnail').first().click();
+  await expect(main).toHaveAttribute('src', /assets\/pets\/cooper.webp$/);
+});
+
+test('fictional contact values still provide call, WhatsApp and email buttons', async ({
+  page,
+}) => {
+  await page.route('**/p/cooper-7f2a/profile.json', async (route) => {
+    const response = await route.fetch();
+    const config = await response.json();
+    config.contacts = [
+      {
+        id: 'example-person',
+        name: 'Alex Riu',
+        phone: '00000000000',
+        whatsapp: '00000000000',
+        email: 'alex@example.invalid',
+        preferred: 'phone',
+        language: 'en',
+        publish: true,
+        consent: true,
+      },
+    ];
+    config.pets[0].contacts = [{ id: 'example-person' }];
+    await route.fulfill({ json: config });
+  });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('p/cooper-7f2a/');
+  const contacts = page.locator('.contacts-public');
+  await expect(contacts.getByRole('link', { name: 'Call Alex Riu', exact: true })).toHaveAttribute(
+    'href',
+    'tel:00000000000',
+  );
+  await expect(
+    contacts.getByRole('link', { name: 'WhatsApp Alex Riu', exact: true }),
+  ).toHaveAttribute('href', 'https://wa.me/00000000000');
+  await expect(contacts.getByRole('link', { name: 'Email Alex Riu', exact: true })).toHaveAttribute(
+    'href',
+    'mailto:alex@example.invalid',
+  );
+  await expect(page.locator('.quick-contact a')).toHaveCount(3);
+  expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true);
+});
+
+test('Help and Export explain template setup, independent hosting and automatic updates in Catalan', async ({
+  page,
+}) => {
+  await page.goto('editor/');
+  await page.getByRole('button', { name: 'Help', exact: true }).click();
+  await expect(page.locator('.setup-guide')).toHaveAttribute('open', '');
+  await expect(
+    page.getByRole('link', { name: 'Create my copy on GitHub', exact: false }),
+  ).toHaveAttribute('href', /template_owner=adriaabad&template_name=petqr/);
+  await expect(page.locator('.publication-guide')).toContainText('Settings → Pages');
+  await expect(page.locator('.publication-guide')).toContainText('GitHub Actions');
+  await page.getByLabel('Language', { exact: true }).selectOption('ca');
+  await expect(page.getByRole('button', { name: 'Configuració', exact: true })).toBeVisible();
+  await page.getByRole('button', { name: 'Exportar fitxers', exact: true }).click();
+  const dialog = page.getByRole('dialog');
+  await expect(dialog.locator('.publication-guide')).toContainText('Commit changes');
+  await expect(dialog.locator('.publication-guide')).toContainText('PUBLISHING.txt');
+  await expect(
+    dialog.getByRole('link', { name: 'Crear la meva còpia a GitHub', exact: false }),
+  ).toHaveAttribute('href', /visibility=public/);
+  const pending = page.waitForEvent('download');
+  await dialog.getByRole('button', { name: 'Confirmar publicació · ZIP', exact: true }).click();
+  const download = await pending;
+  const files = unzipSync(new Uint8Array(await readFile((await download.path())!)));
+  expect(strFromU8(files['PUBLISHING.txt'])).toContain('Crear i publicar la teva web');
+  expect(strFromU8(files['PUBLISHING.txt'])).toContain('No pugis el ZIP directament');
 });
 
 test('emergency contact and warnings remain available without JavaScript', async ({ browser }) => {
@@ -322,13 +401,13 @@ test('QR settings require a public URL and produce SVG and PNG files', async ({ 
     await route.fulfill({ json: config });
   });
   await page.goto('editor/');
-  await page.getByRole('button', { name: 'Site settings', exact: true }).click();
+  await page.getByRole('button', { name: 'Settings', exact: true }).click();
   await page.getByLabel('Public site URL', { exact: true }).fill('');
   await page.getByRole('button', { name: 'My pets', exact: true }).click();
   await page.getByRole('button', { name: 'QR code', exact: true }).first().click();
   await expect(page.getByRole('dialog')).toContainText('QR codes require a final public URL.');
   await page.getByRole('button', { name: 'Close', exact: true }).click();
-  await page.getByRole('button', { name: 'Site settings', exact: true }).click();
+  await page.getByRole('button', { name: 'Settings', exact: true }).click();
   await page.getByLabel('Public site URL', { exact: true }).fill('https://owner.example/animals');
   await page.getByRole('button', { name: 'My pets', exact: true }).click();
   await page.getByRole('button', { name: 'QR code', exact: true }).first().click();
@@ -446,10 +525,13 @@ test('an invalid optional Telegram does not block a photo over 15 MB, and the ex
   expect(sandbox?.split(' ')).not.toContain('allow-scripts');
   const preview = page.frameLocator('#profile-preview');
   await preview.locator('.full-details summary').click();
-  await expect(preview.locator('.gallery img')).toBeVisible();
+  await expect(preview.locator('.gallery img').last()).toBeVisible();
   await expect
     .poll(() =>
-      preview.locator('.gallery img').evaluate((image) => (image as HTMLImageElement).naturalWidth),
+      preview
+        .locator('.gallery img')
+        .last()
+        .evaluate((image) => (image as HTMLImageElement).naturalWidth),
     )
     .toBeGreaterThan(0);
   await page.getByRole('button', { name: 'Export files', exact: true }).click();
@@ -542,7 +624,7 @@ test('local drafts are explicit, restorable and forgettable', async ({ page }) =
   await page.goto('editor/');
   await page.getByRole('button', { name: 'Edit', exact: true }).first().click();
   await page.getByLabel('Name', { exact: true }).fill('Local draft companion');
-  await page.getByRole('button', { name: 'Site settings', exact: true }).click();
+  await page.getByRole('button', { name: 'Settings', exact: true }).click();
   await page.getByRole('button', { name: 'Save draft on this device', exact: true }).click();
   await expect(page.locator('#toast')).toContainText('Draft saved locally.');
   await page.route('**/data/config.json', async (route) => {
@@ -553,14 +635,14 @@ test('local drafts are explicit, restorable and forgettable', async ({ page }) =
   });
   await page.reload();
   await expect(page.locator('.pet-card').first()).toContainText('Cooper');
-  await page.getByRole('button', { name: 'Site settings', exact: true }).click();
+  await page.getByRole('button', { name: 'Settings', exact: true }).click();
   await page.getByRole('button', { name: 'Restore local draft', exact: true }).click();
   await page.getByRole('button', { name: 'My pets', exact: true }).click();
   await expect(page.locator('.pet-card').first()).toContainText('Local draft companion');
   await expect(
     page.locator('.pet-card').first().getByRole('link', { name: 'View profile' }),
   ).toHaveAttribute('href', /\/p\/c0ffee12\/$/);
-  await page.getByRole('button', { name: 'Site settings', exact: true }).click();
+  await page.getByRole('button', { name: 'Settings', exact: true }).click();
   await page.getByRole('button', { name: 'Forget local draft', exact: true }).click();
   await expect(page.locator('#toast')).toContainText('Local draft deleted.');
 });

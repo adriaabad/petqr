@@ -25,8 +25,11 @@ export function footer(config: Config, lang: Language, prefix = ''): string {
 export function photo(pet: Pet, lang: Language, prefix: string, lazy = false): string {
   const p = pet.photos[0];
   return p
-    ? `<img src="${esc(prefix + p.path)}" alt="${esc(textOf(p.alt, lang) || pet.name)}" width="1200" height="900" ${lazy ? 'loading="lazy"' : 'fetchpriority="high"'} decoding="async">`
+    ? `<img src="${esc(prefix + p.path)}" alt="${esc(textOf(p.alt, lang) || pet.name)}" style="${photoPosition(p)}" width="1200" height="900" ${lazy ? 'loading="lazy"' : 'fetchpriority="high"'} decoding="async">`
     : `<div class="photo-empty" role="img" aria-label="${esc(pet.name)}">${paw}</div>`;
+}
+function photoPosition(photo: Pet['photos'][number]): string {
+  return `object-position:${photo.focus?.x ?? 50}% ${photo.focus?.y ?? 50}%`;
 }
 export function renderProfile(
   config: Config,
@@ -50,7 +53,6 @@ export function renderProfile(
       )
         .filter((k) => primary[k] && contactLink(k, primary[k]!))
         .sort((a, b) => Number(b === primary.preferred) - Number(a === primary.preferred))
-        .slice(0, 2)
         .map(
           (k, i) =>
             `<a class="button ${i === 0 ? 'primary' : ''}" href="${esc(contactLink(k, primary[k]!))}" rel="noopener noreferrer">${tr({ phone: 'Call', whatsapp: 'WhatsApp', email: 'Email', telegram: 'Telegram' }[k])}<span class="sr-only"> ${esc(primary.name)}</span></a>`,
@@ -118,7 +120,7 @@ export function renderProfile(
     .join('');
   return `<header class="public-header">${brand(config.site.ownerIndex ? prefix : '#main')}${controls(lang)}</header><main id="main" class="profile">
 
-  <div class="profile-top"><div class="profile-photo">${photo(pet, lang, prefix)}</div><div class="profile-intro"><div class="name-row"><h1>${esc(pet.name)}</h1></div><p class="species">${esc(local(pet.species))}${pet.breed ? ` · ${esc(local(pet.breed))}` : ''}</p><p class="introduction">${esc(local(pet.introduction) || tr('Please contact my people so I can get home safely.'))}</p>
+  <div class="profile-top"><div class="profile-media"><div class="profile-photo">${photo(pet, lang, prefix)}</div>${pet.photos.length > 1 ? `<section class="additional-photos" aria-label="${tr('More photos')}"><div class="gallery">${pet.photos.map((p, index) => `<a href="${esc(prefix + p.path)}" class="photo-thumbnail" data-photo-index="${index}" ${index === 0 ? 'aria-current="true"' : ''} target="_blank" rel="noopener noreferrer" aria-label="${tr('View photo')} ${index + 1} / ${pet.photos.length}"><img src="${esc(prefix + p.path)}" alt="${esc(local(p.alt) || pet.name)}" style="${photoPosition(p)}" width="160" height="120" loading="lazy"></a>`).join('')}</div></section>` : ''}</div><div class="profile-intro"><div class="name-row"><h1>${esc(pet.name)}</h1></div><p class="species">${esc(local(pet.species))}${pet.breed ? ` · ${esc(local(pet.breed))}` : ''}</p><p class="introduction">${esc(local(pet.introduction) || tr('Please contact my people so I can get home safely.'))}</p>
   ${identification}
   ${residenceHTML}
   <section class="contacts-public" aria-label="${tr('Contact my people')}"><h2>${tr('Contact my people')}</h2>${
@@ -145,17 +147,6 @@ export function renderProfile(
   }</section>
   ${locationContact && !preview ? `<details class="location-share enhanced-only"><summary>${tr('Share my location')}</summary><p>${tr('Your browser will ask for location permission. A map link will be prepared in WhatsApp. You choose whether to send it. PetQR does not store your location.')}</p><button class="button" data-share-location="${esc(locationContact.whatsapp)}">${tr('Share my location')}</button><div data-location-result aria-live="polite"></div></details>` : ''}</div></div>
   ${warnings ? `<section class="critical-section" aria-label="${tr('Important information')}">${warnings}</section>` : ''}
-  ${
-    pet.photos.length > 1
-      ? `<section class="additional-photos"><h2>${tr('More photos')}</h2><div class="gallery">${pet.photos
-          .slice(1)
-          .map(
-            (p) =>
-              `<a href="${esc(prefix + p.path)}" target="_blank" rel="noopener noreferrer"><img src="${esc(prefix + p.path)}" alt="${esc(local(p.alt) || pet.name)}" width="600" height="450" loading="lazy"></a>`,
-          )
-          .join('')}</div></section>`
-      : ''
-  }
   <details class="full-details"><summary>${tr('Full details')}</summary>${details || `<p>${esc(local(pet.species))}</p>`}</details>
   ${config.site.ownerIndex ? `<a class="back-link" href="${esc(prefix)}">← ${tr('All pets')}</a>` : ''}</main>${!preview ? quick : ''}${footer(config, lang, prefix)}<div class="toast" role="status" aria-live="polite" id="toast"></div>`;
 }

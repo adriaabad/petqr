@@ -12,7 +12,7 @@ const [site, contacts, pets] = await Promise.all(
 );
 const fixture = () => parseConfig({ version: 1, site, contacts, pets });
 
-test('zero phone numbers and reserved invalid emails are displayed without call or message links', () => {
+test('example contacts retain call, WhatsApp and email actions on the QR profile', () => {
   const config = fixture();
   config.contacts = [
     {
@@ -29,15 +29,13 @@ test('zero phone numbers and reserved invalid emails are displayed without call 
   ];
   config.pets[0].contacts = [{ id: 'placeholder-contact' }];
   const html = renderProfile(config, config.pets[0], 'en');
-  assert.match(html, /00000000000/);
-  assert.match(html, /alex@example.invalid/);
-  assert.doesNotMatch(
-    html,
-    /href="(?:tel:|mailto:|https:\/\/wa.me\/)|data-share-location|class="quick-contact"/,
-  );
-  assert.equal(contactLink('phone', '00000000000'), '');
-  assert.equal(contactLink('whatsapp', '+00 (000) 000-000'), '');
-  assert.equal(contactLink('email', 'Alex@EXAMPLE.INVALID'), '');
+  assert.match(html, /href="tel:00000000000"/);
+  assert.match(html, /href="https:\/\/wa.me\/00000000000"/);
+  assert.match(html, /href="mailto:alex@example.invalid"/);
+  assert.equal((html.match(/class="quick-contact"/g) || []).length, 1);
+  assert.equal(contactLink('phone', '00000000000'), 'tel:00000000000');
+  assert.equal(contactLink('whatsapp', '+00 (000) 000-000'), 'https://wa.me/00000000000');
+  assert.equal(contactLink('email', 'Alex@EXAMPLE.INVALID'), 'mailto:Alex@EXAMPLE.INVALID');
   assert.equal(contactLink('email', 'alex@example.org'), 'mailto:alex@example.org');
   assert.equal(contactLink('phone', '+1 202 555 0101'), 'tel:+12025550101');
 });

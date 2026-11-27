@@ -18,7 +18,7 @@ import {
   explainError,
 } from '../../src/shared/model';
 import { renderProfile, renderIndex, htmlDocument } from '../../src/public/render';
-import { qrSVG, validQRColors, tagSVG } from '../../src/editor/qr';
+import { qrSVG, qr3DSVG, validQRColors, tagSVG } from '../../src/editor/qr';
 import { importArchive, exportArchive } from '../../src/editor/archive';
 import { deployedURL } from '../../scripts/build';
 import { strToU8, zipSync } from 'fflate';
@@ -318,6 +318,14 @@ test('QR SVG preserves quiet zones and different routes yield distinct modules',
   assert.notEqual(a, b);
   assert.match(a, /<svg/);
   assert.match(a, /viewBox/);
+});
+test('3D QR SVG exports filled closed modules at a physical size without a background', () => {
+  const svg = qr3DSVG('https://example.com/p/cooper/', { sizeMm: 50, margin: 4 });
+  assert.match(svg, /width="50mm" height="50mm"/);
+  assert.match(svg, /<path fill="#000000" d="M\d+ \d+h\d+v1h-\d+z/);
+  assert.doesNotMatch(svg, /stroke=|<rect|<text|fill="#ffffff"/);
+  assert.notEqual(svg, qr3DSVG('https://example.com/p/luna/', { sizeMm: 50 }));
+  assert.throws(() => qr3DSVG('https://example.com', { sizeMm: 20 }), /25–120/);
 });
 test('print tag has millimeter dimensions and escaped text', async () => {
   const qr = await qrSVG('https://example.com');

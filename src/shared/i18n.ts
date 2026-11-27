@@ -356,6 +356,22 @@ const phrases: Record<string, [string, string]> = {
   ],
   'Validation errors': ['Errores de validación', 'Errors de validació'],
   'Download SVG': ['Descargar SVG', 'Descarregar SVG'],
+  'Download 3D SVG': ['Descargar SVG 3D', 'Descarregar SVG 3D'],
+  '3D printing SVG': ['SVG para impresión 3D', 'SVG per a impressió 3D'],
+  '3D QR size (mm)': ['Tamaño del QR 3D (mm)', 'Mida del QR 3D (mm)'],
+  'Filled QR modules only, with a transparent background and real millimeter size. Import as an SVG modifier or embossing shape, set a 0.8 mm raised height in your slicer, and keep the quiet zone clear.':
+    [
+      'Solo módulos QR rellenos, con fondo transparente y tamaño real en milímetros. Impórtalo como modificador SVG o relieve, establece una altura de 0,8 mm en el laminador y deja libre el margen alrededor.',
+      'Només mòduls QR plens, amb fons transparent i mida real en mil·límetres. Importa’l com a modificador SVG o relleu, estableix una altura de 0,8 mm al laminador i deixa lliure el marge del voltant.',
+    ],
+  '3D QR size must be 25–120 mm.': [
+    'El tamaño del QR 3D debe estar entre 25 y 120 mm.',
+    'La mida del QR 3D ha de ser entre 25 i 120 mm.',
+  ],
+  'Quiet zone must be 4–12 modules.': [
+    'El margen debe estar entre 4 y 12 módulos.',
+    'El marge ha de ser entre 4 i 12 mòduls.',
+  ],
   'Download PNG': ['Descargar PNG', 'Descarregar PNG'],
   'Copy URL': ['Copiar URL', 'Copiar URL'],
   'Test destination': ['Probar destino', 'Provar destinació'],

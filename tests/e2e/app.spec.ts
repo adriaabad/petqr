@@ -497,11 +497,42 @@ test('QR settings require a public URL and produce SVG and PNG files', async ({ 
   );
   await expect(page.locator('[data-qr] svg')).toBeVisible();
   await page.getByLabel('Resolution', { exact: true }).selectOption('512');
-  for (const name of ['Download SVG', 'Download PNG', 'Download tag SVG', 'Download tag PNG']) {
+  await expect(page.locator('[data-qr-3d] svg')).toBeVisible();
+  await page.getByLabel('3D QR size (mm)', { exact: true }).fill('60');
+  for (const name of [
+    'Download SVG',
+    'Download PNG',
+    'Download 3D SVG',
+    'Download tag SVG',
+    'Download tag PNG',
+  ]) {
     const pending = page.waitForEvent('download');
     await page.getByRole('button', { name, exact: true }).click();
     const result = await pending;
     expect(result.suggestedFilename()).toMatch(/\.(svg|png)$/);
+    if (name === 'Download 3D SVG') {
+      expect(result.suggestedFilename()).toMatch(/-qr-3d\.svg$/);
+      const content = await readFile((await result.path())!, 'utf8');
+      expect(content).toContain('width="60mm" height="60mm"');
+      expect(content).toContain('<path fill="#000000"');
+      expect(content).not.toContain('stroke=');
+      expect(content).not.toContain('<rect');
+      const pixels = await page.evaluate(async (svg) => {
+        const image = new Image();
+        image.src = `data:image/svg+xml;base64,${btoa(svg)}`;
+        await image.decode();
+        const canvas = document.createElement('canvas');
+        canvas.width = canvas.height = 600;
+        const ctx = canvas.getContext('2d')!;
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(0, 0, 600, 600);
+        ctx.drawImage(image, 0, 0, 600, 600);
+        return Array.from(ctx.getImageData(0, 0, 600, 600).data);
+      }, content);
+      expect(jsQR(new Uint8ClampedArray(pixels), 600, 600)?.data).toBe(
+        'https://owner.example/animals/p/c0ffee12/',
+      );
+    }
     if (name === 'Download PNG') {
       const bytes = await readFile((await result.path())!);
       const decoded = await page.evaluate(async (data) => {

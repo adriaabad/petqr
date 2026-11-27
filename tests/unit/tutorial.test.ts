@@ -14,6 +14,11 @@ test('visual tutorial has six illustrated steps, template actions and no pet/con
     assert.equal((html.match(/class="tutorial-visual /g) || []).length, 6);
     assert.match(html, /template_owner=adriaabad&amp;template_name=petqr/);
     assert.match(html, /GitHub Actions/);
+    assert.match(html, /\.github\/workflows\/pages\.yml/);
+    assert.match(html, /Run workflow/);
+    assert.match(html, /Jekyll/);
+    assert.match(html, /href="#activate-pages"/);
+    assert.equal((html.match(/class="tutorial-activation"/g) || []).length, 1);
     assert.match(html, /Commit changes/);
     assert.match(html, /href="\.\.\/editor\/"/);
     assert.doesNotMatch(html, /PHOTO_CREDITS.txt|Cooper|Luna|Mochi|contact-aina/);

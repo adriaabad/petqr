@@ -13,8 +13,8 @@ const words = {
     setup: 'First-time setup',
     first: [
       'Sign in to GitHub, or create a free account. Choose “Create my copy on GitHub”, select your own account, give the repository a name and choose Public. Confirm “Create repository”.',
-      'In the new repository, open Settings → Pages. Under Build and deployment → Source, select GitHub Actions. This is a one-time setting.',
-      'Open Actions → Validate, test & deploy PetQR → Run workflow. If GitHub asks, enable workflows. Wait for the green result and open the website link shown by the deployment.',
+      'In YOUR new repository, open Settings → Pages. Under Build and deployment → Source, select GitHub Actions. Ignore the suggested Jekyll and Static HTML workflow cards: PetQR already includes .github/workflows/pages.yml on main.',
+      'Open Actions. In the left sidebar choose Validate, test & deploy PetQR. If GitHub asks, enable Actions. Above the run list click Run workflow, select main, then click the green Run workflow button again. If the workflow is missing from the sidebar, open YOUR repository URL ending in /actions/workflows/pages.yml. Wait until build and deploy are green, then open Settings → Pages → Visit site. A first run may be red if it started before Pages was configured; run it again now.',
       'Open /editor/ on YOUR new website. It automatically detects its own public address. Edit your animals, photos and contacts there, then export your files.',
     ],
     missing:
@@ -41,8 +41,8 @@ const words = {
     setup: 'Configuración inicial',
     first: [
       'Inicia sesión en GitHub o crea una cuenta gratuita. Pulsa “Crear mi copia en GitHub”, selecciona tu cuenta, pon un nombre al repositorio y elige Public. Confirma “Create repository”.',
-      'En el repositorio nuevo, abre Settings → Pages. En Build and deployment → Source, selecciona GitHub Actions. Solo debes configurarlo una vez.',
-      'Abre Actions → Validate, test & deploy PetQR → Run workflow. Si GitHub lo solicita, activa los flujos de trabajo. Espera el resultado verde y abre el enlace de la web que aparece en la publicación.',
+      'En TU repositorio nuevo, abre Settings → Pages. En Build and deployment → Source, selecciona GitHub Actions. Ignora las tarjetas de Jekyll y Static HTML sugeridas: PetQR ya incluye .github/workflows/pages.yml en main.',
+      'Abre Actions. En la barra lateral izquierda, elige Validate, test & deploy PetQR. Si GitHub lo pide, activa Actions. Encima de la lista de ejecuciones, pulsa Run workflow, selecciona main y vuelve a pulsar el botón verde Run workflow. Si no aparece en la barra lateral, abre la URL de TU repositorio terminada en /actions/workflows/pages.yml. Espera a que build y deploy terminen en verde y abre Settings → Pages → Visit site. La primera ejecución puede estar roja si empezó antes de configurar Pages; vuelve a ejecutarla ahora.',
       'Abre /editor/ en TU nueva web. Detecta automáticamente su propia dirección pública. Edita allí tus animales, fotos y contactos y después exporta los archivos.',
     ],
     missing:
@@ -69,8 +69,8 @@ const words = {
     setup: 'Configuració inicial',
     first: [
       'Inicia sessió a GitHub o crea un compte gratuït. Prem “Crear la meva còpia a GitHub”, selecciona el teu compte, posa un nom al repositori i tria Public. Confirma “Create repository”.',
-      'Al repositori nou, obre Settings → Pages. A Build and deployment → Source, selecciona GitHub Actions. Només ho has de configurar una vegada.',
-      'Obre Actions → Validate, test & deploy PetQR → Run workflow. Si GitHub ho demana, activa els fluxos de treball. Espera el resultat verd i obre l’enllaç de la web que apareix a la publicació.',
+      'Al TEU repositori nou, obre Settings → Pages. A Build and deployment → Source, selecciona GitHub Actions. Ignora les targetes suggerides de Jekyll i Static HTML: PetQR ja inclou .github/workflows/pages.yml a main.',
+      'Obre Actions. A la barra lateral esquerra, tria Validate, test & deploy PetQR. Si GitHub ho demana, activa Actions. A sobre de la llista d’execucions, prem Run workflow, selecciona main i torna a prémer el botó verd Run workflow. Si no surt a la barra lateral, obre l’URL del TEU repositori acabada en /actions/workflows/pages.yml. Espera que build i deploy acabin en verd i obre Settings → Pages → Visit site. La primera execució pot ser vermella si va començar abans de configurar Pages; torna-la a executar ara.',
       'Obre /editor/ a la TEVA web nova. Detecta automàticament la seva pròpia adreça pública. Edita-hi els animals, les fotos i els contactes i després exporta els fitxers.',
     ],
     missing:

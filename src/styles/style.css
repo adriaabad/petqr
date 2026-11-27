@@ -209,6 +209,41 @@
     color: var(--muted);
     line-height: 1.7;
   }
+  .tutorial-activation-link {
+    margin-top: 18px;
+  }
+  .tutorial-activation-panel {
+    scroll-margin-top: 20px;
+    margin-top: 22px;
+    padding: clamp(24px, 4vw, 44px);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    background: var(--surface);
+  }
+  .tutorial-activation-panel h2 {
+    font-size: clamp(1.4rem, 2.4vw, 2rem);
+    margin-bottom: 16px;
+  }
+  .tutorial-activation {
+    max-width: 780px;
+    padding-left: 1.5rem;
+    margin: 0;
+    color: var(--text);
+    font-size: 0.96rem;
+    line-height: 1.65;
+  }
+  .tutorial-activation li + li {
+    margin-top: 13px;
+  }
+  .tutorial-activation-help {
+    max-width: 780px;
+    margin-top: 22px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.6;
+  }
   .mock-window {
     width: 100%;
     max-width: 285px;
@@ -287,6 +322,9 @@
     color: var(--muted);
     display: block;
     margin-bottom: 5px;
+  }
+  .mock-next {
+    margin-top: 12px;
   }
   .mock-select {
     display: flex;

@@ -6,7 +6,7 @@ Maintainers: push this complete project to a new repository, then enable **Setti
 
 The upstream repository is already marked as a template. [Create a new copy directly](https://github.com/new?template_owner=adriaabad&template_name=petqr&name=petqr&visibility=public) after signing in. Help and Export include these steps in English, Spanish and Catalan, and each exported ZIP includes PUBLISHING.txt. Pages must be activated once in the new repository; automatic enablement would require additional GitHub credentials and is deliberately not requested.
 
-Users: **Use this template → Create a new repository**, choose your account/name, then **Settings → Pages → Source → GitHub Actions**. Public repositories can use GitHub Pages on GitHub Free. Organization rules may require allowing the official checkout/setup-node/configure-pages/upload-pages-artifact/deploy-pages actions. Open Actions and manually run **Validate, test & deploy PetQR** after the initial Pages setup.
+Users: **Use this template → Create a new repository**, choose your account/name, then in your new repository open **Settings → Pages → Build and deployment → Source → GitHub Actions**. The Jekyll and Static HTML cards shown below are suggested workflows; do not configure them because `.github/workflows/pages.yml` already exists on `main`. Public repositories can use GitHub Pages on GitHub Free. Organization rules may require allowing the official checkout/setup-node/configure-pages/upload-pages-artifact/deploy-pages actions. Open **Actions**, select **Validate, test & deploy PetQR** in the left sidebar (or go to `https://github.com/YOUR_ACCOUNT/YOUR_REPO/actions/workflows/pages.yml`), click **Run workflow**, select `main`, then click **Run workflow** again. Wait for both build and deploy to finish in green. The published URL is under **Settings → Pages → Visit site**.
 
 On the default branch, relevant source/data/image/configuration changes trigger deployment. Manual dispatch is supported; deployments require the repository's default branch. Pull requests run validation, build and tests without deploying. The workflow installs locked dependencies, validates publication and image references, builds, runs unit/build/browser/accessibility checks, uploads `dist/` and deploys using the official Pages environment. Only the deploy job receives `pages:write` and `id-token:write`; no personal token is needed.
 
@@ -41,7 +41,9 @@ To preserve already printed QR codes, keep the original URL serving the page or 
 
 ## Troubleshooting
 
-- **No workflow / no deployment:** verify `.github/workflows/pages.yml` was uploaded, Actions is enabled, Pages source is GitHub Actions and the run targets the default branch. Initial setup may need a manual run.
+- **No workflow in Actions:** check **Code → main → `.github/workflows/pages.yml`** in your new repository, then open the direct `/actions/workflows/pages.yml` URL for that same repository. Under **Settings → Actions → General**, confirm Actions is enabled. Do not use GitHub's suggested Jekyll or Static HTML workflow cards.
+- **First run fails at “Get independent repository Pages URL”:** the automatic push run may have started before Pages was configured. Select **GitHub Actions** as the Pages source, then start a fresh manual run of the existing workflow on `main`.
+- **No deployment after a green build:** check that the deploy job also finished green; then use **Settings → Pages → Visit site**. A green build alone does not mean the site is live.
 - **403 / environment approval:** check repository/organization permissions and `github-pages` environment rules. PetQR does not bypass account policies.
 - **Validation error:** paths such as `pets.0.name` identify the source. Load the editor and export public data. Never commit a private draft just to bypass validation.
 - **Missing image:** upload the exact exported filename under assets/pets; paths are case-sensitive on Pages.
